@@ -42,11 +42,20 @@ class DistributionSystemService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::PingResponse>> PrepareAsyncPing(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::PingResponse>>(PrepareAsyncPingRaw(context, request, cq));
     }
+    virtual ::grpc::Status CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::distributionSystemService::CollectedData* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>> AsyncCollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>>(AsyncCollectDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>> PrepareAsyncCollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>>(PrepareAsyncCollectDataRaw(context, request, cq));
+    }
     class async_interface {
      public:
       virtual ~async_interface() {}
       virtual void Ping(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Ping(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
@@ -54,6 +63,8 @@ class DistributionSystemService final {
    private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::PingResponse>* AsyncPingRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::PingResponse>* PrepareAsyncPingRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>* AsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::distributionSystemService::CollectedData>* PrepareAsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -65,11 +76,20 @@ class DistributionSystemService final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::PingResponse>> PrepareAsyncPing(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::PingResponse>>(PrepareAsyncPingRaw(context, request, cq));
     }
+    ::grpc::Status CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::distributionSystemService::CollectedData* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>> AsyncCollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>>(AsyncCollectDataRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>> PrepareAsyncCollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>>(PrepareAsyncCollectDataRaw(context, request, cq));
+    }
     class async final :
       public StubInterface::async_interface {
      public:
       void Ping(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response, std::function<void(::grpc::Status)>) override;
       void Ping(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, std::function<void(::grpc::Status)>) override;
+      void CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, ::grpc::ClientUnaryReactor* reactor) override;
      private:
       friend class Stub;
       explicit async(Stub* stub): stub_(stub) { }
@@ -83,7 +103,10 @@ class DistributionSystemService final {
     class async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::distributionSystemService::PingResponse>* AsyncPingRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::distributionSystemService::PingResponse>* PrepareAsyncPingRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>* AsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>* PrepareAsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_Ping_;
+    const ::grpc::internal::RpcMethod rpcmethod_CollectData_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -92,6 +115,7 @@ class DistributionSystemService final {
     Service();
     virtual ~Service();
     virtual ::grpc::Status Ping(::grpc::ServerContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response);
+    virtual ::grpc::Status CollectData(::grpc::ServerContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_Ping : public BaseClass {
@@ -113,7 +137,27 @@ class DistributionSystemService final {
       ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_Ping<Service > AsyncService;
+  template <class BaseClass>
+  class WithAsyncMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_CollectData() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestCollectData(::grpc::ServerContext* context, ::distributionSystemService::Empty* request, ::grpc::ServerAsyncResponseWriter< ::distributionSystemService::CollectedData>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_Ping<WithAsyncMethod_CollectData<Service > > AsyncService;
   template <class BaseClass>
   class WithCallbackMethod_Ping : public BaseClass {
    private:
@@ -141,7 +185,34 @@ class DistributionSystemService final {
     virtual ::grpc::ServerUnaryReactor* Ping(
       ::grpc::CallbackServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::PingResponse* /*response*/)  { return nullptr; }
   };
-  typedef WithCallbackMethod_Ping<Service > CallbackService;
+  template <class BaseClass>
+  class WithCallbackMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_CollectData() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::distributionSystemService::Empty, ::distributionSystemService::CollectedData>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response) { return this->CollectData(context, request, response); }));}
+    void SetMessageAllocatorFor_CollectData(
+        ::grpc::MessageAllocator< ::distributionSystemService::Empty, ::distributionSystemService::CollectedData>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::distributionSystemService::Empty, ::distributionSystemService::CollectedData>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* CollectData(
+      ::grpc::CallbackServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_Ping<WithCallbackMethod_CollectData<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_Ping : public BaseClass {
@@ -156,6 +227,23 @@ class DistributionSystemService final {
     }
     // disable synchronous version of this method
     ::grpc::Status Ping(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::PingResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_CollectData() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -181,6 +269,26 @@ class DistributionSystemService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_CollectData() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestCollectData(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawCallbackMethod_Ping : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -200,6 +308,28 @@ class DistributionSystemService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     virtual ::grpc::ServerUnaryReactor* Ping(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_CollectData() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CollectData(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* CollectData(
       ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
@@ -229,9 +359,36 @@ class DistributionSystemService final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedPing(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::distributionSystemService::Empty,::distributionSystemService::PingResponse>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_Ping<Service > StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_CollectData : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_CollectData() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::distributionSystemService::Empty, ::distributionSystemService::CollectedData>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::distributionSystemService::Empty, ::distributionSystemService::CollectedData>* streamer) {
+                       return this->StreamedCollectData(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_CollectData() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status CollectData(::grpc::ServerContext* /*context*/, const ::distributionSystemService::Empty* /*request*/, ::distributionSystemService::CollectedData* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedCollectData(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::distributionSystemService::Empty,::distributionSystemService::CollectedData>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_Ping<WithStreamedUnaryMethod_CollectData<Service > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_Ping<Service > StreamedService;
+  typedef WithStreamedUnaryMethod_Ping<WithStreamedUnaryMethod_CollectData<Service > > StreamedService;
 };
 
 }  // namespace distributionSystemService

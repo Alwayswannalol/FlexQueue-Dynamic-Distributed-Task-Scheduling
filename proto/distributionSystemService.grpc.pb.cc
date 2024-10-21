@@ -23,6 +23,7 @@ namespace distributionSystemService {
 
 static const char* DistributionSystemService_method_names[] = {
   "/distributionSystemService.DistributionSystemService/Ping",
+  "/distributionSystemService.DistributionSystemService/CollectData",
 };
 
 std::unique_ptr< DistributionSystemService::Stub> DistributionSystemService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -33,6 +34,7 @@ std::unique_ptr< DistributionSystemService::Stub> DistributionSystemService::New
 
 DistributionSystemService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_Ping_(DistributionSystemService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CollectData_(DistributionSystemService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status DistributionSystemService::Stub::Ping(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::distributionSystemService::PingResponse* response) {
@@ -58,6 +60,29 @@ void DistributionSystemService::Stub::async::Ping(::grpc::ClientContext* context
   return result;
 }
 
+::grpc::Status DistributionSystemService::Stub::CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::distributionSystemService::CollectedData* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::distributionSystemService::Empty, ::distributionSystemService::CollectedData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_CollectData_, context, request, response);
+}
+
+void DistributionSystemService::Stub::async::CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::distributionSystemService::Empty, ::distributionSystemService::CollectedData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_CollectData_, context, request, response, std::move(f));
+}
+
+void DistributionSystemService::Stub::async::CollectData(::grpc::ClientContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_CollectData_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>* DistributionSystemService::Stub::PrepareAsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::distributionSystemService::CollectedData, ::distributionSystemService::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_CollectData_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::distributionSystemService::CollectedData>* DistributionSystemService::Stub::AsyncCollectDataRaw(::grpc::ClientContext* context, const ::distributionSystemService::Empty& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncCollectDataRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 DistributionSystemService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       DistributionSystemService_method_names[0],
@@ -69,12 +94,29 @@ DistributionSystemService::Service::Service() {
              ::distributionSystemService::PingResponse* resp) {
                return service->Ping(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      DistributionSystemService_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< DistributionSystemService::Service, ::distributionSystemService::Empty, ::distributionSystemService::CollectedData, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](DistributionSystemService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::distributionSystemService::Empty* req,
+             ::distributionSystemService::CollectedData* resp) {
+               return service->CollectData(ctx, req, resp);
+             }, this)));
 }
 
 DistributionSystemService::Service::~Service() {
 }
 
 ::grpc::Status DistributionSystemService::Service::Ping(::grpc::ServerContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::PingResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status DistributionSystemService::Service::CollectData(::grpc::ServerContext* context, const ::distributionSystemService::Empty* request, ::distributionSystemService::CollectedData* response) {
   (void) context;
   (void) request;
   (void) response;
