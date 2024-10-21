@@ -1,19 +1,27 @@
 #include "async_client_node.h"
 
-int main() {
-    async_node_client client(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
+int main(int argc, char* argv[]) {
 
-    std::thread response_thread([&]() {
-        client.process_responses();
-    });
+    std::string to_server_address;
 
-    // Отправляем несколько асинхронных запросов
-    for (int i = 0; i < 5; ++i) {
-        std::cout << "Sending request " << i << std::endl;
-        client.async_ping(i);
+    if (argc == 2) {
+        to_server_address = argv[1];
+    }
+    else {
+        std::cerr << "Error" << std::endl;
     }
 
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    async_node_client client(grpc::CreateChannel(to_server_address, grpc::InsecureChannelCredentials()), to_server_address);
+
+    std::atomic<int> k = 0;
+    std::string s1;
+    std::string s2;
+
+    std::thread response_thread([&]() {
+        client.process_responses(k, s1, s2);
+    });
+
+    client.async_ping();
 
     // Ждем завершения потока обработки ответов
     response_thread.join();

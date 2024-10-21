@@ -8,12 +8,12 @@ service DistributionSystemService {
 }
 
 message Empty {
-  string num = 1;
+  string to_server_address = 1;
 }
 
 message PingResponse {
   string server_address = 1;
-  bool is_alive = 2;
+  string is_alive = 2;
 }
 
 message CollectedData{

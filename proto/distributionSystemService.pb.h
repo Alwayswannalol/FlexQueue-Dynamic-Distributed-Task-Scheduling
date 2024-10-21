@@ -185,20 +185,20 @@ class Empty final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kNumFieldNumber = 1,
+    kToServerAddressFieldNumber = 1,
   };
-  // string num = 1;
-  void clear_num();
-  const std::string& num() const;
+  // string to_server_address = 1;
+  void clear_to_server_address();
+  const std::string& to_server_address() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_num(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_num();
-  PROTOBUF_NODISCARD std::string* release_num();
-  void set_allocated_num(std::string* num);
+  void set_to_server_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_to_server_address();
+  PROTOBUF_NODISCARD std::string* release_to_server_address();
+  void set_allocated_to_server_address(std::string* to_server_address);
   private:
-  const std::string& _internal_num() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_num(const std::string& value);
-  std::string* _internal_mutable_num();
+  const std::string& _internal_to_server_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_to_server_address(const std::string& value);
+  std::string* _internal_mutable_to_server_address();
   public:
 
   // @@protoc_insertion_point(class_scope:distributionSystemService.Empty)
@@ -209,7 +209,7 @@ class Empty final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr num_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr to_server_address_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -355,13 +355,18 @@ class PingResponse final :
   std::string* _internal_mutable_server_address();
   public:
 
-  // bool is_alive = 2;
+  // string is_alive = 2;
   void clear_is_alive();
-  bool is_alive() const;
-  void set_is_alive(bool value);
+  const std::string& is_alive() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_is_alive(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_is_alive();
+  PROTOBUF_NODISCARD std::string* release_is_alive();
+  void set_allocated_is_alive(std::string* is_alive);
   private:
-  bool _internal_is_alive() const;
-  void _internal_set_is_alive(bool value);
+  const std::string& _internal_is_alive() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_is_alive(const std::string& value);
+  std::string* _internal_mutable_is_alive();
   public:
 
   // @@protoc_insertion_point(class_scope:distributionSystemService.PingResponse)
@@ -373,7 +378,7 @@ class PingResponse final :
   typedef void DestructorSkippable_;
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr server_address_;
-    bool is_alive_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr is_alive_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -543,54 +548,54 @@ class CollectedData final :
 #endif  // __GNUC__
 // Empty
 
-// string num = 1;
-inline void Empty::clear_num() {
-  _impl_.num_.ClearToEmpty();
+// string to_server_address = 1;
+inline void Empty::clear_to_server_address() {
+  _impl_.to_server_address_.ClearToEmpty();
 }
-inline const std::string& Empty::num() const {
-  // @@protoc_insertion_point(field_get:distributionSystemService.Empty.num)
-  return _internal_num();
+inline const std::string& Empty::to_server_address() const {
+  // @@protoc_insertion_point(field_get:distributionSystemService.Empty.to_server_address)
+  return _internal_to_server_address();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void Empty::set_num(ArgT0&& arg0, ArgT... args) {
+void Empty::set_to_server_address(ArgT0&& arg0, ArgT... args) {
  
- _impl_.num_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:distributionSystemService.Empty.num)
+ _impl_.to_server_address_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:distributionSystemService.Empty.to_server_address)
 }
-inline std::string* Empty::mutable_num() {
-  std::string* _s = _internal_mutable_num();
-  // @@protoc_insertion_point(field_mutable:distributionSystemService.Empty.num)
+inline std::string* Empty::mutable_to_server_address() {
+  std::string* _s = _internal_mutable_to_server_address();
+  // @@protoc_insertion_point(field_mutable:distributionSystemService.Empty.to_server_address)
   return _s;
 }
-inline const std::string& Empty::_internal_num() const {
-  return _impl_.num_.Get();
+inline const std::string& Empty::_internal_to_server_address() const {
+  return _impl_.to_server_address_.Get();
 }
-inline void Empty::_internal_set_num(const std::string& value) {
+inline void Empty::_internal_set_to_server_address(const std::string& value) {
   
-  _impl_.num_.Set(value, GetArenaForAllocation());
+  _impl_.to_server_address_.Set(value, GetArenaForAllocation());
 }
-inline std::string* Empty::_internal_mutable_num() {
+inline std::string* Empty::_internal_mutable_to_server_address() {
   
-  return _impl_.num_.Mutable(GetArenaForAllocation());
+  return _impl_.to_server_address_.Mutable(GetArenaForAllocation());
 }
-inline std::string* Empty::release_num() {
-  // @@protoc_insertion_point(field_release:distributionSystemService.Empty.num)
-  return _impl_.num_.Release();
+inline std::string* Empty::release_to_server_address() {
+  // @@protoc_insertion_point(field_release:distributionSystemService.Empty.to_server_address)
+  return _impl_.to_server_address_.Release();
 }
-inline void Empty::set_allocated_num(std::string* num) {
-  if (num != nullptr) {
+inline void Empty::set_allocated_to_server_address(std::string* to_server_address) {
+  if (to_server_address != nullptr) {
     
   } else {
     
   }
-  _impl_.num_.SetAllocated(num, GetArenaForAllocation());
+  _impl_.to_server_address_.SetAllocated(to_server_address, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.num_.IsDefault()) {
-    _impl_.num_.Set("", GetArenaForAllocation());
+  if (_impl_.to_server_address_.IsDefault()) {
+    _impl_.to_server_address_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:distributionSystemService.Empty.num)
+  // @@protoc_insertion_point(field_set_allocated:distributionSystemService.Empty.to_server_address)
 }
 
 // -------------------------------------------------------------------
@@ -647,24 +652,54 @@ inline void PingResponse::set_allocated_server_address(std::string* server_addre
   // @@protoc_insertion_point(field_set_allocated:distributionSystemService.PingResponse.server_address)
 }
 
-// bool is_alive = 2;
+// string is_alive = 2;
 inline void PingResponse::clear_is_alive() {
-  _impl_.is_alive_ = false;
+  _impl_.is_alive_.ClearToEmpty();
 }
-inline bool PingResponse::_internal_is_alive() const {
-  return _impl_.is_alive_;
-}
-inline bool PingResponse::is_alive() const {
+inline const std::string& PingResponse::is_alive() const {
   // @@protoc_insertion_point(field_get:distributionSystemService.PingResponse.is_alive)
   return _internal_is_alive();
 }
-inline void PingResponse::_internal_set_is_alive(bool value) {
-  
-  _impl_.is_alive_ = value;
-}
-inline void PingResponse::set_is_alive(bool value) {
-  _internal_set_is_alive(value);
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void PingResponse::set_is_alive(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.is_alive_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
   // @@protoc_insertion_point(field_set:distributionSystemService.PingResponse.is_alive)
+}
+inline std::string* PingResponse::mutable_is_alive() {
+  std::string* _s = _internal_mutable_is_alive();
+  // @@protoc_insertion_point(field_mutable:distributionSystemService.PingResponse.is_alive)
+  return _s;
+}
+inline const std::string& PingResponse::_internal_is_alive() const {
+  return _impl_.is_alive_.Get();
+}
+inline void PingResponse::_internal_set_is_alive(const std::string& value) {
+  
+  _impl_.is_alive_.Set(value, GetArenaForAllocation());
+}
+inline std::string* PingResponse::_internal_mutable_is_alive() {
+  
+  return _impl_.is_alive_.Mutable(GetArenaForAllocation());
+}
+inline std::string* PingResponse::release_is_alive() {
+  // @@protoc_insertion_point(field_release:distributionSystemService.PingResponse.is_alive)
+  return _impl_.is_alive_.Release();
+}
+inline void PingResponse::set_allocated_is_alive(std::string* is_alive) {
+  if (is_alive != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.is_alive_.SetAllocated(is_alive, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.is_alive_.IsDefault()) {
+    _impl_.is_alive_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:distributionSystemService.PingResponse.is_alive)
 }
 
 // -------------------------------------------------------------------
