@@ -8,10 +8,16 @@
 
 #include <grpcpp/grpcpp.h>
 
-using grpc::CompletionQueue;
 using grpc::Server;
+using grpc::ServerCompletionQueue;
+using grpc::ServerContext;
+using grpc::ServerAsyncResponseWriter;
 
-#include "../proto/distributionSystemService.grpc.pb.h"
+#include "../proto/distributionSystem.grpc.pb.h"
+
+using DistributionSystem::FaultToleranceService;
+using DistributionSystem::PingRequest;
+using DistributionSystem::PingResponse;
 
 #include "async_client_node.h"
 
@@ -20,6 +26,15 @@ public:
     ~async_node_server() {
         server_->Shutdown();
         cq_->Shutdown();
+
+        // Обработка оставшихся событий после Shutdown
+        void* got_tag;
+        bool ok;
+        while (cq_->Next(&got_tag, &ok)) {
+            if (ok) {
+                delete static_cast<call_data*>(got_tag); // Удаление обработанных данных
+            }
+        }
     }
 
     explicit async_node_server(const std::string& server_address, std::vector<std::string> children)
@@ -41,8 +56,8 @@ public:
 private:
     class call_data {
     public:
-        call_data(distributionSystemService::DistributionSystemService::AsyncService* service,
-                 grpc::ServerCompletionQueue* cq, std::vector<std::string> children)
+        call_data(FaultToleranceService::AsyncService* service,
+                 ServerCompletionQueue* cq, std::vector<std::string> children)
             : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
             proceed(children);
         }
@@ -54,6 +69,7 @@ private:
                 service_->RequestPing(&ctx_, &request_, &responder_, cq_, cq_, this);
             } 
             else if (status_ == PROCESS) {
+                new call_data(service_, cq_, children);  // Для обработки нового запроса создаем новый объект call_data
 
                 std::string full_string_server_addresses = "";
                 std::string full_string_server_is_alive = "";
@@ -78,35 +94,33 @@ private:
                     continue;
                 }
 
-                std::cout << requests_count << std::endl;
-
                 // Удаление клиентов
                 for (async_node_client* child_client: child_clients) {
                     delete child_client;
                 }
                 child_clients.clear();
 
-                new call_data(service_, cq_, children);  // Для обработки нового запроса создаем новый объект call_data
-
                 // Формируем ответ на запрос Ping с учетом дочерних узлов
-                response_.set_server_address(full_string_server_addresses + request_.to_server_address() + " ");
-                response_.set_is_alive(full_string_server_is_alive + "1" + " ");
+                response_.set_server_address(full_string_server_addresses + request_.to_server_address());
+                response_.set_is_alive(full_string_server_is_alive + "1");
                 status_ = FINISH;
                 responder_.Finish(response_, grpc::Status::OK, this);
             } 
             else {
-                delete this;
+                if (status_ == FINISH) {
+                    delete this;
+                }
             }
         }
 
     private:
-        distributionSystemService::DistributionSystemService::AsyncService* service_;
-        grpc::ServerCompletionQueue* cq_;
-        grpc::ServerContext ctx_;
+        FaultToleranceService::AsyncService* service_;
+        ServerCompletionQueue* cq_;
+        ServerContext ctx_;
 
-        distributionSystemService::Empty request_;
-        distributionSystemService::PingResponse response_;
-        grpc::ServerAsyncResponseWriter<distributionSystemService::PingResponse> responder_;
+        PingRequest request_;
+        PingResponse response_;
+        ServerAsyncResponseWriter<PingResponse> responder_;
 
         enum CallStatus { CREATE, PROCESS, FINISH };
         CallStatus status_;  // Текущий статус RPC
@@ -120,7 +134,11 @@ private:
         while (true) {
             cq_->Next(&tag, &ok);
             if (ok) {
+                std::cout << "Processing tag: " << tag << std::endl;
                 static_cast<call_data*>(tag)->proceed(children_);
+            } 
+            else {
+                std::cerr << "Error: ServerCompletionQueue returned false" << std::endl;
             }
         }
     }
@@ -128,9 +146,9 @@ private:
     std::string server_address_;
     std::vector<std::string> children_;
 
-    std::unique_ptr<grpc::ServerCompletionQueue> cq_;
-    distributionSystemService::DistributionSystemService::AsyncService service_;
-    std::unique_ptr<grpc::Server> server_;
+    std::unique_ptr<ServerCompletionQueue> cq_;
+    FaultToleranceService::AsyncService service_;
+    std::unique_ptr<Server> server_;
 };
 
-#endif //ASYNC_SERVER_NODE_H
+#endif //!ASYNC_SERVER_NODE_H

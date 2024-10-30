@@ -5,6 +5,7 @@
 #include <thread>
 #include <string>
 #include <atomic>
+#include <mutex>
 
 #include <grpcpp/grpcpp.h>
 
@@ -14,16 +15,27 @@ using grpc::ClientContext;
 using grpc::CompletionQueue;
 using grpc::Status;
 
-#include "../proto/distributionSystemService.grpc.pb.h"
+#include "../proto/distributionSystem.grpc.pb.h"
 
-using distributionSystemService::DistributionSystemService;
-using distributionSystemService::Empty;
-using distributionSystemService::PingResponse;
+using DistributionSystem::FaultToleranceService;
+using DistributionSystem::PingRequest;
+using DistributionSystem::PingResponse;
 
 class async_node_client {
 public:
+    ~async_node_client() {
+        cq_.Shutdown();
+
+        // Обработка оставшихся событий после Shutdown
+        void* got_tag;
+        bool ok;
+        while (cq_.Next(&got_tag, &ok)) {
+            delete static_cast<async_call*>(got_tag); // Удаление обработанных данных
+        }
+    }
+
     explicit async_node_client(std::shared_ptr<Channel> channel, std::string server_address)
-        : stub_(DistributionSystemService::NewStub(channel)), server_address_(server_address) {}
+        : stub_(FaultToleranceService::NewStub(channel)), server_address_(server_address) {}
 
     // Асинхронный метод для отправки Ping-запросов
     void async_ping() {
@@ -49,17 +61,27 @@ public:
             // Восстанавливаем объект async_call
             auto* call = static_cast<async_call*>(got_tag);
 
+            // Для защиты от гонки данных строк full_string_server_addresses и full_string_server_is_alive и счетчика
+            std::unique_lock<std::mutex> lock(mtx_);
+
+            // Проверка очереди 
             if (ok) {
-                std::cout << "Request to " << call->reply.server_address() << " completed successfully: " 
-                          << call->reply.is_alive() << std::endl;
+                if (call->status.ok()) {
+                    std::cout << "Request to " << call->reply.server_address() << " completed successfully: " 
+                            << call->reply.is_alive() << std::endl;
 
-                server_address += call->reply.server_address() + " ";
-                server_is_alive += call->reply.is_alive() + " ";
-            } else {
-                std::cerr << "Server is dead" << std::endl;
+                    server_address += call->reply.server_address() + " ";
+                    server_is_alive += call->reply.is_alive() + " ";
+                }
+                else {
+                    std::cerr << "Server " << call->request.to_server_address() << " is dead" << std::endl;
 
-                server_address += call->request.to_server_address() + " ";
-                server_is_alive += "0 ";
+                    server_address += call->request.to_server_address() + " ";
+                    server_is_alive += "0 ";
+                }
+            } 
+            else {
+                std::cerr << "Error: CompletionQueue returned ok == false" << std::endl;
             }
 
             // Уменьшаем счетчик кол-ва запросов
@@ -73,7 +95,7 @@ public:
 
     // Структура для хранения состояния асинхронного запроса
     struct async_call {
-        Empty request;
+        PingRequest request;
         PingResponse reply;
         ClientContext context;
         Status status;
@@ -81,9 +103,10 @@ public:
     };
 
 private:
-    std::unique_ptr<DistributionSystemService::Stub> stub_;
+    std::unique_ptr<FaultToleranceService::Stub> stub_;
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
     std::string server_address_;
+    std::mutex mtx_;
 };
 
-#endif //ASYNC_CLIENT_NODE_H
+#endif //!ASYNC_CLIENT_NODE_H

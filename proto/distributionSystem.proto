@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package DistributionSystem;
+
+
+// Сервис для распределения тасок по узлам системы
+service DistributionTasksService {
+    rpc CollectData(CollectDataRequest) returns (CollectedData);
+}
+
+message CollectDataRequest {
+  string to_server = 1;
+}
+
+message CollectedData{
+  string server_address = 1;
+  string collected_info = 2;
+}
+
+
+// Сервис для достижения отказоустойчивости в системе
+service FaultToleranceService {
+    rpc Ping(PingRequest) returns (PingResponse);
+}
+
+message PingRequest {
+  string to_server_address = 1;
+}
+
+message PingResponse {
+  string server_address = 1;
+  string is_alive = 2;
+}
