@@ -75,12 +75,14 @@ private:
                 std::string full_string_server_is_alive = "";
 
                 // Сколько запросов надо сделать
-                std::atomic<int> requests_count = children.size();
+                std::atomic<int> requests_count;
+                requests_count.store(children.size());
 
                 // Создаем клиентов для опроса дочерних узлов
-                std::vector<async_node_client*> child_clients;
-                for (const std::string& child: children) {
-                    child_clients.push_back(new async_node_client(grpc::CreateChannel(child, grpc::InsecureChannelCredentials()), child));
+                std::vector<std::shared_ptr<async_node_client>> child_clients;
+                for (const std::string& child : children) {
+                    child_clients.push_back(std::make_shared<async_node_client>(
+                        grpc::CreateChannel(child, grpc::InsecureChannelCredentials()), child));
                 }
 
                 for (auto& child_client: child_clients) {
@@ -90,15 +92,10 @@ private:
                     child_client->async_ping();
                 }
 
+                // TODO: сделать с помощью condition_variable и mutex
                 while (requests_count > 0) {
                     continue;
                 }
-
-                // Удаление клиентов
-                for (async_node_client* child_client: child_clients) {
-                    delete child_client;
-                }
-                child_clients.clear();
 
                 // Формируем ответ на запрос Ping с учетом дочерних узлов
                 response_.set_server_address(full_string_server_addresses + request_.to_server_address());
@@ -111,6 +108,10 @@ private:
                     delete this;
                 }
             }
+        }
+
+        int getStatusRpc() {
+            return status_;
         }
 
     private:
@@ -135,6 +136,8 @@ private:
             cq_->Next(&tag, &ok);
             if (ok) {
                 std::cout << "Processing tag: " << tag << std::endl;
+                // static_cast<call_data*>(tag)->proceed(children_);
+                std::cout << "StatusRpc: " << static_cast<call_data*>(tag)->getStatusRpc() << std::endl;
                 static_cast<call_data*>(tag)->proceed(children_);
             } 
             else {

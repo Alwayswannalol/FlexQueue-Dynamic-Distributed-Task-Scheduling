@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  server1:
+    build: .
+    command: ["./build/server", "0.0.0.0:50051", "server2:50052"]
+    ports:
+      - "50051:50051"
+
+  server2:
+    build: .
+    command: ["./build/server", "0.0.0.0:50052", "server3:50053"]
+    ports:
+      - "50052:50052"
+
+  server3:
+    build: .
+    command: ["./build/server", "0.0.0.0:50053"]
+    ports:
+      - "50053:50053"

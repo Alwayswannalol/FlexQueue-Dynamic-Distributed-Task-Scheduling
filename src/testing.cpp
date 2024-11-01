@@ -37,7 +37,8 @@ int main() {
 
     async_node_client* client = new async_node_client(grpc::CreateChannel("0.0.0.0:50051", grpc::InsecureChannelCredentials()), "0.0.0.0:50051");
 
-    std::atomic<int> quant_requests = 1;
+    std::atomic<int> quant_requests;
+    quant_requests.store(1);
     std::string s1;
     std::string s2;
 

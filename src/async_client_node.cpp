@@ -1,7 +1,6 @@
 #include "async_client_node.h"
 
 int main(int argc, char* argv[]) {
-
     std::vector<std::string> children;
 
     std::string to_server_address;
@@ -11,7 +10,8 @@ int main(int argc, char* argv[]) {
 
         async_node_client client(grpc::CreateChannel(to_server_address, grpc::InsecureChannelCredentials()), to_server_address);
 
-        std::atomic<int> k = 0;
+        std::atomic<int> k;
+        k.store(0);
         std::string s1;
         std::string s2;
 
@@ -33,7 +33,8 @@ int main(int argc, char* argv[]) {
         std::string full_string_server_is_alive = "";
 
         // Сколько запросов надо сделать
-        std::atomic<int> requests_count = children.size();
+        std::atomic<int> requests_count;
+        requests_count.store(children.size());
 
         // Создаем клиентов для опроса дочерних узлов
         std::vector<async_node_client*> child_clients;
