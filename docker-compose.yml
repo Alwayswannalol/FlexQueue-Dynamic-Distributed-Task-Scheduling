@@ -18,3 +18,13 @@ services:
     command: ["./build/server", "0.0.0.0:50053"]
     ports:
       - "50053:50053"
+
+  client:
+    build: .
+    command: ["./build/client", "server1:50051"]
+    ports:
+      - "50050:50050"
+    depends_on:
+      - server1
+      - server2
+      - server3
