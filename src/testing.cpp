@@ -1,5 +1,5 @@
-#include "async_client_node.h"
-#include "async_server_node.h"
+#include "client/async_client_node.h"
+#include "server/async_server_node.h"
 
 int main() {
     async_node_server master_node("0.0.0.0:50051", {"0.0.0.0:50052"});
@@ -35,7 +35,8 @@ int main() {
     });
     std::this_thread::sleep_for(std::chrono::seconds(1));
 
-    async_node_client* client = new async_node_client(grpc::CreateChannel("0.0.0.0:50051", grpc::InsecureChannelCredentials()), "0.0.0.0:50051");
+    std::shared_ptr<async_node_client> client = std::make_shared<async_node_client>(grpc::CreateChannel("0.0.0.0:50051", grpc::InsecureChannelCredentials()), 
+                                                                                    "0.0.0.0:50051");
 
     std::atomic<int> quant_requests;
     quant_requests.store(1);
@@ -58,9 +59,6 @@ int main() {
     while (quant_requests > 0) {
         continue;
     }
-
-    // Удаление клиента и серверов
-    delete client;
 
     mater_node_run.join();
     node1_run.join();
