@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <atomic>
+#include <mutex>
+#include <condition_variable>
 
 #include <grpcpp/grpcpp.h>
 
@@ -19,6 +21,10 @@ using DistributionSystem::FaultToleranceService;
 using DistributionSystem::PingRequest;
 using DistributionSystem::PingResponse;
 
+using DistributionSystem::DistributionTasksService;
+using DistributionSystem::CollectDataRequest;
+using DistributionSystem::CollectedData;
+
 #include "../client/async_client_node.h"
 
 class async_node_server {
@@ -27,12 +33,12 @@ public:
         server_->Shutdown();
         cq_->Shutdown();
 
-        // Обработка оставшихся событий после Shutdown
         void* got_tag;
         bool ok;
         while (cq_->Next(&got_tag, &ok)) {
             if (ok) {
-                delete static_cast<call_data*>(got_tag); // Удаление обработанных данных
+                delete static_cast<ping_rpc*>(got_tag);
+                delete static_cast<collect_data_for_distribution_rpc*>(got_tag);
             }
         }
     }
@@ -43,10 +49,10 @@ public:
     void Run();
 
 private:
-    class call_data {
+    // Класс для обработки Ping RPC
+    class ping_rpc {
     public:
-        call_data(FaultToleranceService::AsyncService* service,
-                 ServerCompletionQueue* cq, std::vector<std::string> children)
+        ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, std::vector<std::string> children)
             : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
             proceed(children);
         }
@@ -63,9 +69,32 @@ private:
         PingRequest request_;
         PingResponse response_;
         ServerAsyncResponseWriter<PingResponse> responder_;
-
         enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus status_;  // Текущий статус RPC
+        CallStatus status_;
+    };
+
+    // Класс для обработки CollectData RPC
+    class collect_data_for_distribution_rpc {
+    public:
+        collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, std::vector<std::string> children)
+            : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
+            proceed(children);
+        }
+
+        void proceed(std::vector<std::string> children);
+
+        int getStatusRpc();
+
+    private:
+        DistributionTasksService::AsyncService* service_;
+        ServerCompletionQueue* cq_;
+        ServerContext ctx_;
+
+        CollectDataRequest request_;
+        CollectedData response_;
+        ServerAsyncResponseWriter<CollectedData> responder_;
+        enum CallStatus { CREATE, PROCESS, FINISH };
+        CallStatus status_;
     };
 
     void handle_rpcs();
@@ -74,7 +103,8 @@ private:
     std::vector<std::string> children_;
 
     std::unique_ptr<ServerCompletionQueue> cq_;
-    FaultToleranceService::AsyncService service_;
+    FaultToleranceService::AsyncService fault_tolerance_service_;
+    DistributionTasksService::AsyncService distribution_tasks_service_;
     std::unique_ptr<Server> server_;
 };
 

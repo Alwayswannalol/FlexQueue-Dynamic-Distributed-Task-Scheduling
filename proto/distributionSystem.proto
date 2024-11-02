@@ -9,7 +9,7 @@ service DistributionTasksService {
 }
 
 message CollectDataRequest {
-  string to_server = 1;
+  string to_server_address = 1;
 }
 
 message CollectedData{

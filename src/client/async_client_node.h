@@ -6,6 +6,7 @@
 #include <string>
 #include <atomic>
 #include <mutex>
+#include <condition_variable>
 
 #include <grpcpp/grpcpp.h>
 
@@ -21,6 +22,10 @@ using DistributionSystem::FaultToleranceService;
 using DistributionSystem::PingRequest;
 using DistributionSystem::PingResponse;
 
+using DistributionSystem::DistributionTasksService;
+using DistributionSystem::CollectDataRequest;
+using DistributionSystem::CollectedData;
+
 class async_node_client {
 public:
     ~async_node_client() {
@@ -35,26 +40,40 @@ public:
     }
 
     explicit async_node_client(std::shared_ptr<Channel> channel, std::string server_address)
-        : stub_(FaultToleranceService::NewStub(channel)), server_address_(server_address) {}
+        : fault_tolerance_stub_(FaultToleranceService::NewStub(channel)),
+          distribution_tasks_stub_(DistributionTasksService::NewStub(channel)),
+          server_address_(server_address) {}
 
     // Асинхронный метод для отправки Ping-запросов
     void async_ping();
 
+    // Асинхронный метод для отправки CollectData-запросов
+    void async_collect_data_for_distribution();
+
     // Обработка результатов асинхронных запросов
-    void process_responses(std::atomic<int>& quant_replies, std::string& server_address, std::string& server_is_alive);
-
-
-    // Структура для хранения состояния асинхронного запроса
-    struct async_call {
-        PingRequest request;
-        PingResponse reply;
-        ClientContext context;
-        Status status;
-        std::unique_ptr<ClientAsyncResponseReader<PingResponse>> response_reader;
-    };
+    void process_responses(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& server_address, 
+                           std::string& server_is_alive);
 
 private:
-    std::unique_ptr<FaultToleranceService::Stub> stub_;
+    // Структура для хранения состояния асинхронного запроса
+    struct async_call {
+        enum CallType { PING, COLLECT_DATA_FOR_DISTRIBUTION } type;
+
+        PingRequest ping_request;
+        PingResponse ping_reply;
+
+        CollectDataRequest collect_data_for_distribution_request;
+        CollectedData collect_data_for_distribution_reply;
+
+        ClientContext context;
+        Status status;
+
+        std::unique_ptr<ClientAsyncResponseReader<PingResponse>> ping_response_reader;
+        std::unique_ptr<ClientAsyncResponseReader<CollectedData>> collect_data_for_distribution_response_reader;
+    };
+
+    std::unique_ptr<FaultToleranceService::Stub> fault_tolerance_stub_;
+    std::unique_ptr<DistributionTasksService::Stub> distribution_tasks_stub_;
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
     std::string server_address_;
     std::mutex mtx_;

@@ -189,20 +189,20 @@ class CollectDataRequest final :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kToServerFieldNumber = 1,
+    kToServerAddressFieldNumber = 1,
   };
-  // string to_server = 1;
-  void clear_to_server();
-  const std::string& to_server() const;
+  // string to_server_address = 1;
+  void clear_to_server_address();
+  const std::string& to_server_address() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_to_server(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_to_server();
-  PROTOBUF_NODISCARD std::string* release_to_server();
-  void set_allocated_to_server(std::string* to_server);
+  void set_to_server_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_to_server_address();
+  PROTOBUF_NODISCARD std::string* release_to_server_address();
+  void set_allocated_to_server_address(std::string* to_server_address);
   private:
-  const std::string& _internal_to_server() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_to_server(const std::string& value);
-  std::string* _internal_mutable_to_server();
+  const std::string& _internal_to_server_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_to_server_address(const std::string& value);
+  std::string* _internal_mutable_to_server_address();
   public:
 
   // @@protoc_insertion_point(class_scope:DistributionSystem.CollectDataRequest)
@@ -213,7 +213,7 @@ class CollectDataRequest final :
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
   struct Impl_ {
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr to_server_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr to_server_address_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -721,54 +721,54 @@ class PingResponse final :
 #endif  // __GNUC__
 // CollectDataRequest
 
-// string to_server = 1;
-inline void CollectDataRequest::clear_to_server() {
-  _impl_.to_server_.ClearToEmpty();
+// string to_server_address = 1;
+inline void CollectDataRequest::clear_to_server_address() {
+  _impl_.to_server_address_.ClearToEmpty();
 }
-inline const std::string& CollectDataRequest::to_server() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.CollectDataRequest.to_server)
-  return _internal_to_server();
+inline const std::string& CollectDataRequest::to_server_address() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.CollectDataRequest.to_server_address)
+  return _internal_to_server_address();
 }
 template <typename ArgT0, typename... ArgT>
 inline PROTOBUF_ALWAYS_INLINE
-void CollectDataRequest::set_to_server(ArgT0&& arg0, ArgT... args) {
+void CollectDataRequest::set_to_server_address(ArgT0&& arg0, ArgT... args) {
  
- _impl_.to_server_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:DistributionSystem.CollectDataRequest.to_server)
+ _impl_.to_server_address_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.CollectDataRequest.to_server_address)
 }
-inline std::string* CollectDataRequest::mutable_to_server() {
-  std::string* _s = _internal_mutable_to_server();
-  // @@protoc_insertion_point(field_mutable:DistributionSystem.CollectDataRequest.to_server)
+inline std::string* CollectDataRequest::mutable_to_server_address() {
+  std::string* _s = _internal_mutable_to_server_address();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.CollectDataRequest.to_server_address)
   return _s;
 }
-inline const std::string& CollectDataRequest::_internal_to_server() const {
-  return _impl_.to_server_.Get();
+inline const std::string& CollectDataRequest::_internal_to_server_address() const {
+  return _impl_.to_server_address_.Get();
 }
-inline void CollectDataRequest::_internal_set_to_server(const std::string& value) {
+inline void CollectDataRequest::_internal_set_to_server_address(const std::string& value) {
   
-  _impl_.to_server_.Set(value, GetArenaForAllocation());
+  _impl_.to_server_address_.Set(value, GetArenaForAllocation());
 }
-inline std::string* CollectDataRequest::_internal_mutable_to_server() {
+inline std::string* CollectDataRequest::_internal_mutable_to_server_address() {
   
-  return _impl_.to_server_.Mutable(GetArenaForAllocation());
+  return _impl_.to_server_address_.Mutable(GetArenaForAllocation());
 }
-inline std::string* CollectDataRequest::release_to_server() {
-  // @@protoc_insertion_point(field_release:DistributionSystem.CollectDataRequest.to_server)
-  return _impl_.to_server_.Release();
+inline std::string* CollectDataRequest::release_to_server_address() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.CollectDataRequest.to_server_address)
+  return _impl_.to_server_address_.Release();
 }
-inline void CollectDataRequest::set_allocated_to_server(std::string* to_server) {
-  if (to_server != nullptr) {
+inline void CollectDataRequest::set_allocated_to_server_address(std::string* to_server_address) {
+  if (to_server_address != nullptr) {
     
   } else {
     
   }
-  _impl_.to_server_.SetAllocated(to_server, GetArenaForAllocation());
+  _impl_.to_server_address_.SetAllocated(to_server_address, GetArenaForAllocation());
 #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.to_server_.IsDefault()) {
-    _impl_.to_server_.Set("", GetArenaForAllocation());
+  if (_impl_.to_server_address_.IsDefault()) {
+    _impl_.to_server_address_.Set("", GetArenaForAllocation());
   }
 #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.CollectDataRequest.to_server)
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.CollectDataRequest.to_server_address)
 }
 
 // -------------------------------------------------------------------

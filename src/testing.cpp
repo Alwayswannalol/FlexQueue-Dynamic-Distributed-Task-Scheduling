@@ -38,14 +38,17 @@ int main() {
     std::shared_ptr<async_node_client> client = std::make_shared<async_node_client>(grpc::CreateChannel("0.0.0.0:50051", grpc::InsecureChannelCredentials()), 
                                                                                     "0.0.0.0:50051");
 
-    std::atomic<int> quant_requests;
-    quant_requests.store(1);
+    std::atomic<int> requests_count;
+    requests_count.store(1);
     std::string s1;
     std::string s2;
 
+    std::condition_variable cv;
+    std::mutex mtx;
+
     std::thread response_thread([&]() {
         try {
-            client->process_responses(quant_requests, s1, s2);
+            client->process_responses(requests_count, cv, s1, s2);
         } catch (const std::exception& e) {
             std::cerr << "Exception in response_thread: " << e.what() << std::endl;
         }
@@ -56,9 +59,8 @@ int main() {
     // Ждем завершения потока обработки ответов
     response_thread.detach();
 
-    while (quant_requests > 0) {
-        continue;
-    }
+    std::unique_lock<std::mutex> lock(mtx);
+    cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
 
     mater_node_run.join();
     node1_run.join();
