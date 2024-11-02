@@ -4,10 +4,10 @@
 ## Запуск:
 Для запукса тестового сценария из корневой папки проекта запустите команду:
 ```bash
-sudo docker-compose up --build
+docker-compose up --build
 ```
 ## Выключение:
 Для выключения серверов выполните команду:
 ```bash
-sudo docker-compose up --build
+docker-compose down
 ```
