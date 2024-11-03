@@ -27,6 +27,12 @@ using DistributionSystem::CollectedData;
 
 #include "../client/async_client_node.h"
 
+enum RPC_TYPE {
+    PING,
+    COLLECT_DATA_FOR_DISTRIBUTION,
+    UNKNOWN
+};
+
 class async_node_server {
 public:
     ~async_node_server() {
@@ -49,17 +55,25 @@ public:
     void Run();
 
 private:
-    // Класс для обработки Ping RPC
-    class ping_rpc {
+    class base_rpc {
     public:
-        ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, std::vector<std::string> children)
-            : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
+        // TODO: можно сделать обработку переменного числа параметров, но если появится необходимость
+        virtual void proceed(std::vector<std::string> children) = 0;
+        RPC_TYPE rpc_type_;
+        base_rpc(RPC_TYPE rpc_type): rpc_type_(rpc_type) {}
+    };
+
+    // Класс для обработки Ping RPC
+    class ping_rpc: public base_rpc {
+    public:
+        ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
+            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
             proceed(children);
         }
 
-        void proceed(std::vector<std::string> children);
+        void proceed(std::vector<std::string> children) override;
 
-        int getStatusRpc();
+        int get_status_rpc();
 
     private:
         FaultToleranceService::AsyncService* service_;
@@ -74,16 +88,16 @@ private:
     };
 
     // Класс для обработки CollectData RPC
-    class collect_data_for_distribution_rpc {
+    class collect_data_for_distribution_rpc: public base_rpc {
     public:
-        collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, std::vector<std::string> children)
-            : service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
+        collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
+            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
             proceed(children);
         }
 
-        void proceed(std::vector<std::string> children);
+        void proceed(std::vector<std::string> children) override;
 
-        int getStatusRpc();
+        int get_status_rpc();
 
     private:
         DistributionTasksService::AsyncService* service_;

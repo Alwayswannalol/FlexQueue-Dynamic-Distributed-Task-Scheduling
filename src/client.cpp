@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
         
         client.async_collect_data_for_distribution();
 
-        // client.async_ping();
+        client.async_ping();
 
         // Ждем завершения потока обработки ответов
         response_thread.join();

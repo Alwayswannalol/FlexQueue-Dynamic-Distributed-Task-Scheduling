@@ -21,7 +21,7 @@ void async_node_server::ping_rpc::proceed(std::vector<std::string> children) {
         service_->RequestPing(&ctx_, &request_, &responder_, cq_, cq_, this);
     } 
     else if (status_ == PROCESS) {
-        new ping_rpc(service_, cq_, children);  // Для обработки нового запроса создаем новый объект ping_rpc
+        new ping_rpc(service_, cq_, RPC_TYPE::PING, children);  // Для обработки нового запроса создаем новый объект ping_rpc
 
         std::string full_string_server_addresses = "";
         std::string full_string_server_is_alive = "";
@@ -63,7 +63,7 @@ void async_node_server::ping_rpc::proceed(std::vector<std::string> children) {
     }
 }
 
-int async_node_server::ping_rpc::getStatusRpc() {
+int async_node_server::ping_rpc::get_status_rpc() {
     return status_;
 }
 
@@ -73,7 +73,7 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(std::vector<s
         service_->RequestCollectData(&ctx_, &request_, &responder_, cq_, cq_, this);
     } 
     else if (status_ == PROCESS) {
-        new collect_data_for_distribution_rpc(service_, cq_, children);  // Для обработки нового запроса создаем новый объект collect_data_for_distribution_rpc
+        new collect_data_for_distribution_rpc(service_, cq_, RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children);  // Для обработки нового запроса создаем новый объект collect_data_for_distribution_rpc
 
         std::string full_string_server_addresses = "";
         std::string full_string_collected_data_for_distribution = "";
@@ -115,28 +115,26 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(std::vector<s
     }
 }
 
-int async_node_server::collect_data_for_distribution_rpc::getStatusRpc() {
+int async_node_server::collect_data_for_distribution_rpc::get_status_rpc() {
     return status_;
 }
 
 // TODO: обрабатывается только метод, который первый написан в if - исправить
 void async_node_server::handle_rpcs() {
-    new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), children_);
-    new ping_rpc(&fault_tolerance_service_, cq_.get(), children_);
+    new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children_);
+    new ping_rpc(&fault_tolerance_service_, cq_.get(), RPC_TYPE::PING, children_);
 
     void* tag;
     bool ok;
     while (true) {
         cq_->Next(&tag, &ok);
         if (ok) {
+            auto rpc_call = static_cast<base_rpc*>(tag);
+
             std::cout << "Processing tag: " << tag << std::endl; 
-            if (auto* collect_data_for_distribution_call = dynamic_cast<collect_data_for_distribution_rpc*>(static_cast<collect_data_for_distribution_rpc*>(tag))) {
-                std::cout << "StatusRpc CollectData: " << collect_data_for_distribution_call->getStatusRpc() << std::endl;
-                collect_data_for_distribution_call->proceed(children_);
-            } else if (auto* ping_call = dynamic_cast<ping_rpc*>(static_cast<ping_rpc*>(tag))) {
-                std::cout << "StatusRpc Ping: " << ping_call->getStatusRpc() << std::endl;
-                ping_call->proceed(children_);
-            }
+            std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
+
+            rpc_call->proceed(children_);
         } 
         else {
             std::cerr << "Error: ServerCompletionQueue returned false" << std::endl;
