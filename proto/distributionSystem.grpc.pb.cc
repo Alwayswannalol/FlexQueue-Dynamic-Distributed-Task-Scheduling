@@ -21,6 +21,59 @@
 #include <grpcpp/support/sync_stream.h>
 namespace DistributionSystem {
 
+static const char* TaskExecutionService_method_names[] = {
+  "/DistributionSystem.TaskExecutionService/ExecuteDetectionTask",
+};
+
+std::unique_ptr< TaskExecutionService::Stub> TaskExecutionService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
+  (void)options;
+  std::unique_ptr< TaskExecutionService::Stub> stub(new TaskExecutionService::Stub(channel, options));
+  return stub;
+}
+
+TaskExecutionService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
+  : channel_(channel), rpcmethod_ExecuteDetectionTask_(TaskExecutionService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::BIDI_STREAMING, channel)
+  {}
+
+::grpc::ClientReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* TaskExecutionService::Stub::ExecuteDetectionTaskRaw(::grpc::ClientContext* context) {
+  return ::grpc::internal::ClientReaderWriterFactory< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>::Create(channel_.get(), rpcmethod_ExecuteDetectionTask_, context);
+}
+
+void TaskExecutionService::Stub::async::ExecuteDetectionTask(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::DistributionSystem::ImageRequest,::DistributionSystem::ImageResponse>* reactor) {
+  ::grpc::internal::ClientCallbackReaderWriterFactory< ::DistributionSystem::ImageRequest,::DistributionSystem::ImageResponse>::Create(stub_->channel_.get(), stub_->rpcmethod_ExecuteDetectionTask_, context, reactor);
+}
+
+::grpc::ClientAsyncReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* TaskExecutionService::Stub::AsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>::Create(channel_.get(), cq, rpcmethod_ExecuteDetectionTask_, context, true, tag);
+}
+
+::grpc::ClientAsyncReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* TaskExecutionService::Stub::PrepareAsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncReaderWriterFactory< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>::Create(channel_.get(), cq, rpcmethod_ExecuteDetectionTask_, context, false, nullptr);
+}
+
+TaskExecutionService::Service::Service() {
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      TaskExecutionService_method_names[0],
+      ::grpc::internal::RpcMethod::BIDI_STREAMING,
+      new ::grpc::internal::BidiStreamingHandler< TaskExecutionService::Service, ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>(
+          [](TaskExecutionService::Service* service,
+             ::grpc::ServerContext* ctx,
+             ::grpc::ServerReaderWriter<::DistributionSystem::ImageResponse,
+             ::DistributionSystem::ImageRequest>* stream) {
+               return service->ExecuteDetectionTask(ctx, stream);
+             }, this)));
+}
+
+TaskExecutionService::Service::~Service() {
+}
+
+::grpc::Status TaskExecutionService::Service::ExecuteDetectionTask(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::DistributionSystem::ImageResponse, ::DistributionSystem::ImageRequest>* stream) {
+  (void) context;
+  (void) stream;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+
 static const char* DistributionTasksService_method_names[] = {
   "/DistributionSystem.DistributionTasksService/CollectData",
 };

@@ -51,6 +51,12 @@ extern CollectDataRequestDefaultTypeInternal _CollectDataRequest_default_instanc
 class CollectedData;
 struct CollectedDataDefaultTypeInternal;
 extern CollectedDataDefaultTypeInternal _CollectedData_default_instance_;
+class ImageRequest;
+struct ImageRequestDefaultTypeInternal;
+extern ImageRequestDefaultTypeInternal _ImageRequest_default_instance_;
+class ImageResponse;
+struct ImageResponseDefaultTypeInternal;
+extern ImageResponseDefaultTypeInternal _ImageResponse_default_instance_;
 class PingRequest;
 struct PingRequestDefaultTypeInternal;
 extern PingRequestDefaultTypeInternal _PingRequest_default_instance_;
@@ -61,12 +67,428 @@ extern PingResponseDefaultTypeInternal _PingResponse_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::DistributionSystem::CollectDataRequest* Arena::CreateMaybeMessage<::DistributionSystem::CollectDataRequest>(Arena*);
 template<> ::DistributionSystem::CollectedData* Arena::CreateMaybeMessage<::DistributionSystem::CollectedData>(Arena*);
+template<> ::DistributionSystem::ImageRequest* Arena::CreateMaybeMessage<::DistributionSystem::ImageRequest>(Arena*);
+template<> ::DistributionSystem::ImageResponse* Arena::CreateMaybeMessage<::DistributionSystem::ImageResponse>(Arena*);
 template<> ::DistributionSystem::PingRequest* Arena::CreateMaybeMessage<::DistributionSystem::PingRequest>(Arena*);
 template<> ::DistributionSystem::PingResponse* Arena::CreateMaybeMessage<::DistributionSystem::PingResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace DistributionSystem {
 
 // ===================================================================
+
+class ImageRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.ImageRequest) */ {
+ public:
+  inline ImageRequest() : ImageRequest(nullptr) {}
+  ~ImageRequest() override;
+  explicit PROTOBUF_CONSTEXPR ImageRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ImageRequest(const ImageRequest& from);
+  ImageRequest(ImageRequest&& from) noexcept
+    : ImageRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ImageRequest& operator=(const ImageRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ImageRequest& operator=(ImageRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ImageRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ImageRequest* internal_default_instance() {
+    return reinterpret_cast<const ImageRequest*>(
+               &_ImageRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  friend void swap(ImageRequest& a, ImageRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ImageRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ImageRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ImageRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ImageRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ImageRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ImageRequest& from) {
+    ImageRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ImageRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.ImageRequest";
+  }
+  protected:
+  explicit ImageRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kClientNameFieldNumber = 1,
+    kFilenameFieldNumber = 2,
+    kPathToDestinationNodeFieldNumber = 3,
+    kDataFieldNumber = 6,
+    kIsLastChunkOfPhotoFieldNumber = 4,
+    kIsLastPhotoFieldNumber = 5,
+  };
+  // string client_name = 1;
+  void clear_client_name();
+  const std::string& client_name() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_client_name(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_client_name();
+  PROTOBUF_NODISCARD std::string* release_client_name();
+  void set_allocated_client_name(std::string* client_name);
+  private:
+  const std::string& _internal_client_name() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_client_name(const std::string& value);
+  std::string* _internal_mutable_client_name();
+  public:
+
+  // string filename = 2;
+  void clear_filename();
+  const std::string& filename() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filename(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filename();
+  PROTOBUF_NODISCARD std::string* release_filename();
+  void set_allocated_filename(std::string* filename);
+  private:
+  const std::string& _internal_filename() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filename(const std::string& value);
+  std::string* _internal_mutable_filename();
+  public:
+
+  // string path_to_destination_node = 3;
+  void clear_path_to_destination_node();
+  const std::string& path_to_destination_node() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_path_to_destination_node(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_path_to_destination_node();
+  PROTOBUF_NODISCARD std::string* release_path_to_destination_node();
+  void set_allocated_path_to_destination_node(std::string* path_to_destination_node);
+  private:
+  const std::string& _internal_path_to_destination_node() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_path_to_destination_node(const std::string& value);
+  std::string* _internal_mutable_path_to_destination_node();
+  public:
+
+  // bytes data = 6;
+  void clear_data();
+  const std::string& data() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_data(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_data();
+  PROTOBUF_NODISCARD std::string* release_data();
+  void set_allocated_data(std::string* data);
+  private:
+  const std::string& _internal_data() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_data(const std::string& value);
+  std::string* _internal_mutable_data();
+  public:
+
+  // bool is_last_chunk_of_photo = 4;
+  void clear_is_last_chunk_of_photo();
+  bool is_last_chunk_of_photo() const;
+  void set_is_last_chunk_of_photo(bool value);
+  private:
+  bool _internal_is_last_chunk_of_photo() const;
+  void _internal_set_is_last_chunk_of_photo(bool value);
+  public:
+
+  // bool is_last_photo = 5;
+  void clear_is_last_photo();
+  bool is_last_photo() const;
+  void set_is_last_photo(bool value);
+  private:
+  bool _internal_is_last_photo() const;
+  void _internal_set_is_last_photo(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.ImageRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr client_name_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_to_destination_node_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
+    bool is_last_chunk_of_photo_;
+    bool is_last_photo_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
+// -------------------------------------------------------------------
+
+class ImageResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.ImageResponse) */ {
+ public:
+  inline ImageResponse() : ImageResponse(nullptr) {}
+  ~ImageResponse() override;
+  explicit PROTOBUF_CONSTEXPR ImageResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  ImageResponse(const ImageResponse& from);
+  ImageResponse(ImageResponse&& from) noexcept
+    : ImageResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline ImageResponse& operator=(const ImageResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline ImageResponse& operator=(ImageResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const ImageResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const ImageResponse* internal_default_instance() {
+    return reinterpret_cast<const ImageResponse*>(
+               &_ImageResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(ImageResponse& a, ImageResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(ImageResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(ImageResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  ImageResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<ImageResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const ImageResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const ImageResponse& from) {
+    ImageResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ImageResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.ImageResponse";
+  }
+  protected:
+  explicit ImageResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kFilenameFieldNumber = 1,
+    kDataFieldNumber = 4,
+    kIsLastChunkOfPhotoFieldNumber = 2,
+    kIsLastPhotoFieldNumber = 3,
+  };
+  // string filename = 1;
+  void clear_filename();
+  const std::string& filename() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_filename(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_filename();
+  PROTOBUF_NODISCARD std::string* release_filename();
+  void set_allocated_filename(std::string* filename);
+  private:
+  const std::string& _internal_filename() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_filename(const std::string& value);
+  std::string* _internal_mutable_filename();
+  public:
+
+  // bytes data = 4;
+  void clear_data();
+  const std::string& data() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_data(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_data();
+  PROTOBUF_NODISCARD std::string* release_data();
+  void set_allocated_data(std::string* data);
+  private:
+  const std::string& _internal_data() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_data(const std::string& value);
+  std::string* _internal_mutable_data();
+  public:
+
+  // bool is_last_chunk_of_photo = 2;
+  void clear_is_last_chunk_of_photo();
+  bool is_last_chunk_of_photo() const;
+  void set_is_last_chunk_of_photo(bool value);
+  private:
+  bool _internal_is_last_chunk_of_photo() const;
+  void _internal_set_is_last_chunk_of_photo(bool value);
+  public:
+
+  // bool is_last_photo = 3;
+  void clear_is_last_photo();
+  bool is_last_photo() const;
+  void set_is_last_photo(bool value);
+  private:
+  bool _internal_is_last_photo() const;
+  void _internal_set_is_last_photo(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.ImageResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
+    bool is_last_chunk_of_photo_;
+    bool is_last_photo_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
+// -------------------------------------------------------------------
 
 class CollectDataRequest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.CollectDataRequest) */ {
@@ -116,7 +538,7 @@ class CollectDataRequest final :
                &_CollectDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    2;
 
   friend void swap(CollectDataRequest& a, CollectDataRequest& b) {
     a.Swap(&b);
@@ -269,7 +691,7 @@ class CollectedData final :
                &_CollectedData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    3;
 
   friend void swap(CollectedData& a, CollectedData& b) {
     a.Swap(&b);
@@ -438,7 +860,7 @@ class PingRequest final :
                &_PingRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(PingRequest& a, PingRequest& b) {
     a.Swap(&b);
@@ -591,7 +1013,7 @@ class PingResponse final :
                &_PingResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(PingResponse& a, PingResponse& b) {
     a.Swap(&b);
@@ -719,6 +1141,394 @@ class PingResponse final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// ImageRequest
+
+// string client_name = 1;
+inline void ImageRequest::clear_client_name() {
+  _impl_.client_name_.ClearToEmpty();
+}
+inline const std::string& ImageRequest::client_name() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.client_name)
+  return _internal_client_name();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageRequest::set_client_name(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.client_name_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.client_name)
+}
+inline std::string* ImageRequest::mutable_client_name() {
+  std::string* _s = _internal_mutable_client_name();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageRequest.client_name)
+  return _s;
+}
+inline const std::string& ImageRequest::_internal_client_name() const {
+  return _impl_.client_name_.Get();
+}
+inline void ImageRequest::_internal_set_client_name(const std::string& value) {
+  
+  _impl_.client_name_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageRequest::_internal_mutable_client_name() {
+  
+  return _impl_.client_name_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageRequest::release_client_name() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageRequest.client_name)
+  return _impl_.client_name_.Release();
+}
+inline void ImageRequest::set_allocated_client_name(std::string* client_name) {
+  if (client_name != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.client_name_.SetAllocated(client_name, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.client_name_.IsDefault()) {
+    _impl_.client_name_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.client_name)
+}
+
+// string filename = 2;
+inline void ImageRequest::clear_filename() {
+  _impl_.filename_.ClearToEmpty();
+}
+inline const std::string& ImageRequest::filename() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.filename)
+  return _internal_filename();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageRequest::set_filename(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.filename_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.filename)
+}
+inline std::string* ImageRequest::mutable_filename() {
+  std::string* _s = _internal_mutable_filename();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageRequest.filename)
+  return _s;
+}
+inline const std::string& ImageRequest::_internal_filename() const {
+  return _impl_.filename_.Get();
+}
+inline void ImageRequest::_internal_set_filename(const std::string& value) {
+  
+  _impl_.filename_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageRequest::_internal_mutable_filename() {
+  
+  return _impl_.filename_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageRequest::release_filename() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageRequest.filename)
+  return _impl_.filename_.Release();
+}
+inline void ImageRequest::set_allocated_filename(std::string* filename) {
+  if (filename != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.filename_.SetAllocated(filename, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.filename_.IsDefault()) {
+    _impl_.filename_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.filename)
+}
+
+// string path_to_destination_node = 3;
+inline void ImageRequest::clear_path_to_destination_node() {
+  _impl_.path_to_destination_node_.ClearToEmpty();
+}
+inline const std::string& ImageRequest::path_to_destination_node() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.path_to_destination_node)
+  return _internal_path_to_destination_node();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageRequest::set_path_to_destination_node(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.path_to_destination_node_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.path_to_destination_node)
+}
+inline std::string* ImageRequest::mutable_path_to_destination_node() {
+  std::string* _s = _internal_mutable_path_to_destination_node();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageRequest.path_to_destination_node)
+  return _s;
+}
+inline const std::string& ImageRequest::_internal_path_to_destination_node() const {
+  return _impl_.path_to_destination_node_.Get();
+}
+inline void ImageRequest::_internal_set_path_to_destination_node(const std::string& value) {
+  
+  _impl_.path_to_destination_node_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageRequest::_internal_mutable_path_to_destination_node() {
+  
+  return _impl_.path_to_destination_node_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageRequest::release_path_to_destination_node() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageRequest.path_to_destination_node)
+  return _impl_.path_to_destination_node_.Release();
+}
+inline void ImageRequest::set_allocated_path_to_destination_node(std::string* path_to_destination_node) {
+  if (path_to_destination_node != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.path_to_destination_node_.SetAllocated(path_to_destination_node, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.path_to_destination_node_.IsDefault()) {
+    _impl_.path_to_destination_node_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.path_to_destination_node)
+}
+
+// bool is_last_chunk_of_photo = 4;
+inline void ImageRequest::clear_is_last_chunk_of_photo() {
+  _impl_.is_last_chunk_of_photo_ = false;
+}
+inline bool ImageRequest::_internal_is_last_chunk_of_photo() const {
+  return _impl_.is_last_chunk_of_photo_;
+}
+inline bool ImageRequest::is_last_chunk_of_photo() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.is_last_chunk_of_photo)
+  return _internal_is_last_chunk_of_photo();
+}
+inline void ImageRequest::_internal_set_is_last_chunk_of_photo(bool value) {
+  
+  _impl_.is_last_chunk_of_photo_ = value;
+}
+inline void ImageRequest::set_is_last_chunk_of_photo(bool value) {
+  _internal_set_is_last_chunk_of_photo(value);
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.is_last_chunk_of_photo)
+}
+
+// bool is_last_photo = 5;
+inline void ImageRequest::clear_is_last_photo() {
+  _impl_.is_last_photo_ = false;
+}
+inline bool ImageRequest::_internal_is_last_photo() const {
+  return _impl_.is_last_photo_;
+}
+inline bool ImageRequest::is_last_photo() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.is_last_photo)
+  return _internal_is_last_photo();
+}
+inline void ImageRequest::_internal_set_is_last_photo(bool value) {
+  
+  _impl_.is_last_photo_ = value;
+}
+inline void ImageRequest::set_is_last_photo(bool value) {
+  _internal_set_is_last_photo(value);
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.is_last_photo)
+}
+
+// bytes data = 6;
+inline void ImageRequest::clear_data() {
+  _impl_.data_.ClearToEmpty();
+}
+inline const std::string& ImageRequest::data() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.data)
+  return _internal_data();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageRequest::set_data(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.data_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.data)
+}
+inline std::string* ImageRequest::mutable_data() {
+  std::string* _s = _internal_mutable_data();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageRequest.data)
+  return _s;
+}
+inline const std::string& ImageRequest::_internal_data() const {
+  return _impl_.data_.Get();
+}
+inline void ImageRequest::_internal_set_data(const std::string& value) {
+  
+  _impl_.data_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageRequest::_internal_mutable_data() {
+  
+  return _impl_.data_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageRequest::release_data() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageRequest.data)
+  return _impl_.data_.Release();
+}
+inline void ImageRequest::set_allocated_data(std::string* data) {
+  if (data != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.data_.SetAllocated(data, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.data_.IsDefault()) {
+    _impl_.data_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.data)
+}
+
+// -------------------------------------------------------------------
+
+// ImageResponse
+
+// string filename = 1;
+inline void ImageResponse::clear_filename() {
+  _impl_.filename_.ClearToEmpty();
+}
+inline const std::string& ImageResponse::filename() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.filename)
+  return _internal_filename();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageResponse::set_filename(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.filename_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.filename)
+}
+inline std::string* ImageResponse::mutable_filename() {
+  std::string* _s = _internal_mutable_filename();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageResponse.filename)
+  return _s;
+}
+inline const std::string& ImageResponse::_internal_filename() const {
+  return _impl_.filename_.Get();
+}
+inline void ImageResponse::_internal_set_filename(const std::string& value) {
+  
+  _impl_.filename_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageResponse::_internal_mutable_filename() {
+  
+  return _impl_.filename_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageResponse::release_filename() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageResponse.filename)
+  return _impl_.filename_.Release();
+}
+inline void ImageResponse::set_allocated_filename(std::string* filename) {
+  if (filename != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.filename_.SetAllocated(filename, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.filename_.IsDefault()) {
+    _impl_.filename_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageResponse.filename)
+}
+
+// bool is_last_chunk_of_photo = 2;
+inline void ImageResponse::clear_is_last_chunk_of_photo() {
+  _impl_.is_last_chunk_of_photo_ = false;
+}
+inline bool ImageResponse::_internal_is_last_chunk_of_photo() const {
+  return _impl_.is_last_chunk_of_photo_;
+}
+inline bool ImageResponse::is_last_chunk_of_photo() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.is_last_chunk_of_photo)
+  return _internal_is_last_chunk_of_photo();
+}
+inline void ImageResponse::_internal_set_is_last_chunk_of_photo(bool value) {
+  
+  _impl_.is_last_chunk_of_photo_ = value;
+}
+inline void ImageResponse::set_is_last_chunk_of_photo(bool value) {
+  _internal_set_is_last_chunk_of_photo(value);
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.is_last_chunk_of_photo)
+}
+
+// bool is_last_photo = 3;
+inline void ImageResponse::clear_is_last_photo() {
+  _impl_.is_last_photo_ = false;
+}
+inline bool ImageResponse::_internal_is_last_photo() const {
+  return _impl_.is_last_photo_;
+}
+inline bool ImageResponse::is_last_photo() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.is_last_photo)
+  return _internal_is_last_photo();
+}
+inline void ImageResponse::_internal_set_is_last_photo(bool value) {
+  
+  _impl_.is_last_photo_ = value;
+}
+inline void ImageResponse::set_is_last_photo(bool value) {
+  _internal_set_is_last_photo(value);
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.is_last_photo)
+}
+
+// bytes data = 4;
+inline void ImageResponse::clear_data() {
+  _impl_.data_.ClearToEmpty();
+}
+inline const std::string& ImageResponse::data() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.data)
+  return _internal_data();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void ImageResponse::set_data(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.data_.SetBytes(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.data)
+}
+inline std::string* ImageResponse::mutable_data() {
+  std::string* _s = _internal_mutable_data();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageResponse.data)
+  return _s;
+}
+inline const std::string& ImageResponse::_internal_data() const {
+  return _impl_.data_.Get();
+}
+inline void ImageResponse::_internal_set_data(const std::string& value) {
+  
+  _impl_.data_.Set(value, GetArenaForAllocation());
+}
+inline std::string* ImageResponse::_internal_mutable_data() {
+  
+  return _impl_.data_.Mutable(GetArenaForAllocation());
+}
+inline std::string* ImageResponse::release_data() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.ImageResponse.data)
+  return _impl_.data_.Release();
+}
+inline void ImageResponse::set_allocated_data(std::string* data) {
+  if (data != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.data_.SetAllocated(data, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.data_.IsDefault()) {
+    _impl_.data_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageResponse.data)
+}
+
+// -------------------------------------------------------------------
+
 // CollectDataRequest
 
 // string to_server_address = 1;
@@ -1036,6 +1846,10 @@ inline void PingResponse::set_allocated_is_alive(std::string* is_alive) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
