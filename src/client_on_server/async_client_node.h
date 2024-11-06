@@ -1,8 +1,6 @@
 #ifndef ASYNC_CLIENT_NODE_H
 #define ASYNC_CLIENT_NODE_H
 
-#define CHUNK_SIZE 400
-
 #include <memory>
 #include <thread>
 #include <string>
@@ -30,16 +28,9 @@ using DistributionSystem::DistributionTasksService;
 using DistributionSystem::CollectDataRequest;
 using DistributionSystem::CollectedData;
 
-using DistributionSystem::TaskExecutionService;
-using DistributionSystem::ImageRequest;
-using DistributionSystem::ImageResponse;
-
-#include "../data_collection/files_info.h"
-
 enum CALL_TYPE {
     PING_CALL,
     COLLECT_DATA_FOR_DISTRIBUTION_CALL,
-    EXECUTE_DETECTION_TASK_CALL,
     UNKNOWN_CALL
 };
 
@@ -66,8 +57,6 @@ public:
 
     // Асинхронный метод для отправки CollectData-запросов
     void async_collect_data_for_distribution();
-
-    void async_execute_detection_task();
 
     // Обработка результатов асинхронных запросов
     // TODO: сделать обработку переменного числа параметров
@@ -119,7 +108,6 @@ private:
 
     std::unique_ptr<FaultToleranceService::Stub> fault_tolerance_stub_;
     std::unique_ptr<DistributionTasksService::Stub> distribution_tasks_stub_;
-    std::unique_ptr<TaskExecutionService::Stub> execution_task_stub_;
 
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
     std::string to_server_address_;

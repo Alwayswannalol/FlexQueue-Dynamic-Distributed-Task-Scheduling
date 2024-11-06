@@ -16,11 +16,9 @@ find_package(gRPC CONFIG REQUIRED)
 
 add_executable(server src/server.cpp src/server/async_server_node.cpp 
 src/client_on_server/async_client_node.cpp
-src/data_collection/files_info.cpp
 proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
 
-add_executable(client_on_server src/client_on_server.cpp src/client_on_server/async_client_node.cpp 
-src/data_collection/files_info.cpp
+add_executable(client_on_server src/client_on_server.cpp src/client_on_server/async_client_node.cpp
 proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
 
 target_link_libraries(server PRIVATE gRPC::grpc++ gRPC::grpc gRPC::grpc++_reflection protobuf::libprotobuf)

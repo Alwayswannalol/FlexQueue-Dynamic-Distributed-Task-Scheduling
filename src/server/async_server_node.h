@@ -40,7 +40,7 @@ using DistributionSystem::ImageResponse;
 enum RPC_TYPE {
     PING,
     COLLECT_DATA_FOR_DISTRIBUTION,
-    EXECUTE_DETECTION_TASK,
+    DETECTION_TASK_EXECUTION,
     UNKNOWN
 };
 
@@ -68,7 +68,7 @@ public:
 private:
     class base_rpc {
     public:
-        // TODO: можно сделать обработку переменного числа параметров
+        // TODO: сделать обработку переменного числа параметров
         virtual void proceed(std::vector<std::string> children) = 0;
 
         RPC_TYPE rpc_type_;
@@ -126,7 +126,25 @@ private:
         CallStatus status_;
     };
 
-    class execute_detection_rpc: public base_rpc {
+    class detection_task_execution_rpc: public base_rpc {
+    public:
+        detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
+            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {}
+        
+        void proceed(std::vector<std::string> children) override;
+
+        int get_status_rpc();
+
+    private:
+        TaskExecutionService::AsyncService* service_;
+        ServerCompletionQueue* cq_;
+        ServerContext ctx_;
+
+        ImageRequest request_;
+        ImageResponse response_;
+        ServerAsyncReaderWriter<ImageRequest, ImageResponse> responder_;
+        enum CallStatus { CREATE, PROCESS, FINISH };
+        CallStatus status_;
     };
 
     void handle_rpcs();
