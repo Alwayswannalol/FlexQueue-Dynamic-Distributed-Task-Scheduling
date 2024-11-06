@@ -21,6 +21,10 @@ void async_node_server::Run() {
     handle_rpcs();
 }
 
+int async_node_server::base_rpc::get_rpc_type() {
+    return rpc_type_;
+}
+
 void async_node_server::ping_rpc::proceed(std::vector<std::string> children) {
     if (status_ == CREATE) {
         status_ = PROCESS;
@@ -124,96 +128,9 @@ int async_node_server::collect_data_for_distribution_rpc::get_status_rpc() {
     return status_;
 }
 
-void async_node_server::execute_detection_rpc::proceed(std::vector<std::string> children) {
-    const char* data_from_client;
-
-    if (status_ == CREATE) {
-        status_ = START_PROCESS;
-        service_->RequestExecuteDetectionTask(&ctx_, &responder_, cq_, cq_, this);
-    } 
-    else if (status_ == START_PROCESS) {
-        new execute_detection_rpc(service_, cq_, RPC_TYPE::EXECUTE_DETECTION_TASK, children);
-        status_ = READ;
-        responder_.Read(&request_, this);
-    }
-    else if (status_ == READ) {
-        // TODO: когда будет обработка функции proceed с переменным числом параметров, можно будет передавать server_dir_, пока захардкодил
-        if (!write_photo) {
-            if (!std::filesystem::exists("/home/egor/work/code/FlexQueue/FlexQueue-Dynamic-Distributed-Task-Scheduling/tmp/" + request_.client_name())) {
-                std::filesystem::create_directories("/home/egor/work/code/FlexQueue/FlexQueue-Dynamic-Distributed-Task-Scheduling/tmp/" + request_.client_name());
-            }
-
-            // TODO: убрать output_, когда будет внедрена обработка
-            write_photo.open("/home/egor/work/code/FlexQueue/FlexQueue-Dynamic-Distributed-Task-Scheduling/tmp/" + request_.client_name() + "/output_" + std::to_string(num_photo) + ".jpg", std::ios::app);
-        }
-
-        data_from_client = request_.data().c_str();
-
-        if (!write_photo) {
-            std::cerr << "Error in writing file" << std::endl;
-        }
-
-        write_photo.write(data_from_client, request_.data().length());
-
-        if (request_.is_last_chunk_of_photo()) {
-            write_photo.close();
-            num_photo++;
-        }
-
-        if (request_.is_last_chunk_of_photo() && request_.is_last_photo()) {
-            // TODO: выполнение задачи
-            status_ = WRITE;
-        }
-        else {
-            responder_.Read(&request_, this);
-        }
-    }
-    else if (status_ == WRITE) {
-        char data_for_client[CHUNK_SIZE];
-        // TODO: отправка клиенту ответа
-        for (int i = 1; i <= num_photo; i++) {
-            std::string filepath = "/home/egor/work/code/FlexQueue/FlexQueue-Dynamic-Distributed-Task-Scheduling/tmp/" + request_.client_name() + "/output_" + std::to_string(i) + ".jpg";
-
-            std::ifstream read_photo(filepath);
-            int size_photo = files_info::get_size(filepath);
-
-            int numOfChunk = 1;
-
-            read_photo.read(data_for_client, CHUNK_SIZE);
-            while(numOfChunk * CHUNK_SIZE <= size_photo) {
-                response_.set_filename("output" + std::to_string(i) + ".jpg");
-                response_.set_is_last_chunk_of_photo(false);
-                if (i == num_photo) {
-                    response_.set_is_last_photo(true);
-                }
-                response_.set_data(data_for_client, read_photo.gcount());
-                responder_.Write(response_, this);
-            }
-            if (numOfChunk * CHUNK_SIZE != size_photo) {
-                response_.set_filename("output" + std::to_string(i) + ".jpg");
-                response_.set_is_last_chunk_of_photo(true);
-                if (i == num_photo) {
-                    response_.set_is_last_photo(true);
-                }
-                response_.set_data(data_for_client, read_photo.gcount());
-                responder_.Write(response_, this);
-            }
-
-            read_photo.close();
-
-            responder_.Finish(grpc::Status::OK, this);
-        }
-        status_ = FINISH;
-    }
-    else {
-        delete this;
-    }
-}
-
 void async_node_server::handle_rpcs() {
     new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children_);
     new ping_rpc(&fault_tolerance_service_, cq_.get(), RPC_TYPE::PING, children_);
-    new execute_detection_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::EXECUTE_DETECTION_TASK, children_);
 
     void* tag;
     bool ok;

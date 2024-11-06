@@ -3,14 +3,17 @@
 int main(int argc, char* argv[]) {
 
     std::string server_address;
+    std::string server_dir;
     std::vector<std::string> children;
 
-    if (argc == 2) {
-        server_address = argv[1];
+    if (argc == 3) {
+        server_dir = argv[1];
+        server_address = argv[2];
     }
-    else if (argc > 2) {
-        server_address = argv[1];
-        for (int i = 2; i < argc; i++) {
+    else if (argc > 3) {
+        server_dir = argv[1];
+        server_address = argv[2];
+        for (int i = 3; i < argc; i++) {
             children.push_back(argv[i]);
         }
     }
@@ -18,7 +21,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Error" << std::endl;
     }
 
-    async_node_server server(server_address, children);
+    async_node_server server(server_address, server_dir, children);
     server.Run();
     return 0;
 }

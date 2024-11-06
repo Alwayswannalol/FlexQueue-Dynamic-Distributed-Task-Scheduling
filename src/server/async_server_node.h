@@ -34,7 +34,7 @@ using DistributionSystem::TaskExecutionService;
 using DistributionSystem::ImageRequest;
 using DistributionSystem::ImageResponse;
 
-#include "../client/async_client_node.h"
+#include "../client_on_server/async_client_node.h"
 #include "../data_collection/files_info.h"
 
 enum RPC_TYPE {
@@ -60,9 +60,8 @@ public:
         }
     }
 
-    // TODO: посмотреть в контейнере какой указать server_dir_
-    explicit async_node_server(const std::string& server_address, std::vector<std::string> children)
-        : server_address_(server_address), children_(std::move(children)), server_dir_("") {}
+    explicit async_node_server(const std::string& server_address, std::string server_dir, std::vector<std::string> children)
+        : server_address_(server_address), children_(std::move(children)), server_dir_(server_dir) {}
 
     void Run();
 
@@ -71,8 +70,12 @@ private:
     public:
         // TODO: можно сделать обработку переменного числа параметров
         virtual void proceed(std::vector<std::string> children) = 0;
+
         RPC_TYPE rpc_type_;
+        int get_rpc_type();
+
         base_rpc(RPC_TYPE rpc_type): rpc_type_(rpc_type) {}
+        virtual ~base_rpc() = default;
     };
 
     // Класс для обработки Ping RPC
@@ -124,30 +127,6 @@ private:
     };
 
     class execute_detection_rpc: public base_rpc {
-    public:
-        execute_detection_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
-        : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE), num_photo(1) {}
-
-        void proceed(std::vector<std::string> children) override;
-
-        int get_status_rpc();
-
-    private:
-
-        TaskExecutionService::AsyncService* service_;
-        ServerCompletionQueue* cq_;
-        ServerContext ctx_;
-
-        ImageRequest request_;
-        ImageResponse response_;
-        ServerAsyncReaderWriter<ImageResponse, ImageRequest> responder_;
-
-        enum CallStatus { CREATE, START_PROCESS, READ, WRITE, FINISH };
-        CallStatus status_;
-
-        // Каждый объект класса обрабатывает один rpc, поэтому нужно и можно добавить как поля класса
-        std::ofstream write_photo;
-        int num_photo;
     };
 
     void handle_rpcs();
@@ -155,18 +134,6 @@ private:
     std::string server_address_;
     std::vector<std::string> children_;
     std::string server_dir_;
-
-    // Поля для хранения информации о состоянии сервера
-    std::string cpu_load1;
-    std::string cpu_load2;
-    std::string cpu_load3;
-    int free_ram;
-    int queue_size;
-
-    int quant_cores;
-    int total_ram;
-    int max_freq;
-    int min_freq;
 
     std::unique_ptr<ServerCompletionQueue> cq_;
     FaultToleranceService::AsyncService fault_tolerance_service_;
