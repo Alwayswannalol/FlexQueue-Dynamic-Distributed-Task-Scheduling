@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
         std::condition_variable cv;
 
         std::thread response_thread([&]() {
-            client.process_responses(k, cv, s1, s2);
+            client.handle_call(k, cv, s1, s2);
         });
         
         client.async_collect_data_for_distribution();

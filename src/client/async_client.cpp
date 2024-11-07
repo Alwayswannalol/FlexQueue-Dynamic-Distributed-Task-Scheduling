@@ -1,7 +1,7 @@
 #include "async_client.h"
 
 void async_client::detection_task_execution_call::proceed(bool ok) {
-    if(call_status_ == PROCESS) {
+    if(call_status_ == PROCESS_CALL) {
         if (writing_mode_) {
             if (counter < 2) {
                 request_.set_filename(test_str[counter]);
@@ -16,7 +16,7 @@ void async_client::detection_task_execution_call::proceed(bool ok) {
         }
         else {
             if (!ok) {
-                call_status_ = FINISH;
+                call_status_ = FINISH_CALL;
                 responder_->Finish(&status, (void*)this);
                 return;
             }

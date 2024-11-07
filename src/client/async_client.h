@@ -25,6 +25,12 @@ enum CALL_TYPE {
     UNKNOWN_CALL
 };
 
+enum CALL_STATUS {
+    CREATE_CALL, 
+    PROCESS_CALL, 
+    FINISH_CALL
+};
+
 class async_client {
 public:
     ~async_client() {
@@ -52,9 +58,10 @@ private:
     class base_call {
     public:
         CALL_TYPE call_type_;
-        int get_call_type();
+        CALL_STATUS call_status_;
 
-        base_call(CALL_TYPE call_type): call_type_(call_type) {}
+
+        base_call(CALL_TYPE call_type, CALL_STATUS call_status): call_type_(call_type), call_status_(call_status) {}
         virtual ~base_call() = default;
 
         // TODO: сделать обработку переменного числа параметров
@@ -65,16 +72,14 @@ private:
     public:
 
         detection_task_execution_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type)
-            : base_call(call_type), call_status_(CREATE), writing_mode_(true), 
+            : base_call(call_type, CREATE_CALL), writing_mode_(true), 
             counter(0), test_str({"1 from client", "2 from client"}) {
             responder_ = stub_->AsyncExecuteDetectionTask(&context, &cq_, (void*)this);
-            call_status_ = PROCESS;
+            call_status_ = PROCESS_CALL;
         };
 
         void proceed(bool ok) override;
     private:
-        enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus call_status_;
 
         std::unique_ptr<ClientAsyncReaderWriter<ImageRequest, ImageResponse>> responder_;
 

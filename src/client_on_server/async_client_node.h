@@ -34,6 +34,12 @@ enum CALL_TYPE {
     UNKNOWN_CALL
 };
 
+enum CALL_STATUS {
+    CREATE_CALL, 
+    PROCESS_CALL, 
+    FINISH_CALL
+};
+
 class async_node_client {
 public:
     ~async_node_client() {
@@ -60,35 +66,42 @@ public:
 
     // Обработка результатов асинхронных запросов
     // TODO: сделать обработку переменного числа параметров
-    void process_responses(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& server_address, 
-                           std::string& server_is_alive);
+    void handle_call(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& server_address, 
+                     std::string& server_is_alive);
 
 private:
     class base_call {
     public:
         // TODO: сделать обработку переменного числа параметров
-        virtual void get_response(bool ok, std::string& server_address, std::string& server_info) = 0;
+        virtual void proceed(bool ok, std::string& server_address, std::string& server_info) = 0;
 
         CALL_TYPE call_type_;
-        int get_call_type();
+        CALL_STATUS call_status_;
 
-        base_call(CALL_TYPE call_type): call_type_(call_type) {}
+        base_call(CALL_TYPE call_type, CALL_STATUS call_status): call_type_(call_type), call_status_(call_status) {}
         virtual ~base_call() = default;
     };
 
     class ping_call: public base_call {
     public:
-        std::unique_ptr<ClientAsyncResponseReader<PingResponse>> ping_response_reader;
 
-        ClientContext context;
-        Status status;
+        ping_call(std::unique_ptr<FaultToleranceService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, 
+            std::string to_server_address): base_call(call_type, CREATE_CALL) {
+            ping_request.set_to_server_address(to_server_address);
+            ping_response_reader = stub_->AsyncPing(&context, ping_request, &cq_);
+            ping_response_reader->Finish(&ping_response, &status, (void*)this);
+        };
 
-        PingRequest ping_request;
-        PingResponse ping_response;
+        void proceed(bool ok, std::string& server_address, std::string& server_info) override;
 
-        ping_call(CALL_TYPE call_type): base_call(call_type) {};
+        private:
+            std::unique_ptr<ClientAsyncResponseReader<PingResponse>> ping_response_reader;
 
-        void get_response(bool ok, std::string& server_address, std::string& server_info) override;
+            ClientContext context;
+            Status status;
+
+            PingRequest ping_request;
+            PingResponse ping_response;
     };
 
     class collect_data_for_distribution_call: public base_call {
@@ -101,9 +114,14 @@ private:
         CollectDataRequest collect_data_request;
         CollectedData collected_data_response;
 
-        collect_data_for_distribution_call(CALL_TYPE call_type): base_call(call_type) {};
+        collect_data_for_distribution_call(std::unique_ptr<DistributionTasksService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, 
+            std::string to_server_address): base_call(call_type, CREATE_CALL) {
+                collect_data_request.set_to_server_address(to_server_address);
+                collect_data_response_reader = stub_->AsyncCollectData(&context, collect_data_request, &cq_);
+                collect_data_response_reader->Finish(&collected_data_response, &status, (void*)this);
+            };
 
-        void get_response(bool ok, std::string& server_address, std::string& server_info) override;
+        void proceed(bool ok, std::string& server_address, std::string& server_info) override;
     };
 
     std::unique_ptr<FaultToleranceService::Stub> fault_tolerance_stub_;

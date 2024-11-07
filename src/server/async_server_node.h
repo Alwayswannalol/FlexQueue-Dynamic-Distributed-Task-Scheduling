@@ -44,10 +44,10 @@ enum RPC_TYPE {
     UNKNOWN
 };
 
-enum CALL_STATUS {
-    CREATE, 
-    PROCESS, 
-    FINISH
+enum RPC_STATUS {
+    CREATE_RPC, 
+    PROCESS_RPC, 
+    FINISH_RPC
 };
 
 class async_node_server {
@@ -76,14 +76,10 @@ private:
         // TODO: сделать обработку переменного числа параметров
         virtual void proceed(bool ok, std::vector<std::string> children, std::string server_dir) = 0;
 
-        int get_rpc_type();
-
-        int get_rpc_status();
-
-        base_rpc(RPC_TYPE rpc_type, CALL_STATUS status): rpc_type_(rpc_type), status_(status) {}
+        base_rpc(RPC_TYPE rpc_type, RPC_STATUS status): rpc_type_(rpc_type), status_(status) {}
         virtual ~base_rpc() = default;
         
-        CALL_STATUS status_;
+        RPC_STATUS status_;
         RPC_TYPE rpc_type_;
     };
 
@@ -92,7 +88,7 @@ private:
     public:
         ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
-            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_) {
+            : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_) {
             proceed(true, children, server_dir);
         }
 
@@ -113,7 +109,7 @@ private:
     public:
         collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
-            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_) {
+            : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_) {
             proceed(true, children, server_dir);
         }
 
@@ -133,7 +129,7 @@ private:
     public:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
-            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_), 
+            : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_), 
               writing_mode_(false), new_responder_created_(false),
               counter(0), test_str({"1 from server", "2 from server"}) {
                 proceed(true, children, server_dir);

@@ -21,21 +21,13 @@ void async_node_server::Run() {
     handle_rpcs();
 }
 
-int async_node_server::base_rpc::get_rpc_type() {
-    return rpc_type_;
-}
-
-int async_node_server::base_rpc::get_rpc_status() {
-    return status_;
-}
-
 void async_node_server::ping_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
-    if (status_ == CREATE) {
-        status_ = PROCESS;
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
         // Запрашиваем новое событие Ping
         service_->RequestPing(&ctx_, &request_, &responder_, cq_, cq_, this);
     } 
-    else if (status_ == PROCESS) {
+    else if (status_ == PROCESS_RPC) {
         new ping_rpc(service_, cq_, RPC_TYPE::PING, children, server_dir);  // Для обработки нового запроса создаем новый объект ping_rpc
 
         std::string full_string_server_addresses = "";
@@ -57,7 +49,7 @@ void async_node_server::ping_rpc::proceed(bool ok, std::vector<std::string> chil
 
         for (auto& child_client: child_clients) {
             std::thread([this, child_client, &requests_count, &cv, &full_string_server_addresses, &full_string_server_is_alive]() {
-                child_client->process_responses(requests_count, cv, full_string_server_addresses, full_string_server_is_alive); // Запуск метода обработки ответов
+                child_client->handle_call(requests_count, cv, full_string_server_addresses, full_string_server_is_alive); // Запуск метода обработки ответов
             }).detach();
             child_client->async_ping();
         }
@@ -68,7 +60,7 @@ void async_node_server::ping_rpc::proceed(bool ok, std::vector<std::string> chil
         // Формируем ответ на запрос Ping с учетом дочерних узлов
         response_.set_server_address(full_string_server_addresses + request_.to_server_address());
         response_.set_is_alive(full_string_server_is_alive + "1");
-        status_ = FINISH;
+        status_ = FINISH_RPC;
         responder_.Finish(response_, grpc::Status::OK, this);
     } 
     else {
@@ -77,11 +69,11 @@ void async_node_server::ping_rpc::proceed(bool ok, std::vector<std::string> chil
 }
 
 void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
-    if (status_ == CREATE) {
-        status_ = PROCESS;
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
         service_->RequestCollectData(&ctx_, &request_, &responder_, cq_, cq_, this);
     } 
-    else if (status_ == PROCESS) {
+    else if (status_ == PROCESS_RPC) {
         new collect_data_for_distribution_rpc(service_, cq_, RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children, server_dir);  // Для обработки нового запроса создаем новый объект collect_data_for_distribution_rpc
 
         std::string full_string_server_addresses = "";
@@ -103,7 +95,7 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
 
         for (auto& child_client: child_clients) {
             std::thread([this, child_client, &requests_count, &cv, &full_string_server_addresses, &full_string_collected_data_for_distribution]() {
-                child_client->process_responses(requests_count, cv, full_string_server_addresses, full_string_collected_data_for_distribution); // Запуск метода обработки ответов
+                child_client->handle_call(requests_count, cv, full_string_server_addresses, full_string_collected_data_for_distribution); // Запуск метода обработки ответов
             }).detach();
             child_client->async_collect_data_for_distribution();
         }
@@ -116,7 +108,7 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
         response_.set_collected_info(full_string_collected_data_for_distribution + "2");
         //
 
-        status_ = FINISH;
+        status_ = FINISH_RPC;
         responder_.Finish(response_, grpc::Status::OK, this);
     } 
     else {
@@ -125,11 +117,11 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
 }
 
 void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
-    if (status_ == CREATE) {
-        status_ = PROCESS;
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
         service_->RequestExecuteDetectionTask(&ctx_, &responder_, cq_, cq_, this);
     }
-    else if (status_ == PROCESS) {
+    else if (status_ == PROCESS_RPC) {
         if (!new_responder_created_) {
             new detection_task_execution_rpc(service_, cq_, RPC_TYPE::DETECTION_TASK_EXECUTION, children, server_dir);
             new_responder_created_ = true;
@@ -149,7 +141,7 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
         if(writing_mode_)//writing mode
         {
             if (!ok || counter >= 2) {
-                status_ = FINISH;
+                status_ = FINISH_RPC;
                 responder_.Finish(Status(), (void*)this);
             }
             else {
@@ -177,7 +169,7 @@ void async_node_server::handle_rpcs() {
         auto rpc_call = static_cast<base_rpc*>(tag);
 
         std::cout << "Processing tag: " << tag << std::endl; 
-        std::cout << "Processing rpc_type: " << rpc_call->get_rpc_type() << std::endl; 
+        std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
 
         rpc_call->proceed(ok, children_, server_dir_);
     }
