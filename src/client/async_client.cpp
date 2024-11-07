@@ -1,41 +1,46 @@
 #include "async_client.h"
 
-void async_client::detection_task_execution_call::get_response(bool ok) {
-    if (!ok) {
-        responder_->Finish(&status, reinterpret_cast<void*>(this));
-        delete this;
+void async_client::detection_task_execution_call::proceed(bool ok) {
+    if(call_status_ == PROCESS) {
+        if (writing_mode_) {
+            if (counter < 2) {
+                request_.set_filename(test_str[counter]);
+                counter++;
+                responder_->Write(request_, (void*)this);
+            }
+            else {
+                responder_->WritesDone((void*)this);
+                writing_mode_ = false;
+            }
+            return;
+        }
+        else {
+            if (!ok) {
+                call_status_ = FINISH;
+                responder_->Finish(&status, (void*)this);
+                return;
+            }
+            responder_->Read(&response_, (void*)this);
+            std::cout << response_.filename() << std::endl;
+        }
         return;
     }
-    responder_->Read(&image_response, reinterpret_cast<void*>(this));
-    std::cout << image_response.filename() << std::endl;
+    else {
+        delete this;
+    }
 }
 
 void async_client::async_execute_detection_task() {
-    auto* call = new detection_task_execution_call(CALL_TYPE::DETECTION_TASK_EXECUTION_CALL);
-
-    call->responder_ = task_execution_stub_->AsyncExecuteDetectionTask(&call->context, &cq_, reinterpret_cast<void*>(call));
-
-    call->image_request.set_filename("First Hello");
-
-    call->responder_->Write(call->image_request, reinterpret_cast<void*>(call));
-
-    call->image_request.set_filename("Second Hello");
-
-    call->responder_->Write(call->image_request, reinterpret_cast<void*>(call));
-
-    call->responder_->WritesDone(reinterpret_cast<void*>(call));
+    auto* call = new detection_task_execution_call(task_execution_stub_, cq_, CALL_TYPE::DETECTION_TASK_EXECUTION_CALL);
 }
 
-void async_client::process_responses() {
+void async_client::handle_call() {
     void* got_tag;
     bool ok = false;
 
     while (cq_.Next(&got_tag, &ok)) {
         // Восстанавливаем объект async_call
         auto* call = static_cast<base_call*>(got_tag);
-
-        call->get_response(ok);
-
-        // delete call;
+        call->proceed(ok);
     }
 }

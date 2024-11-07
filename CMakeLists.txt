@@ -21,5 +21,9 @@ proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
 add_executable(client_on_server src/client_on_server.cpp src/client_on_server/async_client_node.cpp
 proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
 
+add_executable(client src/client.cpp src/client/async_client.cpp
+proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
+
 target_link_libraries(server PRIVATE gRPC::grpc++ gRPC::grpc gRPC::grpc++_reflection protobuf::libprotobuf)
 target_link_libraries(client_on_server PRIVATE gRPC::grpc++ gRPC::grpc gRPC::grpc++_reflection protobuf::libprotobuf)
+target_link_libraries(client PRIVATE gRPC::grpc++ gRPC::grpc gRPC::grpc++_reflection protobuf::libprotobuf)

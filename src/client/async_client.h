@@ -38,49 +38,62 @@ public:
         }
     }
 
-    explicit async_client(std::shared_ptr<Channel> channel, std::string to_server_address)
-        : task_execution_stub_(TaskExecutionService::NewStub(channel)),
-          to_server_address_(to_server_address) {}
+    explicit async_client(std::shared_ptr<Channel> channel)
+        : task_execution_stub_(TaskExecutionService::NewStub(channel)) {}
 
     // TODO: передавать в функцию вектор с путями до фотографий
     void async_execute_detection_task();
 
-    // Обработка результатов асинхронных запросов
+    // Обработка rpc_calls
     // TODO: сделать обработку переменного числа параметров
-    void process_responses();
+    void handle_call();
 
 private:
     class base_call {
     public:
-        // TODO: сделать обработку переменного числа параметров
-        virtual void get_response(bool ok) = 0;
-
         CALL_TYPE call_type_;
         int get_call_type();
 
         base_call(CALL_TYPE call_type): call_type_(call_type) {}
         virtual ~base_call() = default;
+
+        // TODO: сделать обработку переменного числа параметров
+        virtual void proceed(bool ok) = 0;
     };
 
     class detection_task_execution_call: public base_call {
     public:
+
+        detection_task_execution_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type)
+            : base_call(call_type), call_status_(CREATE), writing_mode_(true), 
+            counter(0), test_str({"1 from client", "2 from client"}) {
+            responder_ = stub_->AsyncExecuteDetectionTask(&context, &cq_, (void*)this);
+            call_status_ = PROCESS;
+        };
+
+        void proceed(bool ok) override;
+    private:
+        enum CallStatus { CREATE, PROCESS, FINISH };
+        CallStatus call_status_;
+
         std::unique_ptr<ClientAsyncReaderWriter<ImageRequest, ImageResponse>> responder_;
 
         ClientContext context;
         Status status;
 
-        ImageRequest image_request;
-        ImageResponse image_response;
+        ImageRequest request_;
+        ImageResponse response_;
 
-        detection_task_execution_call(CALL_TYPE call_type): base_call(call_type) {};
+        bool writing_mode_;
 
-        void get_response(bool ok) override;
+        // TODO: для тестирования
+        int counter;
+        std::vector<std::string> test_str;
     };
 
     std::unique_ptr<TaskExecutionService::Stub> task_execution_stub_;
 
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
-    std::string to_server_address_;
     std::mutex mtx_;
 };
 

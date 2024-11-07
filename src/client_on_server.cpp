@@ -20,8 +20,6 @@ int main(int argc, char* argv[]) {
         std::thread response_thread([&]() {
             client.process_responses(k, cv, s1, s2);
         });
-
-        // client.async_execute_detection_task();
         
         client.async_collect_data_for_distribution();
 

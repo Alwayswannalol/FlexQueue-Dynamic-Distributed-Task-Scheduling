@@ -44,6 +44,12 @@ enum RPC_TYPE {
     UNKNOWN
 };
 
+enum CALL_STATUS {
+    CREATE, 
+    PROCESS, 
+    FINISH
+};
+
 class async_node_server {
 public:
     ~async_node_server() {
@@ -54,8 +60,7 @@ public:
         bool ok;
         while (cq_->Next(&got_tag, &ok)) {
             if (ok) {
-                delete static_cast<ping_rpc*>(got_tag);
-                delete static_cast<collect_data_for_distribution_rpc*>(got_tag);
+                delete static_cast<base_rpc*>(got_tag);
             }
         }
     }
@@ -69,26 +74,29 @@ private:
     class base_rpc {
     public:
         // TODO: сделать обработку переменного числа параметров
-        virtual void proceed(std::vector<std::string> children) = 0;
+        virtual void proceed(bool ok, std::vector<std::string> children, std::string server_dir) = 0;
 
-        RPC_TYPE rpc_type_;
         int get_rpc_type();
 
-        base_rpc(RPC_TYPE rpc_type): rpc_type_(rpc_type) {}
+        int get_rpc_status();
+
+        base_rpc(RPC_TYPE rpc_type, CALL_STATUS status): rpc_type_(rpc_type), status_(status) {}
         virtual ~base_rpc() = default;
+        
+        CALL_STATUS status_;
+        RPC_TYPE rpc_type_;
     };
 
     // Класс для обработки Ping RPC
     class ping_rpc: public base_rpc {
     public:
-        ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
-            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
-            proceed(children);
+        ping_rpc(FaultToleranceService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
+        std::vector<std::string> children, std::string server_dir)
+            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_) {
+            proceed(true, children, server_dir);
         }
 
-        void proceed(std::vector<std::string> children) override;
-
-        int get_status_rpc();
+        void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
 
     private:
         FaultToleranceService::AsyncService* service_;
@@ -98,21 +106,18 @@ private:
         PingRequest request_;
         PingResponse response_;
         ServerAsyncResponseWriter<PingResponse> responder_;
-        enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus status_;
     };
 
     // Класс для обработки CollectData RPC
     class collect_data_for_distribution_rpc: public base_rpc {
     public:
-        collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
-            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {
-            proceed(children);
+        collect_data_for_distribution_rpc(DistributionTasksService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
+        std::vector<std::string> children, std::string server_dir)
+            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_) {
+            proceed(true, children, server_dir);
         }
 
-        void proceed(std::vector<std::string> children) override;
-
-        int get_status_rpc();
+        void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
 
     private:
         DistributionTasksService::AsyncService* service_;
@@ -122,18 +127,19 @@ private:
         CollectDataRequest request_;
         CollectedData response_;
         ServerAsyncResponseWriter<CollectedData> responder_;
-        enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus status_;
     };
 
     class detection_task_execution_rpc: public base_rpc {
     public:
-        detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, std::vector<std::string> children)
-            : base_rpc(rpc_type), service_(service), cq_(cq), responder_(&ctx_), status_(CREATE) {}
+        detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
+        std::vector<std::string> children, std::string server_dir)
+            : base_rpc(rpc_type, CREATE), service_(service), cq_(cq), responder_(&ctx_), 
+              writing_mode_(false), new_responder_created_(false),
+              counter(0), test_str({"1 from server", "2 from server"}) {
+                proceed(true, children, server_dir);
+        }
         
-        void proceed(std::vector<std::string> children) override;
-
-        int get_status_rpc();
+        void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
 
     private:
         TaskExecutionService::AsyncService* service_;
@@ -142,9 +148,14 @@ private:
 
         ImageRequest request_;
         ImageResponse response_;
-        ServerAsyncReaderWriter<ImageRequest, ImageResponse> responder_;
-        enum CallStatus { CREATE, PROCESS, FINISH };
-        CallStatus status_;
+        ServerAsyncReaderWriter<ImageResponse, ImageRequest> responder_;
+
+        bool writing_mode_;
+        bool new_responder_created_;
+
+        // TODO: для тестирования
+        int counter;
+        std::vector<std::string> test_str;
     };
 
     void handle_rpcs();
