@@ -21,8 +21,8 @@ void async_node_client::collect_data_for_distribution_call::proceed(bool ok, std
             std::cout << "CollectData from " << collected_data_response.server_address() << " completed successfully: " 
                         << collected_data_response.collected_info() << std::endl;
 
-            server_address += collected_data_response.server_address() + " ";
-            server_info += collected_data_response.collected_info() + " ";
+            server_address += collected_data_response.server_address() + "\n";
+            server_info += collected_data_response.collected_info() + "\n";
         } else {
             std::cerr << "CollectData request to " << collect_data_request.to_server_address() << " failed." << std::endl;
         }

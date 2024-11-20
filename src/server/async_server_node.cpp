@@ -103,10 +103,15 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
         std::unique_lock<std::mutex> lock(mtx);
         cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
 
-        // TODO: написать сбор данных
+
+        std::string collected_data_string = data_collection_server::collect_cpu_load() + " " + 
+                                            data_collection_server::collect_mem_free() + " " + 
+                                            data_collection_server::collect_cpu_freq() + " " + 
+                                            data_collection_server::collect_mem_total() + " " + 
+                                            data_collection_server::collect_quant_cores();
+
         response_.set_server_address(full_string_server_addresses + request_.to_server_address());
-        response_.set_collected_info(full_string_collected_data_for_distribution + "2");
-        //
+        response_.set_collected_info(full_string_collected_data_for_distribution + collected_data_string);
 
         status_ = FINISH_RPC;
         responder_.Finish(response_, grpc::Status::OK, this);

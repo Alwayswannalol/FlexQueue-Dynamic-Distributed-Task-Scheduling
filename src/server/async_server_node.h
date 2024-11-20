@@ -35,7 +35,7 @@ using DistributionSystem::ImageRequest;
 using DistributionSystem::ImageResponse;
 
 #include "../client_on_server/async_client_node.h"
-#include "../data_collection/files_info.h"
+#include "../data_collection/data_collection_server.h"
 
 enum RPC_TYPE {
     PING,
