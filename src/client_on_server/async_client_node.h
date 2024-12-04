@@ -67,7 +67,7 @@ public:
     // Обработка результатов асинхронных запросов
     // TODO: сделать обработку переменного числа параметров
     void handle_call(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& server_address, 
-                     std::string& server_is_alive);
+                     std::string& server_info);
 
 private:
     class base_call {

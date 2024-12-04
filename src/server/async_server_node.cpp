@@ -103,7 +103,6 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
         std::unique_lock<std::mutex> lock(mtx);
         cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
 
-
         std::string collected_data_string = data_collection_server::collect_cpu_load() + " " + 
                                             data_collection_server::collect_mem_free() + " " + 
                                             data_collection_server::collect_cpu_freq() + " " + 
@@ -176,6 +175,8 @@ void async_node_server::handle_rpcs() {
         std::cout << "Processing tag: " << tag << std::endl; 
         std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
 
-        rpc_call->proceed(ok, children_, server_dir_);
+        std::thread([this, rpc_call, ok](){
+            rpc_call->proceed(ok, children_, server_dir_);
+        }).detach();
     }
 }

@@ -42,6 +42,8 @@ void async_node_client::handle_call(std::atomic<int>& quant_replies, std::condit
     void* got_tag;
     bool ok = false;
 
+    auto start = std::chrono::high_resolution_clock::now();
+
     while (cq_.Next(&got_tag, &ok)) {
         // Восстанавливаем объект async_call
         auto* call = static_cast<base_call*>(got_tag);
@@ -50,6 +52,12 @@ void async_node_client::handle_call(std::atomic<int>& quant_replies, std::condit
         std::unique_lock<std::mutex> lock(mtx_);
 
         call->proceed(ok, server_address, server_info);
+
+
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> duration = end - start;
+        std::cout << "Processed time: " << duration.count() << std::endl;
+
 
         // Уменьшаем счетчик кол-ва запросов
         quant_replies--;
