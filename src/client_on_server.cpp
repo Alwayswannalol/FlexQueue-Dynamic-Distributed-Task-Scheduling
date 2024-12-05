@@ -1,5 +1,5 @@
 #include "client_on_server/async_client_node.h"
-#define TEST_100
+// #define TEST_100
 
 int main(int argc, char* argv[]) {
     std::vector<std::string> children;
@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
             client.handle_call(k, cv, s1, s2);
         });
         
-        client.async_collect_data_for_distribution();
+        client.async_get_topology();
 
         // Ждем завершения потока обработки ответов
         response_thread.join();

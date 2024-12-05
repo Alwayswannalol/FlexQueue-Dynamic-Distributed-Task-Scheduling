@@ -57,24 +57,346 @@ extern ImageRequestDefaultTypeInternal _ImageRequest_default_instance_;
 class ImageResponse;
 struct ImageResponseDefaultTypeInternal;
 extern ImageResponseDefaultTypeInternal _ImageResponse_default_instance_;
+class PathResponse;
+struct PathResponseDefaultTypeInternal;
+extern PathResponseDefaultTypeInternal _PathResponse_default_instance_;
 class PingRequest;
 struct PingRequestDefaultTypeInternal;
 extern PingRequestDefaultTypeInternal _PingRequest_default_instance_;
 class PingResponse;
 struct PingResponseDefaultTypeInternal;
 extern PingResponseDefaultTypeInternal _PingResponse_default_instance_;
+class TaskInfoRequest;
+struct TaskInfoRequestDefaultTypeInternal;
+extern TaskInfoRequestDefaultTypeInternal _TaskInfoRequest_default_instance_;
+class TopologyRequest;
+struct TopologyRequestDefaultTypeInternal;
+extern TopologyRequestDefaultTypeInternal _TopologyRequest_default_instance_;
+class TopologyResponse;
+struct TopologyResponseDefaultTypeInternal;
+extern TopologyResponseDefaultTypeInternal _TopologyResponse_default_instance_;
 }  // namespace DistributionSystem
 PROTOBUF_NAMESPACE_OPEN
 template<> ::DistributionSystem::CollectDataRequest* Arena::CreateMaybeMessage<::DistributionSystem::CollectDataRequest>(Arena*);
 template<> ::DistributionSystem::CollectedData* Arena::CreateMaybeMessage<::DistributionSystem::CollectedData>(Arena*);
 template<> ::DistributionSystem::ImageRequest* Arena::CreateMaybeMessage<::DistributionSystem::ImageRequest>(Arena*);
 template<> ::DistributionSystem::ImageResponse* Arena::CreateMaybeMessage<::DistributionSystem::ImageResponse>(Arena*);
+template<> ::DistributionSystem::PathResponse* Arena::CreateMaybeMessage<::DistributionSystem::PathResponse>(Arena*);
 template<> ::DistributionSystem::PingRequest* Arena::CreateMaybeMessage<::DistributionSystem::PingRequest>(Arena*);
 template<> ::DistributionSystem::PingResponse* Arena::CreateMaybeMessage<::DistributionSystem::PingResponse>(Arena*);
+template<> ::DistributionSystem::TaskInfoRequest* Arena::CreateMaybeMessage<::DistributionSystem::TaskInfoRequest>(Arena*);
+template<> ::DistributionSystem::TopologyRequest* Arena::CreateMaybeMessage<::DistributionSystem::TopologyRequest>(Arena*);
+template<> ::DistributionSystem::TopologyResponse* Arena::CreateMaybeMessage<::DistributionSystem::TopologyResponse>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace DistributionSystem {
 
 // ===================================================================
+
+class TaskInfoRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.TaskInfoRequest) */ {
+ public:
+  inline TaskInfoRequest() : TaskInfoRequest(nullptr) {}
+  ~TaskInfoRequest() override;
+  explicit PROTOBUF_CONSTEXPR TaskInfoRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TaskInfoRequest(const TaskInfoRequest& from);
+  TaskInfoRequest(TaskInfoRequest&& from) noexcept
+    : TaskInfoRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline TaskInfoRequest& operator=(const TaskInfoRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TaskInfoRequest& operator=(TaskInfoRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TaskInfoRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TaskInfoRequest* internal_default_instance() {
+    return reinterpret_cast<const TaskInfoRequest*>(
+               &_TaskInfoRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    0;
+
+  friend void swap(TaskInfoRequest& a, TaskInfoRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TaskInfoRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TaskInfoRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TaskInfoRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TaskInfoRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TaskInfoRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TaskInfoRequest& from) {
+    TaskInfoRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TaskInfoRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.TaskInfoRequest";
+  }
+  protected:
+  explicit TaskInfoRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTaskDataFieldNumber = 1,
+  };
+  // string task_data = 1;
+  void clear_task_data();
+  const std::string& task_data() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_task_data(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_task_data();
+  PROTOBUF_NODISCARD std::string* release_task_data();
+  void set_allocated_task_data(std::string* task_data);
+  private:
+  const std::string& _internal_task_data() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_task_data(const std::string& value);
+  std::string* _internal_mutable_task_data();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.TaskInfoRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr task_data_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
+// -------------------------------------------------------------------
+
+class PathResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.PathResponse) */ {
+ public:
+  inline PathResponse() : PathResponse(nullptr) {}
+  ~PathResponse() override;
+  explicit PROTOBUF_CONSTEXPR PathResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  PathResponse(const PathResponse& from);
+  PathResponse(PathResponse&& from) noexcept
+    : PathResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline PathResponse& operator=(const PathResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline PathResponse& operator=(PathResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const PathResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const PathResponse* internal_default_instance() {
+    return reinterpret_cast<const PathResponse*>(
+               &_PathResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    1;
+
+  friend void swap(PathResponse& a, PathResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(PathResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(PathResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  PathResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<PathResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const PathResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const PathResponse& from) {
+    PathResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(PathResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.PathResponse";
+  }
+  protected:
+  explicit PathResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kPathFieldNumber = 1,
+  };
+  // string path = 1;
+  void clear_path();
+  const std::string& path() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_path(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_path();
+  PROTOBUF_NODISCARD std::string* release_path();
+  void set_allocated_path(std::string* path);
+  private:
+  const std::string& _internal_path() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_path(const std::string& value);
+  std::string* _internal_mutable_path();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.PathResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
+// -------------------------------------------------------------------
 
 class ImageRequest final :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.ImageRequest) */ {
@@ -124,7 +446,7 @@ class ImageRequest final :
                &_ImageRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    0;
+    2;
 
   friend void swap(ImageRequest& a, ImageRequest& b) {
     a.Swap(&b);
@@ -347,7 +669,7 @@ class ImageResponse final :
                &_ImageResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    1;
+    3;
 
   friend void swap(ImageResponse& a, ImageResponse& b) {
     a.Swap(&b);
@@ -538,7 +860,7 @@ class CollectDataRequest final :
                &_CollectDataRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    4;
 
   friend void swap(CollectDataRequest& a, CollectDataRequest& b) {
     a.Swap(&b);
@@ -691,7 +1013,7 @@ class CollectedData final :
                &_CollectedData_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    5;
 
   friend void swap(CollectedData& a, CollectedData& b) {
     a.Swap(&b);
@@ -860,7 +1182,7 @@ class PingRequest final :
                &_PingRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    6;
 
   friend void swap(PingRequest& a, PingRequest& b) {
     a.Swap(&b);
@@ -1013,7 +1335,7 @@ class PingResponse final :
                &_PingResponse_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    7;
 
   friend void swap(PingResponse& a, PingResponse& b) {
     a.Swap(&b);
@@ -1132,6 +1454,328 @@ class PingResponse final :
   union { Impl_ _impl_; };
   friend struct ::TableStruct_distributionSystem_2eproto;
 };
+// -------------------------------------------------------------------
+
+class TopologyRequest final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.TopologyRequest) */ {
+ public:
+  inline TopologyRequest() : TopologyRequest(nullptr) {}
+  ~TopologyRequest() override;
+  explicit PROTOBUF_CONSTEXPR TopologyRequest(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TopologyRequest(const TopologyRequest& from);
+  TopologyRequest(TopologyRequest&& from) noexcept
+    : TopologyRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline TopologyRequest& operator=(const TopologyRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TopologyRequest& operator=(TopologyRequest&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TopologyRequest& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TopologyRequest* internal_default_instance() {
+    return reinterpret_cast<const TopologyRequest*>(
+               &_TopologyRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    8;
+
+  friend void swap(TopologyRequest& a, TopologyRequest& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TopologyRequest* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TopologyRequest* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TopologyRequest* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TopologyRequest>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TopologyRequest& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TopologyRequest& from) {
+    TopologyRequest::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TopologyRequest* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.TopologyRequest";
+  }
+  protected:
+  explicit TopologyRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kToServerAddressFieldNumber = 1,
+  };
+  // string to_server_address = 1;
+  void clear_to_server_address();
+  const std::string& to_server_address() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_to_server_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_to_server_address();
+  PROTOBUF_NODISCARD std::string* release_to_server_address();
+  void set_allocated_to_server_address(std::string* to_server_address);
+  private:
+  const std::string& _internal_to_server_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_to_server_address(const std::string& value);
+  std::string* _internal_mutable_to_server_address();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.TopologyRequest)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr to_server_address_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
+// -------------------------------------------------------------------
+
+class TopologyResponse final :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:DistributionSystem.TopologyResponse) */ {
+ public:
+  inline TopologyResponse() : TopologyResponse(nullptr) {}
+  ~TopologyResponse() override;
+  explicit PROTOBUF_CONSTEXPR TopologyResponse(::PROTOBUF_NAMESPACE_ID::internal::ConstantInitialized);
+
+  TopologyResponse(const TopologyResponse& from);
+  TopologyResponse(TopologyResponse&& from) noexcept
+    : TopologyResponse() {
+    *this = ::std::move(from);
+  }
+
+  inline TopologyResponse& operator=(const TopologyResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline TopologyResponse& operator=(TopologyResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (GetOwningArena() == from.GetOwningArena()
+  #ifdef PROTOBUF_FORCE_COPY_IN_MOVE
+        && GetOwningArena() != nullptr
+  #endif  // !PROTOBUF_FORCE_COPY_IN_MOVE
+    ) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const TopologyResponse& default_instance() {
+    return *internal_default_instance();
+  }
+  static inline const TopologyResponse* internal_default_instance() {
+    return reinterpret_cast<const TopologyResponse*>(
+               &_TopologyResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    9;
+
+  friend void swap(TopologyResponse& a, TopologyResponse& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(TopologyResponse* other) {
+    if (other == this) return;
+  #ifdef PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() != nullptr &&
+        GetOwningArena() == other->GetOwningArena()) {
+   #else  // PROTOBUF_FORCE_COPY_IN_SWAP
+    if (GetOwningArena() == other->GetOwningArena()) {
+  #endif  // !PROTOBUF_FORCE_COPY_IN_SWAP
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(TopologyResponse* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetOwningArena() == other->GetOwningArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  TopologyResponse* New(::PROTOBUF_NAMESPACE_ID::Arena* arena = nullptr) const final {
+    return CreateMaybeMessage<TopologyResponse>(arena);
+  }
+  using ::PROTOBUF_NAMESPACE_ID::Message::CopyFrom;
+  void CopyFrom(const TopologyResponse& from);
+  using ::PROTOBUF_NAMESPACE_ID::Message::MergeFrom;
+  void MergeFrom( const TopologyResponse& from) {
+    TopologyResponse::MergeImpl(*this, from);
+  }
+  private:
+  static void MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg);
+  public:
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  uint8_t* _InternalSerialize(
+      uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::PROTOBUF_NAMESPACE_ID::Arena* arena, bool is_message_owned);
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(TopologyResponse* other);
+
+  private:
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "DistributionSystem.TopologyResponse";
+  }
+  protected:
+  explicit TopologyResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                       bool is_message_owned = false);
+  public:
+
+  static const ClassData _class_data_;
+  const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*GetClassData() const final;
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kParentAddressFieldNumber = 1,
+    kChildrenAddressesFieldNumber = 2,
+  };
+  // string parent_address = 1;
+  void clear_parent_address();
+  const std::string& parent_address() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_parent_address(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_parent_address();
+  PROTOBUF_NODISCARD std::string* release_parent_address();
+  void set_allocated_parent_address(std::string* parent_address);
+  private:
+  const std::string& _internal_parent_address() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_parent_address(const std::string& value);
+  std::string* _internal_mutable_parent_address();
+  public:
+
+  // string children_addresses = 2;
+  void clear_children_addresses();
+  const std::string& children_addresses() const;
+  template <typename ArgT0 = const std::string&, typename... ArgT>
+  void set_children_addresses(ArgT0&& arg0, ArgT... args);
+  std::string* mutable_children_addresses();
+  PROTOBUF_NODISCARD std::string* release_children_addresses();
+  void set_allocated_children_addresses(std::string* children_addresses);
+  private:
+  const std::string& _internal_children_addresses() const;
+  inline PROTOBUF_ALWAYS_INLINE void _internal_set_children_addresses(const std::string& value);
+  std::string* _internal_mutable_children_addresses();
+  public:
+
+  // @@protoc_insertion_point(class_scope:DistributionSystem.TopologyResponse)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  struct Impl_ {
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr parent_address_;
+    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr children_addresses_;
+    mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_distributionSystem_2eproto;
+};
 // ===================================================================
 
 
@@ -1141,6 +1785,114 @@ class PingResponse final :
   #pragma GCC diagnostic push
   #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif  // __GNUC__
+// TaskInfoRequest
+
+// string task_data = 1;
+inline void TaskInfoRequest::clear_task_data() {
+  _impl_.task_data_.ClearToEmpty();
+}
+inline const std::string& TaskInfoRequest::task_data() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.TaskInfoRequest.task_data)
+  return _internal_task_data();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TaskInfoRequest::set_task_data(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.task_data_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.TaskInfoRequest.task_data)
+}
+inline std::string* TaskInfoRequest::mutable_task_data() {
+  std::string* _s = _internal_mutable_task_data();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.TaskInfoRequest.task_data)
+  return _s;
+}
+inline const std::string& TaskInfoRequest::_internal_task_data() const {
+  return _impl_.task_data_.Get();
+}
+inline void TaskInfoRequest::_internal_set_task_data(const std::string& value) {
+  
+  _impl_.task_data_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TaskInfoRequest::_internal_mutable_task_data() {
+  
+  return _impl_.task_data_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TaskInfoRequest::release_task_data() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.TaskInfoRequest.task_data)
+  return _impl_.task_data_.Release();
+}
+inline void TaskInfoRequest::set_allocated_task_data(std::string* task_data) {
+  if (task_data != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.task_data_.SetAllocated(task_data, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.task_data_.IsDefault()) {
+    _impl_.task_data_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.TaskInfoRequest.task_data)
+}
+
+// -------------------------------------------------------------------
+
+// PathResponse
+
+// string path = 1;
+inline void PathResponse::clear_path() {
+  _impl_.path_.ClearToEmpty();
+}
+inline const std::string& PathResponse::path() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.PathResponse.path)
+  return _internal_path();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void PathResponse::set_path(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.path_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.PathResponse.path)
+}
+inline std::string* PathResponse::mutable_path() {
+  std::string* _s = _internal_mutable_path();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.PathResponse.path)
+  return _s;
+}
+inline const std::string& PathResponse::_internal_path() const {
+  return _impl_.path_.Get();
+}
+inline void PathResponse::_internal_set_path(const std::string& value) {
+  
+  _impl_.path_.Set(value, GetArenaForAllocation());
+}
+inline std::string* PathResponse::_internal_mutable_path() {
+  
+  return _impl_.path_.Mutable(GetArenaForAllocation());
+}
+inline std::string* PathResponse::release_path() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.PathResponse.path)
+  return _impl_.path_.Release();
+}
+inline void PathResponse::set_allocated_path(std::string* path) {
+  if (path != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.path_.SetAllocated(path, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.path_.IsDefault()) {
+    _impl_.path_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.PathResponse.path)
+}
+
+// -------------------------------------------------------------------
+
 // ImageRequest
 
 // string client_name = 1;
@@ -1843,9 +2595,175 @@ inline void PingResponse::set_allocated_is_alive(std::string* is_alive) {
   // @@protoc_insertion_point(field_set_allocated:DistributionSystem.PingResponse.is_alive)
 }
 
+// -------------------------------------------------------------------
+
+// TopologyRequest
+
+// string to_server_address = 1;
+inline void TopologyRequest::clear_to_server_address() {
+  _impl_.to_server_address_.ClearToEmpty();
+}
+inline const std::string& TopologyRequest::to_server_address() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.TopologyRequest.to_server_address)
+  return _internal_to_server_address();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TopologyRequest::set_to_server_address(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.to_server_address_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.TopologyRequest.to_server_address)
+}
+inline std::string* TopologyRequest::mutable_to_server_address() {
+  std::string* _s = _internal_mutable_to_server_address();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.TopologyRequest.to_server_address)
+  return _s;
+}
+inline const std::string& TopologyRequest::_internal_to_server_address() const {
+  return _impl_.to_server_address_.Get();
+}
+inline void TopologyRequest::_internal_set_to_server_address(const std::string& value) {
+  
+  _impl_.to_server_address_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TopologyRequest::_internal_mutable_to_server_address() {
+  
+  return _impl_.to_server_address_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TopologyRequest::release_to_server_address() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.TopologyRequest.to_server_address)
+  return _impl_.to_server_address_.Release();
+}
+inline void TopologyRequest::set_allocated_to_server_address(std::string* to_server_address) {
+  if (to_server_address != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.to_server_address_.SetAllocated(to_server_address, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.to_server_address_.IsDefault()) {
+    _impl_.to_server_address_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.TopologyRequest.to_server_address)
+}
+
+// -------------------------------------------------------------------
+
+// TopologyResponse
+
+// string parent_address = 1;
+inline void TopologyResponse::clear_parent_address() {
+  _impl_.parent_address_.ClearToEmpty();
+}
+inline const std::string& TopologyResponse::parent_address() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.TopologyResponse.parent_address)
+  return _internal_parent_address();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TopologyResponse::set_parent_address(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.parent_address_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.TopologyResponse.parent_address)
+}
+inline std::string* TopologyResponse::mutable_parent_address() {
+  std::string* _s = _internal_mutable_parent_address();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.TopologyResponse.parent_address)
+  return _s;
+}
+inline const std::string& TopologyResponse::_internal_parent_address() const {
+  return _impl_.parent_address_.Get();
+}
+inline void TopologyResponse::_internal_set_parent_address(const std::string& value) {
+  
+  _impl_.parent_address_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TopologyResponse::_internal_mutable_parent_address() {
+  
+  return _impl_.parent_address_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TopologyResponse::release_parent_address() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.TopologyResponse.parent_address)
+  return _impl_.parent_address_.Release();
+}
+inline void TopologyResponse::set_allocated_parent_address(std::string* parent_address) {
+  if (parent_address != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.parent_address_.SetAllocated(parent_address, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.parent_address_.IsDefault()) {
+    _impl_.parent_address_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.TopologyResponse.parent_address)
+}
+
+// string children_addresses = 2;
+inline void TopologyResponse::clear_children_addresses() {
+  _impl_.children_addresses_.ClearToEmpty();
+}
+inline const std::string& TopologyResponse::children_addresses() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.TopologyResponse.children_addresses)
+  return _internal_children_addresses();
+}
+template <typename ArgT0, typename... ArgT>
+inline PROTOBUF_ALWAYS_INLINE
+void TopologyResponse::set_children_addresses(ArgT0&& arg0, ArgT... args) {
+ 
+ _impl_.children_addresses_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
+  // @@protoc_insertion_point(field_set:DistributionSystem.TopologyResponse.children_addresses)
+}
+inline std::string* TopologyResponse::mutable_children_addresses() {
+  std::string* _s = _internal_mutable_children_addresses();
+  // @@protoc_insertion_point(field_mutable:DistributionSystem.TopologyResponse.children_addresses)
+  return _s;
+}
+inline const std::string& TopologyResponse::_internal_children_addresses() const {
+  return _impl_.children_addresses_.Get();
+}
+inline void TopologyResponse::_internal_set_children_addresses(const std::string& value) {
+  
+  _impl_.children_addresses_.Set(value, GetArenaForAllocation());
+}
+inline std::string* TopologyResponse::_internal_mutable_children_addresses() {
+  
+  return _impl_.children_addresses_.Mutable(GetArenaForAllocation());
+}
+inline std::string* TopologyResponse::release_children_addresses() {
+  // @@protoc_insertion_point(field_release:DistributionSystem.TopologyResponse.children_addresses)
+  return _impl_.children_addresses_.Release();
+}
+inline void TopologyResponse::set_allocated_children_addresses(std::string* children_addresses) {
+  if (children_addresses != nullptr) {
+    
+  } else {
+    
+  }
+  _impl_.children_addresses_.SetAllocated(children_addresses, GetArenaForAllocation());
+#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (_impl_.children_addresses_.IsDefault()) {
+    _impl_.children_addresses_.Set("", GetArenaForAllocation());
+  }
+#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.TopologyResponse.children_addresses)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

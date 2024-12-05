@@ -28,9 +28,14 @@ using DistributionSystem::DistributionTasksService;
 using DistributionSystem::CollectDataRequest;
 using DistributionSystem::CollectedData;
 
+using DistributionSystem::ScalabilityService;
+using DistributionSystem::TopologyRequest;
+using DistributionSystem::TopologyResponse;
+
 enum CALL_TYPE {
     PING_CALL,
     COLLECT_DATA_FOR_DISTRIBUTION_CALL,
+    GET_TOPOLOGY_CALL,
     UNKNOWN_CALL
 };
 
@@ -56,6 +61,7 @@ public:
     explicit async_node_client(std::shared_ptr<Channel> channel, std::string to_server_address)
         : fault_tolerance_stub_(FaultToleranceService::NewStub(channel)),
           distribution_tasks_stub_(DistributionTasksService::NewStub(channel)),
+          scalability_stub_(ScalabilityService::NewStub(channel)),
           to_server_address_(to_server_address) {}
 
     // Асинхронный метод для отправки Ping-запросов
@@ -63,6 +69,9 @@ public:
 
     // Асинхронный метод для отправки CollectData-запросов
     void async_collect_data_for_distribution();
+
+    // Асинхронный метод для отправки GetTopology-запросов
+    void async_get_topology();
 
     // Обработка результатов асинхронных запросов
     // TODO: сделать обработку переменного числа параметров
@@ -124,8 +133,30 @@ private:
         void proceed(bool ok, std::string& server_address, std::string& server_info) override;
     };
 
+    class get_topology_call: public base_call {
+    public:
+        std::unique_ptr<ClientAsyncResponseReader<TopologyResponse>> topology_response_reader;
+
+        ClientContext context;
+        Status status;
+
+        TopologyRequest topology_request;
+        TopologyResponse topology_response;
+
+        get_topology_call(std::unique_ptr<ScalabilityService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, 
+            std::string to_server_address): base_call(call_type, CREATE_CALL) {
+                topology_request.set_to_server_address(to_server_address);
+                topology_response_reader = stub_->AsyncGetTopology(&context, topology_request, &cq_);
+                std::cout << "EWErr" << std::endl;
+                topology_response_reader->Finish(&topology_response, &status, (void*)this);
+            }
+
+        void proceed(bool ok, std::string& server_address, std::string& server_info) override;
+    };
+
     std::unique_ptr<FaultToleranceService::Stub> fault_tolerance_stub_;
     std::unique_ptr<DistributionTasksService::Stub> distribution_tasks_stub_;
+    std::unique_ptr<ScalabilityService::Stub> scalability_stub_;
 
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
     std::string to_server_address_;

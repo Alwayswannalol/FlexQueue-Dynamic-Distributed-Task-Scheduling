@@ -36,6 +36,13 @@ class TaskExecutionService final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
+    virtual ::grpc::Status DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::DistributionSystem::PathResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>> AsyncDistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>>(AsyncDistributeDetectionTaskRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>> PrepareAsyncDistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>>(PrepareAsyncDistributeDetectionTaskRaw(context, request, cq));
+    }
     std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>> ExecuteDetectionTask(::grpc::ClientContext* context) {
       return std::unique_ptr< ::grpc::ClientReaderWriterInterface< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>>(ExecuteDetectionTaskRaw(context));
     }
@@ -48,12 +55,16 @@ class TaskExecutionService final {
     class async_interface {
      public:
       virtual ~async_interface() {}
+      virtual void DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
       virtual void ExecuteDetectionTask(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::DistributionSystem::ImageRequest,::DistributionSystem::ImageResponse>* reactor) = 0;
     };
     typedef class async_interface experimental_async_interface;
     virtual class async_interface* async() { return nullptr; }
     class async_interface* experimental_async() { return async(); }
    private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>* AsyncDistributeDetectionTaskRaw(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::PathResponse>* PrepareAsyncDistributeDetectionTaskRaw(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientReaderWriterInterface< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* ExecuteDetectionTaskRaw(::grpc::ClientContext* context) = 0;
     virtual ::grpc::ClientAsyncReaderWriterInterface< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* AsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderWriterInterface< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* PrepareAsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) = 0;
@@ -61,6 +72,13 @@ class TaskExecutionService final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::DistributionSystem::PathResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>> AsyncDistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>>(AsyncDistributeDetectionTaskRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>> PrepareAsyncDistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>>(PrepareAsyncDistributeDetectionTaskRaw(context, request, cq));
+    }
     std::unique_ptr< ::grpc::ClientReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>> ExecuteDetectionTask(::grpc::ClientContext* context) {
       return std::unique_ptr< ::grpc::ClientReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>>(ExecuteDetectionTaskRaw(context));
     }
@@ -73,6 +91,8 @@ class TaskExecutionService final {
     class async final :
       public StubInterface::async_interface {
      public:
+      void DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response, std::function<void(::grpc::Status)>) override;
+      void DistributeDetectionTask(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
       void ExecuteDetectionTask(::grpc::ClientContext* context, ::grpc::ClientBidiReactor< ::DistributionSystem::ImageRequest,::DistributionSystem::ImageResponse>* reactor) override;
      private:
       friend class Stub;
@@ -85,9 +105,12 @@ class TaskExecutionService final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>* AsyncDistributeDetectionTaskRaw(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::DistributionSystem::PathResponse>* PrepareAsyncDistributeDetectionTaskRaw(::grpc::ClientContext* context, const ::DistributionSystem::TaskInfoRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* ExecuteDetectionTaskRaw(::grpc::ClientContext* context) override;
     ::grpc::ClientAsyncReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* AsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReaderWriter< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>* PrepareAsyncExecuteDetectionTaskRaw(::grpc::ClientContext* context, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_DistributeDetectionTask_;
     const ::grpc::internal::RpcMethod rpcmethod_ExecuteDetectionTask_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
@@ -96,7 +119,28 @@ class TaskExecutionService final {
    public:
     Service();
     virtual ~Service();
+    virtual ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response);
     virtual ::grpc::Status ExecuteDetectionTask(::grpc::ServerContext* context, ::grpc::ServerReaderWriter< ::DistributionSystem::ImageResponse, ::DistributionSystem::ImageRequest>* stream);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDistributeDetectionTask(::grpc::ServerContext* context, ::DistributionSystem::TaskInfoRequest* request, ::grpc::ServerAsyncResponseWriter< ::DistributionSystem::PathResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
   };
   template <class BaseClass>
   class WithAsyncMethod_ExecuteDetectionTask : public BaseClass {
@@ -104,7 +148,7 @@ class TaskExecutionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ExecuteDetectionTask() {
-      ::grpc::Service::MarkMethodAsync(0);
+      ::grpc::Service::MarkMethodAsync(1);
     }
     ~WithAsyncMethod_ExecuteDetectionTask() override {
       BaseClassMustBeDerivedFromService(this);
@@ -115,17 +159,44 @@ class TaskExecutionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestExecuteDetectionTask(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::DistributionSystem::ImageResponse, ::DistributionSystem::ImageRequest>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncBidiStreaming(0, context, stream, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncBidiStreaming(1, context, stream, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_ExecuteDetectionTask<Service > AsyncService;
+  typedef WithAsyncMethod_DistributeDetectionTask<WithAsyncMethod_ExecuteDetectionTask<Service > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::DistributionSystem::TaskInfoRequest, ::DistributionSystem::PathResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::DistributionSystem::TaskInfoRequest* request, ::DistributionSystem::PathResponse* response) { return this->DistributeDetectionTask(context, request, response); }));}
+    void SetMessageAllocatorFor_DistributeDetectionTask(
+        ::grpc::MessageAllocator< ::DistributionSystem::TaskInfoRequest, ::DistributionSystem::PathResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::DistributionSystem::TaskInfoRequest, ::DistributionSystem::PathResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DistributeDetectionTask(
+      ::grpc::CallbackServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/)  { return nullptr; }
+  };
   template <class BaseClass>
   class WithCallbackMethod_ExecuteDetectionTask : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithCallbackMethod_ExecuteDetectionTask() {
-      ::grpc::Service::MarkMethodCallback(0,
+      ::grpc::Service::MarkMethodCallback(1,
           new ::grpc::internal::CallbackBidiHandler< ::DistributionSystem::ImageRequest, ::DistributionSystem::ImageResponse>(
             [this](
                    ::grpc::CallbackServerContext* context) { return this->ExecuteDetectionTask(context); }));
@@ -142,15 +213,32 @@ class TaskExecutionService final {
       ::grpc::CallbackServerContext* /*context*/)
       { return nullptr; }
   };
-  typedef WithCallbackMethod_ExecuteDetectionTask<Service > CallbackService;
+  typedef WithCallbackMethod_DistributeDetectionTask<WithCallbackMethod_ExecuteDetectionTask<Service > > CallbackService;
   typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
   template <class BaseClass>
   class WithGenericMethod_ExecuteDetectionTask : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ExecuteDetectionTask() {
-      ::grpc::Service::MarkMethodGeneric(0);
+      ::grpc::Service::MarkMethodGeneric(1);
     }
     ~WithGenericMethod_ExecuteDetectionTask() override {
       BaseClassMustBeDerivedFromService(this);
@@ -162,12 +250,32 @@ class TaskExecutionService final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestDistributeDetectionTask(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_ExecuteDetectionTask : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ExecuteDetectionTask() {
-      ::grpc::Service::MarkMethodRaw(0);
+      ::grpc::Service::MarkMethodRaw(1);
     }
     ~WithRawMethod_ExecuteDetectionTask() override {
       BaseClassMustBeDerivedFromService(this);
@@ -178,8 +286,30 @@ class TaskExecutionService final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestExecuteDetectionTask(::grpc::ServerContext* context, ::grpc::ServerAsyncReaderWriter< ::grpc::ByteBuffer, ::grpc::ByteBuffer>* stream, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncBidiStreaming(0, context, stream, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncBidiStreaming(1, context, stream, new_call_cq, notification_cq, tag);
     }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->DistributeDetectionTask(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* DistributeDetectionTask(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
   };
   template <class BaseClass>
   class WithRawCallbackMethod_ExecuteDetectionTask : public BaseClass {
@@ -187,7 +317,7 @@ class TaskExecutionService final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawCallbackMethod_ExecuteDetectionTask() {
-      ::grpc::Service::MarkMethodRawCallback(0,
+      ::grpc::Service::MarkMethodRawCallback(1,
           new ::grpc::internal::CallbackBidiHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
                    ::grpc::CallbackServerContext* context) { return this->ExecuteDetectionTask(context); }));
@@ -204,9 +334,36 @@ class TaskExecutionService final {
       ::grpc::CallbackServerContext* /*context*/)
       { return nullptr; }
   };
-  typedef Service StreamedUnaryService;
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_DistributeDetectionTask : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_DistributeDetectionTask() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::DistributionSystem::TaskInfoRequest, ::DistributionSystem::PathResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::DistributionSystem::TaskInfoRequest, ::DistributionSystem::PathResponse>* streamer) {
+                       return this->StreamedDistributeDetectionTask(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_DistributeDetectionTask() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status DistributeDetectionTask(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TaskInfoRequest* /*request*/, ::DistributionSystem::PathResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedDistributeDetectionTask(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::DistributionSystem::TaskInfoRequest,::DistributionSystem::PathResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_DistributeDetectionTask<Service > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef Service StreamedService;
+  typedef WithStreamedUnaryMethod_DistributeDetectionTask<Service > StreamedService;
 };
 
 // Сервис для распределения тасок по узлам системы
@@ -623,6 +780,214 @@ class FaultToleranceService final {
   typedef WithStreamedUnaryMethod_Ping<Service > StreamedUnaryService;
   typedef Service SplitStreamedService;
   typedef WithStreamedUnaryMethod_Ping<Service > StreamedService;
+};
+
+// Сервис для масштабируемости системы:
+class ScalabilityService final {
+ public:
+  static constexpr char const* service_full_name() {
+    return "DistributionSystem.ScalabilityService";
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::DistributionSystem::TopologyResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>> AsyncGetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>>(AsyncGetTopologyRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>> PrepareAsyncGetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>>(PrepareAsyncGetTopologyRaw(context, request, cq));
+    }
+    class async_interface {
+     public:
+      virtual ~async_interface() {}
+      virtual void GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+    };
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>* AsyncGetTopologyRaw(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::DistributionSystem::TopologyResponse>* PrepareAsyncGetTopologyRaw(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::DistributionSystem::TopologyResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>> AsyncGetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>>(AsyncGetTopologyRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>> PrepareAsyncGetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>>(PrepareAsyncGetTopologyRaw(context, request, cq));
+    }
+    class async final :
+      public StubInterface::async_interface {
+     public:
+      void GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetTopology(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+     private:
+      friend class Stub;
+      explicit async(Stub* stub): stub_(stub) { }
+      Stub* stub() { return stub_; }
+      Stub* stub_;
+    };
+    class async* async() override { return &async_stub_; }
+
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>* AsyncGetTopologyRaw(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::DistributionSystem::TopologyResponse>* PrepareAsyncGetTopologyRaw(::grpc::ClientContext* context, const ::DistributionSystem::TopologyRequest& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_GetTopology_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status GetTopology(::grpc::ServerContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetTopology() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetTopology(::grpc::ServerContext* context, ::DistributionSystem::TopologyRequest* request, ::grpc::ServerAsyncResponseWriter< ::DistributionSystem::TopologyResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_GetTopology<Service > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetTopology() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::DistributionSystem::TopologyRequest, ::DistributionSystem::TopologyResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::DistributionSystem::TopologyRequest* request, ::DistributionSystem::TopologyResponse* response) { return this->GetTopology(context, request, response); }));}
+    void SetMessageAllocatorFor_GetTopology(
+        ::grpc::MessageAllocator< ::DistributionSystem::TopologyRequest, ::DistributionSystem::TopologyResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::DistributionSystem::TopologyRequest, ::DistributionSystem::TopologyResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetTopology(
+      ::grpc::CallbackServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_GetTopology<Service > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetTopology() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetTopology() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetTopology(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetTopology() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetTopology(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetTopology(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetTopology : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetTopology() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::DistributionSystem::TopologyRequest, ::DistributionSystem::TopologyResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::DistributionSystem::TopologyRequest, ::DistributionSystem::TopologyResponse>* streamer) {
+                       return this->StreamedGetTopology(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetTopology() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetTopology(::grpc::ServerContext* /*context*/, const ::DistributionSystem::TopologyRequest* /*request*/, ::DistributionSystem::TopologyResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetTopology(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::DistributionSystem::TopologyRequest,::DistributionSystem::TopologyResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_GetTopology<Service > StreamedUnaryService;
+  typedef Service SplitStreamedService;
+  typedef WithStreamedUnaryMethod_GetTopology<Service > StreamedService;
 };
 
 }  // namespace DistributionSystem

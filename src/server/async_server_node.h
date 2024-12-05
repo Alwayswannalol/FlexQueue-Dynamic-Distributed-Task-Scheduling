@@ -34,6 +34,10 @@ using DistributionSystem::TaskExecutionService;
 using DistributionSystem::ImageRequest;
 using DistributionSystem::ImageResponse;
 
+using DistributionSystem::ScalabilityService;
+using DistributionSystem::TopologyRequest;
+using DistributionSystem::TopologyResponse;
+
 #include "../client_on_server/async_client_node.h"
 #include "../data_collection/data_collection_server.h"
 
@@ -41,6 +45,7 @@ enum RPC_TYPE {
     PING,
     COLLECT_DATA_FOR_DISTRIBUTION,
     DETECTION_TASK_EXECUTION,
+    GET_TOPOLOGY,
     UNKNOWN
 };
 
@@ -125,6 +130,28 @@ private:
         ServerAsyncResponseWriter<CollectedData> responder_;
     };
 
+    // Класс для обработки GetTopology RPC
+    class get_topology_rpc: public base_rpc {
+    public:
+        get_topology_rpc(ScalabilityService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type,
+        std::vector<std::string> children, std::string server_dir)
+            : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_) {
+                proceed(true, children, server_dir);
+            }
+        
+        void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
+
+        private:
+            ScalabilityService::AsyncService* service_;
+            ServerCompletionQueue* cq_;
+            ServerContext ctx_;
+
+            TopologyRequest request_;
+            TopologyResponse response_;
+            ServerAsyncResponseWriter<TopologyResponse> responder_;
+    };
+
+    // Класс для обработки DetectionTaskExecution RPC
     class detection_task_execution_rpc: public base_rpc {
     public:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
@@ -163,6 +190,7 @@ private:
     std::unique_ptr<ServerCompletionQueue> cq_;
     FaultToleranceService::AsyncService fault_tolerance_service_;
     DistributionTasksService::AsyncService distribution_tasks_service_;
+    ScalabilityService::AsyncService scalability_service_;
     TaskExecutionService::AsyncService task_execution_service_;
     
     std::unique_ptr<Server> server_;

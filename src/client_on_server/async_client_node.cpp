@@ -29,6 +29,18 @@ void async_node_client::collect_data_for_distribution_call::proceed(bool ok, std
     }
 }
 
+void async_node_client::get_topology_call::proceed(bool ok, std::string& server_address, std::string& server_info) {
+    if (ok) {
+        if (status.ok()) {
+            std::cout << "Parents: " << topology_response.parent_address() << std::endl;
+            std::cout << "Childrens: " << topology_response.children_addresses() << std::endl;
+        }
+        else {
+            std::cerr << "CollectData request to " << topology_request.to_server_address() << " failed." << std::endl;
+        }
+    }
+}
+
 void async_node_client::async_ping() {
     auto* call = new ping_call(fault_tolerance_stub_, cq_, CALL_TYPE::PING_CALL, to_server_address_);
 }
@@ -37,12 +49,14 @@ void async_node_client::async_collect_data_for_distribution() {
     auto* call = new collect_data_for_distribution_call(distribution_tasks_stub_, cq_, CALL_TYPE::COLLECT_DATA_FOR_DISTRIBUTION_CALL, to_server_address_);
 }
 
+void async_node_client::async_get_topology() {
+    auto* call = new get_topology_call(scalability_stub_, cq_, CALL_TYPE::GET_TOPOLOGY_CALL, to_server_address_);
+}
+
 void async_node_client::handle_call(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& server_address, 
                                     std::string& server_info) {
     void* got_tag;
     bool ok = false;
-
-    auto start = std::chrono::high_resolution_clock::now();
 
     while (cq_.Next(&got_tag, &ok)) {
         // Восстанавливаем объект async_call
@@ -52,11 +66,6 @@ void async_node_client::handle_call(std::atomic<int>& quant_replies, std::condit
         std::unique_lock<std::mutex> lock(mtx_);
 
         call->proceed(ok, server_address, server_info);
-
-
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> duration = end - start;
-        std::cout << "Processed time: " << duration.count() << std::endl;
 
 
         // Уменьшаем счетчик кол-ва запросов

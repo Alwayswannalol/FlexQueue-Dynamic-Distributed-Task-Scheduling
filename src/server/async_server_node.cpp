@@ -11,6 +11,7 @@ void async_node_server::Run() {
     builder.RegisterService(&fault_tolerance_service_);
     builder.RegisterService(&distribution_tasks_service_);
     builder.RegisterService(&task_execution_service_);
+    builder.RegisterService(&scalability_service_);
 
     cq_ = builder.AddCompletionQueue();
     server_ = builder.BuildAndStart();
@@ -120,6 +121,28 @@ void async_node_server::collect_data_for_distribution_rpc::proceed(bool ok, std:
     }
 }
 
+void async_node_server::get_topology_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
+        service_->RequestGetTopology(&ctx_, &request_, &responder_, cq_, cq_, this);
+    }
+    else if (status_ == PROCESS_RPC) {
+        new get_topology_rpc(service_, cq_, RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children, server_dir);
+
+        std::string full_string_parent_addresses = "";
+        std::string full_string_children_addresses = "";
+
+        response_.set_parent_address("lalalalal");
+        response_.set_children_addresses("kakakakakakak");
+
+        status_ = FINISH_RPC;
+        responder_.Finish(response_, grpc::Status::OK, this);
+    } 
+    else {
+        delete this;
+    }
+}
+
 void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
     if (status_ == CREATE_RPC) {
         status_ = PROCESS_RPC;
@@ -164,6 +187,7 @@ void async_node_server::handle_rpcs() {
     new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children_, server_dir_);
     new ping_rpc(&fault_tolerance_service_, cq_.get(), RPC_TYPE::PING, children_, server_dir_);
     new detection_task_execution_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::DETECTION_TASK_EXECUTION, children_, server_dir_);
+    new get_topology_rpc(&scalability_service_, cq_.get(), RPC_TYPE::GET_TOPOLOGY, children_, server_dir_);
 
     void* tag;
     bool ok;

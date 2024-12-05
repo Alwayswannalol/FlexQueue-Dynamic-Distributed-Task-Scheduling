@@ -21,6 +21,32 @@ namespace _pb = ::PROTOBUF_NAMESPACE_ID;
 namespace _pbi = _pb::internal;
 
 namespace DistributionSystem {
+PROTOBUF_CONSTEXPR TaskInfoRequest::TaskInfoRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.task_data_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TaskInfoRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TaskInfoRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TaskInfoRequestDefaultTypeInternal() {}
+  union {
+    TaskInfoRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TaskInfoRequestDefaultTypeInternal _TaskInfoRequest_default_instance_;
+PROTOBUF_CONSTEXPR PathResponse::PathResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.path_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct PathResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR PathResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~PathResponseDefaultTypeInternal() {}
+  union {
+    PathResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PathResponseDefaultTypeInternal _PathResponse_default_instance_;
 PROTOBUF_CONSTEXPR ImageRequest::ImageRequest(
     ::_pbi::ConstantInitialized): _impl_{
     /*decltype(_impl_.client_name_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
@@ -109,12 +135,53 @@ struct PingResponseDefaultTypeInternal {
   };
 };
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 PingResponseDefaultTypeInternal _PingResponse_default_instance_;
+PROTOBUF_CONSTEXPR TopologyRequest::TopologyRequest(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.to_server_address_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TopologyRequestDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TopologyRequestDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TopologyRequestDefaultTypeInternal() {}
+  union {
+    TopologyRequest _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TopologyRequestDefaultTypeInternal _TopologyRequest_default_instance_;
+PROTOBUF_CONSTEXPR TopologyResponse::TopologyResponse(
+    ::_pbi::ConstantInitialized): _impl_{
+    /*decltype(_impl_.parent_address_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_.children_addresses_)*/{&::_pbi::fixed_address_empty_string, ::_pbi::ConstantInitialized{}}
+  , /*decltype(_impl_._cached_size_)*/{}} {}
+struct TopologyResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR TopologyResponseDefaultTypeInternal()
+      : _instance(::_pbi::ConstantInitialized{}) {}
+  ~TopologyResponseDefaultTypeInternal() {}
+  union {
+    TopologyResponse _instance;
+  };
+};
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 TopologyResponseDefaultTypeInternal _TopologyResponse_default_instance_;
 }  // namespace DistributionSystem
-static ::_pb::Metadata file_level_metadata_distributionSystem_2eproto[6];
+static ::_pb::Metadata file_level_metadata_distributionSystem_2eproto[10];
 static constexpr ::_pb::EnumDescriptor const** file_level_enum_descriptors_distributionSystem_2eproto = nullptr;
 static constexpr ::_pb::ServiceDescriptor const** file_level_service_descriptors_distributionSystem_2eproto = nullptr;
 
 const uint32_t TableStruct_distributionSystem_2eproto::offsets[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TaskInfoRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TaskInfoRequest, _impl_.task_data_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::PathResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::PathResponse, _impl_.path_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::DistributionSystem::ImageRequest, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -167,54 +234,87 @@ const uint32_t TableStruct_distributionSystem_2eproto::offsets[] PROTOBUF_SECTIO
   ~0u,  // no _inlined_string_donated_
   PROTOBUF_FIELD_OFFSET(::DistributionSystem::PingResponse, _impl_.server_address_),
   PROTOBUF_FIELD_OFFSET(::DistributionSystem::PingResponse, _impl_.is_alive_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TopologyRequest, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TopologyRequest, _impl_.to_server_address_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TopologyResponse, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _inlined_string_donated_
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TopologyResponse, _impl_.parent_address_),
+  PROTOBUF_FIELD_OFFSET(::DistributionSystem::TopologyResponse, _impl_.children_addresses_),
 };
 static const ::_pbi::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, -1, sizeof(::DistributionSystem::ImageRequest)},
-  { 12, -1, -1, sizeof(::DistributionSystem::ImageResponse)},
-  { 22, -1, -1, sizeof(::DistributionSystem::CollectDataRequest)},
-  { 29, -1, -1, sizeof(::DistributionSystem::CollectedData)},
-  { 37, -1, -1, sizeof(::DistributionSystem::PingRequest)},
-  { 44, -1, -1, sizeof(::DistributionSystem::PingResponse)},
+  { 0, -1, -1, sizeof(::DistributionSystem::TaskInfoRequest)},
+  { 7, -1, -1, sizeof(::DistributionSystem::PathResponse)},
+  { 14, -1, -1, sizeof(::DistributionSystem::ImageRequest)},
+  { 26, -1, -1, sizeof(::DistributionSystem::ImageResponse)},
+  { 36, -1, -1, sizeof(::DistributionSystem::CollectDataRequest)},
+  { 43, -1, -1, sizeof(::DistributionSystem::CollectedData)},
+  { 51, -1, -1, sizeof(::DistributionSystem::PingRequest)},
+  { 58, -1, -1, sizeof(::DistributionSystem::PingResponse)},
+  { 66, -1, -1, sizeof(::DistributionSystem::TopologyRequest)},
+  { 73, -1, -1, sizeof(::DistributionSystem::TopologyResponse)},
 };
 
 static const ::_pb::Message* const file_default_instances[] = {
+  &::DistributionSystem::_TaskInfoRequest_default_instance_._instance,
+  &::DistributionSystem::_PathResponse_default_instance_._instance,
   &::DistributionSystem::_ImageRequest_default_instance_._instance,
   &::DistributionSystem::_ImageResponse_default_instance_._instance,
   &::DistributionSystem::_CollectDataRequest_default_instance_._instance,
   &::DistributionSystem::_CollectedData_default_instance_._instance,
   &::DistributionSystem::_PingRequest_default_instance_._instance,
   &::DistributionSystem::_PingResponse_default_instance_._instance,
+  &::DistributionSystem::_TopologyRequest_default_instance_._instance,
+  &::DistributionSystem::_TopologyResponse_default_instance_._instance,
 };
 
 const char descriptor_table_protodef_distributionSystem_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\030distributionSystem.proto\022\022Distribution"
-  "System\"\234\001\n\014ImageRequest\022\023\n\013client_name\030\001"
-  " \001(\t\022\020\n\010filename\030\002 \001(\t\022 \n\030path_to_destin"
-  "ation_node\030\003 \001(\t\022\036\n\026is_last_chunk_of_pho"
-  "to\030\004 \001(\010\022\025\n\ris_last_photo\030\005 \001(\010\022\014\n\004data\030"
-  "\006 \001(\014\"f\n\rImageResponse\022\020\n\010filename\030\001 \001(\t"
-  "\022\036\n\026is_last_chunk_of_photo\030\002 \001(\010\022\025\n\ris_l"
-  "ast_photo\030\003 \001(\010\022\014\n\004data\030\004 \001(\014\"/\n\022Collect"
-  "DataRequest\022\031\n\021to_server_address\030\001 \001(\t\"\?"
-  "\n\rCollectedData\022\026\n\016server_address\030\001 \001(\t\022"
-  "\026\n\016collected_info\030\002 \001(\t\"(\n\013PingRequest\022\031"
-  "\n\021to_server_address\030\001 \001(\t\"8\n\014PingRespons"
-  "e\022\026\n\016server_address\030\001 \001(\t\022\020\n\010is_alive\030\002 "
-  "\001(\t2w\n\024TaskExecutionService\022_\n\024ExecuteDe"
-  "tectionTask\022 .DistributionSystem.ImageRe"
-  "quest\032!.DistributionSystem.ImageResponse"
-  "(\0010\0012t\n\030DistributionTasksService\022X\n\013Coll"
-  "ectData\022&.DistributionSystem.CollectData"
-  "Request\032!.DistributionSystem.CollectedDa"
-  "ta2b\n\025FaultToleranceService\022I\n\004Ping\022\037.Di"
-  "stributionSystem.PingRequest\032 .Distribut"
-  "ionSystem.PingResponseb\006proto3"
+  "System\"$\n\017TaskInfoRequest\022\021\n\ttask_data\030\001"
+  " \001(\t\"\034\n\014PathResponse\022\014\n\004path\030\001 \001(\t\"\234\001\n\014I"
+  "mageRequest\022\023\n\013client_name\030\001 \001(\t\022\020\n\010file"
+  "name\030\002 \001(\t\022 \n\030path_to_destination_node\030\003"
+  " \001(\t\022\036\n\026is_last_chunk_of_photo\030\004 \001(\010\022\025\n\r"
+  "is_last_photo\030\005 \001(\010\022\014\n\004data\030\006 \001(\014\"f\n\rIma"
+  "geResponse\022\020\n\010filename\030\001 \001(\t\022\036\n\026is_last_"
+  "chunk_of_photo\030\002 \001(\010\022\025\n\ris_last_photo\030\003 "
+  "\001(\010\022\014\n\004data\030\004 \001(\014\"/\n\022CollectDataRequest\022"
+  "\031\n\021to_server_address\030\001 \001(\t\"\?\n\rCollectedD"
+  "ata\022\026\n\016server_address\030\001 \001(\t\022\026\n\016collected"
+  "_info\030\002 \001(\t\"(\n\013PingRequest\022\031\n\021to_server_"
+  "address\030\001 \001(\t\"8\n\014PingResponse\022\026\n\016server_"
+  "address\030\001 \001(\t\022\020\n\010is_alive\030\002 \001(\t\",\n\017Topol"
+  "ogyRequest\022\031\n\021to_server_address\030\001 \001(\t\"F\n"
+  "\020TopologyResponse\022\026\n\016parent_address\030\001 \001("
+  "\t\022\032\n\022children_addresses\030\002 \001(\t2\331\001\n\024TaskEx"
+  "ecutionService\022`\n\027DistributeDetectionTas"
+  "k\022#.DistributionSystem.TaskInfoRequest\032 "
+  ".DistributionSystem.PathResponse\022_\n\024Exec"
+  "uteDetectionTask\022 .DistributionSystem.Im"
+  "ageRequest\032!.DistributionSystem.ImageRes"
+  "ponse(\0010\0012t\n\030DistributionTasksService\022X\n"
+  "\013CollectData\022&.DistributionSystem.Collec"
+  "tDataRequest\032!.DistributionSystem.Collec"
+  "tedData2b\n\025FaultToleranceService\022I\n\004Ping"
+  "\022\037.DistributionSystem.PingRequest\032 .Dist"
+  "ributionSystem.PingResponse2n\n\022Scalabili"
+  "tyService\022X\n\013GetTopology\022#.DistributionS"
+  "ystem.TopologyRequest\032$.DistributionSyst"
+  "em.TopologyResponseb\006proto3"
   ;
 static ::_pbi::once_flag descriptor_table_distributionSystem_2eproto_once;
 const ::_pbi::DescriptorTable descriptor_table_distributionSystem_2eproto = {
-    false, false, 870, descriptor_table_protodef_distributionSystem_2eproto,
+    false, false, 1267, descriptor_table_protodef_distributionSystem_2eproto,
     "distributionSystem.proto",
-    &descriptor_table_distributionSystem_2eproto_once, nullptr, 0, 6,
+    &descriptor_table_distributionSystem_2eproto_once, nullptr, 0, 10,
     schemas, file_default_instances, TableStruct_distributionSystem_2eproto::offsets,
     file_level_metadata_distributionSystem_2eproto, file_level_enum_descriptors_distributionSystem_2eproto,
     file_level_service_descriptors_distributionSystem_2eproto,
@@ -226,6 +326,412 @@ PROTOBUF_ATTRIBUTE_WEAK const ::_pbi::DescriptorTable* descriptor_table_distribu
 // Force running AddDescriptors() at dynamic initialization time.
 PROTOBUF_ATTRIBUTE_INIT_PRIORITY2 static ::_pbi::AddDescriptorsRunner dynamic_init_dummy_distributionSystem_2eproto(&descriptor_table_distributionSystem_2eproto);
 namespace DistributionSystem {
+
+// ===================================================================
+
+class TaskInfoRequest::_Internal {
+ public:
+};
+
+TaskInfoRequest::TaskInfoRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:DistributionSystem.TaskInfoRequest)
+}
+TaskInfoRequest::TaskInfoRequest(const TaskInfoRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TaskInfoRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_data_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.task_data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_task_data().empty()) {
+    _this->_impl_.task_data_.Set(from._internal_task_data(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:DistributionSystem.TaskInfoRequest)
+}
+
+inline void TaskInfoRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.task_data_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.task_data_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.task_data_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TaskInfoRequest::~TaskInfoRequest() {
+  // @@protoc_insertion_point(destructor:DistributionSystem.TaskInfoRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TaskInfoRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.task_data_.Destroy();
+}
+
+void TaskInfoRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TaskInfoRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:DistributionSystem.TaskInfoRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.task_data_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TaskInfoRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string task_data = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_task_data();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "DistributionSystem.TaskInfoRequest.task_data"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TaskInfoRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DistributionSystem.TaskInfoRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string task_data = 1;
+  if (!this->_internal_task_data().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_task_data().data(), static_cast<int>(this->_internal_task_data().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "DistributionSystem.TaskInfoRequest.task_data");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_task_data(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DistributionSystem.TaskInfoRequest)
+  return target;
+}
+
+size_t TaskInfoRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DistributionSystem.TaskInfoRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string task_data = 1;
+  if (!this->_internal_task_data().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_task_data());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TaskInfoRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TaskInfoRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TaskInfoRequest::GetClassData() const { return &_class_data_; }
+
+
+void TaskInfoRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TaskInfoRequest*>(&to_msg);
+  auto& from = static_cast<const TaskInfoRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:DistributionSystem.TaskInfoRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_task_data().empty()) {
+    _this->_internal_set_task_data(from._internal_task_data());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TaskInfoRequest::CopyFrom(const TaskInfoRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DistributionSystem.TaskInfoRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TaskInfoRequest::IsInitialized() const {
+  return true;
+}
+
+void TaskInfoRequest::InternalSwap(TaskInfoRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.task_data_, lhs_arena,
+      &other->_impl_.task_data_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TaskInfoRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
+      file_level_metadata_distributionSystem_2eproto[0]);
+}
+
+// ===================================================================
+
+class PathResponse::_Internal {
+ public:
+};
+
+PathResponse::PathResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:DistributionSystem.PathResponse)
+}
+PathResponse::PathResponse(const PathResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  PathResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.path_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.path_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.path_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_path().empty()) {
+    _this->_impl_.path_.Set(from._internal_path(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:DistributionSystem.PathResponse)
+}
+
+inline void PathResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.path_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.path_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.path_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+PathResponse::~PathResponse() {
+  // @@protoc_insertion_point(destructor:DistributionSystem.PathResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void PathResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.path_.Destroy();
+}
+
+void PathResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void PathResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:DistributionSystem.PathResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.path_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* PathResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string path = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_path();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "DistributionSystem.PathResponse.path"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* PathResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DistributionSystem.PathResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string path = 1;
+  if (!this->_internal_path().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_path().data(), static_cast<int>(this->_internal_path().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "DistributionSystem.PathResponse.path");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_path(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DistributionSystem.PathResponse)
+  return target;
+}
+
+size_t PathResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DistributionSystem.PathResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string path = 1;
+  if (!this->_internal_path().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_path());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData PathResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    PathResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*PathResponse::GetClassData() const { return &_class_data_; }
+
+
+void PathResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<PathResponse*>(&to_msg);
+  auto& from = static_cast<const PathResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:DistributionSystem.PathResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_path().empty()) {
+    _this->_internal_set_path(from._internal_path());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void PathResponse::CopyFrom(const PathResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DistributionSystem.PathResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PathResponse::IsInitialized() const {
+  return true;
+}
+
+void PathResponse::InternalSwap(PathResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.path_, lhs_arena,
+      &other->_impl_.path_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata PathResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
+      file_level_metadata_distributionSystem_2eproto[1]);
+}
 
 // ===================================================================
 
@@ -632,7 +1138,7 @@ void ImageRequest::InternalSwap(ImageRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ImageRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[0]);
+      file_level_metadata_distributionSystem_2eproto[2]);
 }
 
 // ===================================================================
@@ -940,7 +1446,7 @@ void ImageResponse::InternalSwap(ImageResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata ImageResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[1]);
+      file_level_metadata_distributionSystem_2eproto[3]);
 }
 
 // ===================================================================
@@ -1143,7 +1649,7 @@ void CollectDataRequest::InternalSwap(CollectDataRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CollectDataRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[2]);
+      file_level_metadata_distributionSystem_2eproto[4]);
 }
 
 // ===================================================================
@@ -1396,7 +1902,7 @@ void CollectedData::InternalSwap(CollectedData* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata CollectedData::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[3]);
+      file_level_metadata_distributionSystem_2eproto[5]);
 }
 
 // ===================================================================
@@ -1599,7 +2105,7 @@ void PingRequest::InternalSwap(PingRequest* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PingRequest::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[4]);
+      file_level_metadata_distributionSystem_2eproto[6]);
 }
 
 // ===================================================================
@@ -1852,12 +2358,476 @@ void PingResponse::InternalSwap(PingResponse* other) {
 ::PROTOBUF_NAMESPACE_ID::Metadata PingResponse::GetMetadata() const {
   return ::_pbi::AssignDescriptors(
       &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
-      file_level_metadata_distributionSystem_2eproto[5]);
+      file_level_metadata_distributionSystem_2eproto[7]);
+}
+
+// ===================================================================
+
+class TopologyRequest::_Internal {
+ public:
+};
+
+TopologyRequest::TopologyRequest(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:DistributionSystem.TopologyRequest)
+}
+TopologyRequest::TopologyRequest(const TopologyRequest& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TopologyRequest* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.to_server_address_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.to_server_address_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.to_server_address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_to_server_address().empty()) {
+    _this->_impl_.to_server_address_.Set(from._internal_to_server_address(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:DistributionSystem.TopologyRequest)
+}
+
+inline void TopologyRequest::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.to_server_address_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.to_server_address_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.to_server_address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TopologyRequest::~TopologyRequest() {
+  // @@protoc_insertion_point(destructor:DistributionSystem.TopologyRequest)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TopologyRequest::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.to_server_address_.Destroy();
+}
+
+void TopologyRequest::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TopologyRequest::Clear() {
+// @@protoc_insertion_point(message_clear_start:DistributionSystem.TopologyRequest)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.to_server_address_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TopologyRequest::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string to_server_address = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_to_server_address();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "DistributionSystem.TopologyRequest.to_server_address"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TopologyRequest::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DistributionSystem.TopologyRequest)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string to_server_address = 1;
+  if (!this->_internal_to_server_address().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_to_server_address().data(), static_cast<int>(this->_internal_to_server_address().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "DistributionSystem.TopologyRequest.to_server_address");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_to_server_address(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DistributionSystem.TopologyRequest)
+  return target;
+}
+
+size_t TopologyRequest::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DistributionSystem.TopologyRequest)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string to_server_address = 1;
+  if (!this->_internal_to_server_address().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_to_server_address());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TopologyRequest::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TopologyRequest::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TopologyRequest::GetClassData() const { return &_class_data_; }
+
+
+void TopologyRequest::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TopologyRequest*>(&to_msg);
+  auto& from = static_cast<const TopologyRequest&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:DistributionSystem.TopologyRequest)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_to_server_address().empty()) {
+    _this->_internal_set_to_server_address(from._internal_to_server_address());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TopologyRequest::CopyFrom(const TopologyRequest& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DistributionSystem.TopologyRequest)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TopologyRequest::IsInitialized() const {
+  return true;
+}
+
+void TopologyRequest::InternalSwap(TopologyRequest* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.to_server_address_, lhs_arena,
+      &other->_impl_.to_server_address_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TopologyRequest::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
+      file_level_metadata_distributionSystem_2eproto[8]);
+}
+
+// ===================================================================
+
+class TopologyResponse::_Internal {
+ public:
+};
+
+TopologyResponse::TopologyResponse(::PROTOBUF_NAMESPACE_ID::Arena* arena,
+                         bool is_message_owned)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena, is_message_owned) {
+  SharedCtor(arena, is_message_owned);
+  // @@protoc_insertion_point(arena_constructor:DistributionSystem.TopologyResponse)
+}
+TopologyResponse::TopologyResponse(const TopologyResponse& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message() {
+  TopologyResponse* const _this = this; (void)_this;
+  new (&_impl_) Impl_{
+      decltype(_impl_.parent_address_){}
+    , decltype(_impl_.children_addresses_){}
+    , /*decltype(_impl_._cached_size_)*/{}};
+
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  _impl_.parent_address_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.parent_address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_parent_address().empty()) {
+    _this->_impl_.parent_address_.Set(from._internal_parent_address(), 
+      _this->GetArenaForAllocation());
+  }
+  _impl_.children_addresses_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.children_addresses_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  if (!from._internal_children_addresses().empty()) {
+    _this->_impl_.children_addresses_.Set(from._internal_children_addresses(), 
+      _this->GetArenaForAllocation());
+  }
+  // @@protoc_insertion_point(copy_constructor:DistributionSystem.TopologyResponse)
+}
+
+inline void TopologyResponse::SharedCtor(
+    ::_pb::Arena* arena, bool is_message_owned) {
+  (void)arena;
+  (void)is_message_owned;
+  new (&_impl_) Impl_{
+      decltype(_impl_.parent_address_){}
+    , decltype(_impl_.children_addresses_){}
+    , /*decltype(_impl_._cached_size_)*/{}
+  };
+  _impl_.parent_address_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.parent_address_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+  _impl_.children_addresses_.InitDefault();
+  #ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
+    _impl_.children_addresses_.Set("", GetArenaForAllocation());
+  #endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
+}
+
+TopologyResponse::~TopologyResponse() {
+  // @@protoc_insertion_point(destructor:DistributionSystem.TopologyResponse)
+  if (auto *arena = _internal_metadata_.DeleteReturnArena<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>()) {
+  (void)arena;
+    return;
+  }
+  SharedDtor();
+}
+
+inline void TopologyResponse::SharedDtor() {
+  GOOGLE_DCHECK(GetArenaForAllocation() == nullptr);
+  _impl_.parent_address_.Destroy();
+  _impl_.children_addresses_.Destroy();
+}
+
+void TopologyResponse::SetCachedSize(int size) const {
+  _impl_._cached_size_.Set(size);
+}
+
+void TopologyResponse::Clear() {
+// @@protoc_insertion_point(message_clear_start:DistributionSystem.TopologyResponse)
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _impl_.parent_address_.ClearToEmpty();
+  _impl_.children_addresses_.ClearToEmpty();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* TopologyResponse::_InternalParse(const char* ptr, ::_pbi::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  while (!ctx->Done(&ptr)) {
+    uint32_t tag;
+    ptr = ::_pbi::ReadTag(ptr, &tag);
+    switch (tag >> 3) {
+      // string parent_address = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 10)) {
+          auto str = _internal_mutable_parent_address();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "DistributionSystem.TopologyResponse.parent_address"));
+        } else
+          goto handle_unusual;
+        continue;
+      // string children_addresses = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<uint8_t>(tag) == 18)) {
+          auto str = _internal_mutable_children_addresses();
+          ptr = ::_pbi::InlineGreedyStringParser(str, ptr, ctx);
+          CHK_(ptr);
+          CHK_(::_pbi::VerifyUTF8(str, "DistributionSystem.TopologyResponse.children_addresses"));
+        } else
+          goto handle_unusual;
+        continue;
+      default:
+        goto handle_unusual;
+    }  // switch
+  handle_unusual:
+    if ((tag == 0) || ((tag & 7) == 4)) {
+      CHK_(ptr);
+      ctx->SetLastTag(tag);
+      goto message_done;
+    }
+    ptr = UnknownFieldParse(
+        tag,
+        _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+        ptr, ctx);
+    CHK_(ptr != nullptr);
+  }  // while
+message_done:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto message_done;
+#undef CHK_
+}
+
+uint8_t* TopologyResponse::_InternalSerialize(
+    uint8_t* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:DistributionSystem.TopologyResponse)
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // string parent_address = 1;
+  if (!this->_internal_parent_address().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_parent_address().data(), static_cast<int>(this->_internal_parent_address().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "DistributionSystem.TopologyResponse.parent_address");
+    target = stream->WriteStringMaybeAliased(
+        1, this->_internal_parent_address(), target);
+  }
+
+  // string children_addresses = 2;
+  if (!this->_internal_children_addresses().empty()) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      this->_internal_children_addresses().data(), static_cast<int>(this->_internal_children_addresses().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "DistributionSystem.TopologyResponse.children_addresses");
+    target = stream->WriteStringMaybeAliased(
+        2, this->_internal_children_addresses(), target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:DistributionSystem.TopologyResponse)
+  return target;
+}
+
+size_t TopologyResponse::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:DistributionSystem.TopologyResponse)
+  size_t total_size = 0;
+
+  uint32_t cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // string parent_address = 1;
+  if (!this->_internal_parent_address().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_parent_address());
+  }
+
+  // string children_addresses = 2;
+  if (!this->_internal_children_addresses().empty()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_children_addresses());
+  }
+
+  return MaybeComputeUnknownFieldsSize(total_size, &_impl_._cached_size_);
+}
+
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData TopologyResponse::_class_data_ = {
+    ::PROTOBUF_NAMESPACE_ID::Message::CopyWithSourceCheck,
+    TopologyResponse::MergeImpl
+};
+const ::PROTOBUF_NAMESPACE_ID::Message::ClassData*TopologyResponse::GetClassData() const { return &_class_data_; }
+
+
+void TopologyResponse::MergeImpl(::PROTOBUF_NAMESPACE_ID::Message& to_msg, const ::PROTOBUF_NAMESPACE_ID::Message& from_msg) {
+  auto* const _this = static_cast<TopologyResponse*>(&to_msg);
+  auto& from = static_cast<const TopologyResponse&>(from_msg);
+  // @@protoc_insertion_point(class_specific_merge_from_start:DistributionSystem.TopologyResponse)
+  GOOGLE_DCHECK_NE(&from, _this);
+  uint32_t cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (!from._internal_parent_address().empty()) {
+    _this->_internal_set_parent_address(from._internal_parent_address());
+  }
+  if (!from._internal_children_addresses().empty()) {
+    _this->_internal_set_children_addresses(from._internal_children_addresses());
+  }
+  _this->_internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+}
+
+void TopologyResponse::CopyFrom(const TopologyResponse& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:DistributionSystem.TopologyResponse)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool TopologyResponse::IsInitialized() const {
+  return true;
+}
+
+void TopologyResponse::InternalSwap(TopologyResponse* other) {
+  using std::swap;
+  auto* lhs_arena = GetArenaForAllocation();
+  auto* rhs_arena = other->GetArenaForAllocation();
+  _internal_metadata_.InternalSwap(&other->_internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.parent_address_, lhs_arena,
+      &other->_impl_.parent_address_, rhs_arena
+  );
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr::InternalSwap(
+      &_impl_.children_addresses_, lhs_arena,
+      &other->_impl_.children_addresses_, rhs_arena
+  );
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata TopologyResponse::GetMetadata() const {
+  return ::_pbi::AssignDescriptors(
+      &descriptor_table_distributionSystem_2eproto_getter, &descriptor_table_distributionSystem_2eproto_once,
+      file_level_metadata_distributionSystem_2eproto[9]);
 }
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace DistributionSystem
 PROTOBUF_NAMESPACE_OPEN
+template<> PROTOBUF_NOINLINE ::DistributionSystem::TaskInfoRequest*
+Arena::CreateMaybeMessage< ::DistributionSystem::TaskInfoRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::DistributionSystem::TaskInfoRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::DistributionSystem::PathResponse*
+Arena::CreateMaybeMessage< ::DistributionSystem::PathResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::DistributionSystem::PathResponse >(arena);
+}
 template<> PROTOBUF_NOINLINE ::DistributionSystem::ImageRequest*
 Arena::CreateMaybeMessage< ::DistributionSystem::ImageRequest >(Arena* arena) {
   return Arena::CreateMessageInternal< ::DistributionSystem::ImageRequest >(arena);
@@ -1881,6 +2851,14 @@ Arena::CreateMaybeMessage< ::DistributionSystem::PingRequest >(Arena* arena) {
 template<> PROTOBUF_NOINLINE ::DistributionSystem::PingResponse*
 Arena::CreateMaybeMessage< ::DistributionSystem::PingResponse >(Arena* arena) {
   return Arena::CreateMessageInternal< ::DistributionSystem::PingResponse >(arena);
+}
+template<> PROTOBUF_NOINLINE ::DistributionSystem::TopologyRequest*
+Arena::CreateMaybeMessage< ::DistributionSystem::TopologyRequest >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::DistributionSystem::TopologyRequest >(arena);
+}
+template<> PROTOBUF_NOINLINE ::DistributionSystem::TopologyResponse*
+Arena::CreateMaybeMessage< ::DistributionSystem::TopologyResponse >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::DistributionSystem::TopologyResponse >(arena);
 }
 PROTOBUF_NAMESPACE_CLOSE
 
