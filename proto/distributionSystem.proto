@@ -2,14 +2,40 @@ syntax = "proto3";
 
 package DistributionSystem;
 
+// Сервис выполнения задач
+service TaskExecutionService {
+  rpc DistributeDetectionTask(TaskInfoRequest) returns (PathResponse);
+  rpc ExecuteDetectionTask(stream ImageRequest) returns (stream ImageResponse);
+}
+
+message TaskInfoRequest {
+  string task_data = 1;
+}
+
+message PathResponse {
+  string path = 1;
+}
+
+message ImageRequest {
+  string client_name = 1;
+  string filename = 2;
+  bool last_packet = 3;
+  bytes data = 4;
+}
+
+message ImageResponse {
+  string filename = 1;
+  bytes data = 2;
+}
+
 
 // Сервис для распределения тасок по узлам системы
 service DistributionTasksService {
-    rpc CollectData(CollectDataRequest) returns (CollectedData);
+  rpc CollectData(CollectDataRequest) returns (CollectedData);
 }
 
 message CollectDataRequest {
-  string to_server = 1;
+  string to_server_address = 1;
 }
 
 message CollectedData{
@@ -20,7 +46,7 @@ message CollectedData{
 
 // Сервис для достижения отказоустойчивости в системе
 service FaultToleranceService {
-    rpc Ping(PingRequest) returns (PingResponse);
+  rpc Ping(PingRequest) returns (PingResponse);
 }
 
 message PingRequest {
@@ -30,4 +56,19 @@ message PingRequest {
 message PingResponse {
   string server_address = 1;
   string is_alive = 2;
+}
+
+
+// Сервис для масштабируемости системы:
+service ScalabilityService {
+  rpc GetTopology(TopologyRequest) returns (TopologyResponse);
+}
+
+message TopologyRequest {
+  string to_server_address = 1;
+}
+
+message TopologyResponse {
+  string parent_address = 1;
+  string children_addresses = 2;
 }

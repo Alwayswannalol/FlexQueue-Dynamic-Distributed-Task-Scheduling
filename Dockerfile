@@ -33,6 +33,7 @@ RUN git clone --recurse-submodules -b v1.54.2 --depth 1 --shallow-submodules htt
 
 # Копируем содержимое проекта в контейнер
 WORKDIR /app
+
 COPY . .
 
 # Сборка проекта
