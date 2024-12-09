@@ -1,7 +1,9 @@
 #ifndef ASYNC_SERVER_NODE_H
 #define ASYNC_SERVER_NODE_H
 
-#define CHUNK_SIZE 400
+#ifndef CHUNK_SIZE
+#define CHUNK_SIZE 4000000
+#endif
 
 #include <memory>
 #include <vector>
@@ -40,6 +42,7 @@ using DistributionSystem::TopologyResponse;
 
 #include "../client_on_server/async_client_node.h"
 #include "../data_collection/data_collection_server.h"
+#include "../data_collection/files_info.h"
 
 enum RPC_TYPE {
     PING,
@@ -157,8 +160,7 @@ private:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
             : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_), 
-              writing_mode_(false), new_responder_created_(false),
-              counter(0), test_str({"1 from server", "2 from server"}) {
+              writing_mode_(false), new_responder_created_(false) {
                 proceed(true, children, server_dir);
         }
         
@@ -176,9 +178,15 @@ private:
         bool writing_mode_;
         bool new_responder_created_;
 
-        // TODO: для тестирования
-        int counter;
-        std::vector<std::string> test_str;
+        bool last_packet;
+
+        std::ofstream writing_stream;
+        std::string prev_filename_;
+
+        std::ifstream reading_stream;
+        std::string prev_filepath_;
+        int num_of_chunk;
+        int size;
     };
 
     void handle_rpcs();

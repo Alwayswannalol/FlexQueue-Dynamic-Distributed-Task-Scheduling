@@ -23,9 +23,10 @@ void async_node_client::collect_data_for_distribution_call::proceed(bool ok, std
 
             server_address += collected_data_response.server_address() + "\n";
             server_info += collected_data_response.collected_info() + "\n";
-        } else {
-            std::cerr << "CollectData request to " << collect_data_request.to_server_address() << " failed." << std::endl;
         }
+    }
+    else {
+        std::cerr << "Error: CompletionQueue returned ok == false" << std::endl;
     }
 }
 
@@ -34,10 +35,13 @@ void async_node_client::get_topology_call::proceed(bool ok, std::string& server_
         if (status.ok()) {
             std::cout << "Parents: " << topology_response.parent_address() << std::endl;
             std::cout << "Childrens: " << topology_response.children_addresses() << std::endl;
+
+            server_address += topology_response.parent_address() + "\n";
+            server_info += topology_response.children_addresses() + "\n";
         }
-        else {
-            std::cerr << "CollectData request to " << topology_request.to_server_address() << " failed." << std::endl;
-        }
+    }
+    else {
+        std::cerr << "Error: CompletionQueue returned ok == false" << std::endl;
     }
 }
 

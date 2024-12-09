@@ -1,7 +1,9 @@
 #ifndef ASYNC_CLIENT_H
 #define ASYNC_CLIENT_H
 
-#define CHUNK_SIZE 400
+#ifndef CHUNK_SIZE
+#define CHUNK_SIZE 4000000
+#endif
 
 #include <grpcpp/grpcpp.h>
 
@@ -44,11 +46,10 @@ public:
         }
     }
 
-    explicit async_client(std::shared_ptr<Channel> channel)
-        : task_execution_stub_(TaskExecutionService::NewStub(channel)) {}
+    explicit async_client(std::shared_ptr<Channel> channel, std::string client_name)
+        : task_execution_stub_(TaskExecutionService::NewStub(channel)), client_name_(client_name) {}
 
-    // TODO: передавать в функцию вектор с путями до фотографий
-    void async_execute_detection_task();
+    void async_execute_detection_task(std::vector<std::string> filePaths);
 
     // Обработка rpc_calls
     // TODO: сделать обработку переменного числа параметров
@@ -71,9 +72,10 @@ private:
     class detection_task_execution_call: public base_call {
     public:
 
-        detection_task_execution_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type)
-            : base_call(call_type, CREATE_CALL), writing_mode_(true), 
-            counter(0), test_str({"1 from client", "2 from client"}) {
+        detection_task_execution_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, 
+                                      std::vector<std::string> filePaths, std::string client_name)
+            : base_call(call_type, CREATE_CALL), writing_mode_(true),
+              filePaths_(filePaths), counter_(0), client_name_(client_name) {
             responder_ = stub_->AsyncExecuteDetectionTask(&context, &cq_, (void*)this);
             call_status_ = PROCESS_CALL;
         };
@@ -91,15 +93,26 @@ private:
 
         bool writing_mode_;
 
-        // TODO: для тестирования
-        int counter;
-        std::vector<std::string> test_str;
+        std::vector<std::string> filePaths_;
+        int counter_;
+
+        std::ifstream reading_stream;
+        std::string prev_filepath_;
+        int size;
+        int num_of_chunk;
+
+        std::ofstream writing_stream;
+        std::string prev_filename_;
+
+        std::string client_name_;
     };
 
     std::unique_ptr<TaskExecutionService::Stub> task_execution_stub_;
 
     CompletionQueue cq_;  // Общая очередь для всех асинхронных операций
     std::mutex mtx_;
+
+    std::string client_name_;
 };
 
 #endif

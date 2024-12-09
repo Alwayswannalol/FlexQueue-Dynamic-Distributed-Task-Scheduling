@@ -132,8 +132,40 @@ void async_node_server::get_topology_rpc::proceed(bool ok, std::vector<std::stri
         std::string full_string_parent_addresses = "";
         std::string full_string_children_addresses = "";
 
-        response_.set_parent_address("lalalalal");
-        response_.set_children_addresses("kakakakakakak");
+        // Сколько запросов надо сделать
+        std::atomic<int> requests_count;
+        requests_count.store(children.size());
+
+        std::mutex mtx;
+        std::condition_variable cv;
+
+        // Создаем клиентов для опроса дочерних узлов
+        std::vector<std::shared_ptr<async_node_client>> child_clients;
+        for (const std::string& child : children) {
+            child_clients.push_back(std::make_shared<async_node_client>(
+                grpc::CreateChannel(child, grpc::InsecureChannelCredentials()), child));
+        }
+
+        for (auto& child_client: child_clients) {
+            std::thread([this, child_client, &requests_count, &cv, &full_string_parent_addresses, &full_string_children_addresses]() {
+                child_client->handle_call(requests_count, cv, full_string_parent_addresses, full_string_children_addresses); // Запуск метода обработки ответов
+            }).detach();
+            child_client->async_get_topology();
+        }
+
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
+
+        response_.set_parent_address(full_string_parent_addresses + request_.to_server_address());
+        for (const std::string& child: children) {
+            full_string_children_addresses += child + " ";
+        }
+
+        if (children.size() == 0) {
+            full_string_children_addresses += "No";
+        }
+
+        response_.set_children_addresses(full_string_children_addresses);
 
         status_ = FINISH_RPC;
         responder_.Finish(response_, grpc::Status::OK, this);
@@ -161,24 +193,84 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             }
             else {
                 responder_.Read(&request_, (void*)this);
-                std::cout << request_.filename() << std::endl;
+                
+                if (std::filesystem::create_directories("tmp/" + request_.client_name() + "/results")) {
+                    std::cout << "Create folder for " << request_.client_name() << std::endl;
+                }
+                else {
+                    std::cout << "Folder already exists" << std::endl;
+                }
+
+                std::string filename_ = request_.filename();
+                filename_.erase(std::remove(filename_.begin(), filename_.end(), '/'), filename_.end());
+
+                if (filename_ != prev_filename_) {
+                    if (!writing_stream.is_open()) {
+                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                    }
+                    else {
+                        writing_stream.close();
+                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                    }
+                    prev_filename_ = filename_;
+                }
+
+                writing_stream.write(request_.data().c_str(), request_.data().size());
+
+                if (request_.last_packet() == true) {
+                    // TODO: сделать запуск обработки изображений
+                    std::cout << "Выполнение задачи..." << std::endl;
+                    writing_mode_ = true;
+                }
             }
         }
-
-        if(writing_mode_)//writing mode
-        {
-            if (!ok || counter >= 2) {
+        else { //writing mode
+            if (last_packet) {
                 status_ = FINISH_RPC;
                 responder_.Finish(Status(), (void*)this);
             }
             else {
-                response_.set_filename(test_str[counter]);
-                counter++;
+                // TODO: пока передаю обратно фиксированное одно изображение (чтобы проверить rpc)
+                if (!reading_stream.is_open()) {
+                    reading_stream.open("tmp/alwayswannalol/results/1_result.jpg");
+                    num_of_chunk = 1;
+                    size = files_info::get_size("tmp/alwayswannalol/results/1_result.jpg");
+                }
+
+                char data_for_client[CHUNK_SIZE];
+
+                if (num_of_chunk * CHUNK_SIZE <= size) {
+                    reading_stream.read(data_for_client, sizeof(data_for_client));
+
+                    response_.set_filename("1_result.jpg");
+                    response_.set_data(data_for_client, reading_stream.gcount());
+
+                    num_of_chunk++;
+                }
+                else {
+                    reading_stream.read(data_for_client, sizeof(data_for_client));
+
+                    response_.set_filename("1_result.jpg");
+                    response_.set_data(data_for_client, reading_stream.gcount());
+
+                    last_packet = true;
+
+                    reading_stream.close();
+                }
+
                 responder_.Write(response_, (void*)this);
             }
         }
     }
     else {
+        if (reading_stream.is_open()) {
+            reading_stream.close();
+        }
+
+        if (writing_stream.is_open()) {
+            writing_stream.close();
+        }
+
         delete this;
     }
 }

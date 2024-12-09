@@ -521,10 +521,8 @@ class ImageRequest final :
   enum : int {
     kClientNameFieldNumber = 1,
     kFilenameFieldNumber = 2,
-    kPathToDestinationNodeFieldNumber = 3,
-    kDataFieldNumber = 6,
-    kIsLastChunkOfPhotoFieldNumber = 4,
-    kIsLastPhotoFieldNumber = 5,
+    kDataFieldNumber = 4,
+    kLastPacketFieldNumber = 3,
   };
   // string client_name = 1;
   void clear_client_name();
@@ -554,21 +552,7 @@ class ImageRequest final :
   std::string* _internal_mutable_filename();
   public:
 
-  // string path_to_destination_node = 3;
-  void clear_path_to_destination_node();
-  const std::string& path_to_destination_node() const;
-  template <typename ArgT0 = const std::string&, typename... ArgT>
-  void set_path_to_destination_node(ArgT0&& arg0, ArgT... args);
-  std::string* mutable_path_to_destination_node();
-  PROTOBUF_NODISCARD std::string* release_path_to_destination_node();
-  void set_allocated_path_to_destination_node(std::string* path_to_destination_node);
-  private:
-  const std::string& _internal_path_to_destination_node() const;
-  inline PROTOBUF_ALWAYS_INLINE void _internal_set_path_to_destination_node(const std::string& value);
-  std::string* _internal_mutable_path_to_destination_node();
-  public:
-
-  // bytes data = 6;
+  // bytes data = 4;
   void clear_data();
   const std::string& data() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -582,22 +566,13 @@ class ImageRequest final :
   std::string* _internal_mutable_data();
   public:
 
-  // bool is_last_chunk_of_photo = 4;
-  void clear_is_last_chunk_of_photo();
-  bool is_last_chunk_of_photo() const;
-  void set_is_last_chunk_of_photo(bool value);
+  // bool last_packet = 3;
+  void clear_last_packet();
+  bool last_packet() const;
+  void set_last_packet(bool value);
   private:
-  bool _internal_is_last_chunk_of_photo() const;
-  void _internal_set_is_last_chunk_of_photo(bool value);
-  public:
-
-  // bool is_last_photo = 5;
-  void clear_is_last_photo();
-  bool is_last_photo() const;
-  void set_is_last_photo(bool value);
-  private:
-  bool _internal_is_last_photo() const;
-  void _internal_set_is_last_photo(bool value);
+  bool _internal_last_packet() const;
+  void _internal_set_last_packet(bool value);
   public:
 
   // @@protoc_insertion_point(class_scope:DistributionSystem.ImageRequest)
@@ -610,10 +585,8 @@ class ImageRequest final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr client_name_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
-    ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr path_to_destination_node_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
-    bool is_last_chunk_of_photo_;
-    bool is_last_photo_;
+    bool last_packet_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -743,9 +716,7 @@ class ImageResponse final :
 
   enum : int {
     kFilenameFieldNumber = 1,
-    kDataFieldNumber = 4,
-    kIsLastChunkOfPhotoFieldNumber = 2,
-    kIsLastPhotoFieldNumber = 3,
+    kDataFieldNumber = 2,
   };
   // string filename = 1;
   void clear_filename();
@@ -761,7 +732,7 @@ class ImageResponse final :
   std::string* _internal_mutable_filename();
   public:
 
-  // bytes data = 4;
+  // bytes data = 2;
   void clear_data();
   const std::string& data() const;
   template <typename ArgT0 = const std::string&, typename... ArgT>
@@ -775,24 +746,6 @@ class ImageResponse final :
   std::string* _internal_mutable_data();
   public:
 
-  // bool is_last_chunk_of_photo = 2;
-  void clear_is_last_chunk_of_photo();
-  bool is_last_chunk_of_photo() const;
-  void set_is_last_chunk_of_photo(bool value);
-  private:
-  bool _internal_is_last_chunk_of_photo() const;
-  void _internal_set_is_last_chunk_of_photo(bool value);
-  public:
-
-  // bool is_last_photo = 3;
-  void clear_is_last_photo();
-  bool is_last_photo() const;
-  void set_is_last_photo(bool value);
-  private:
-  bool _internal_is_last_photo() const;
-  void _internal_set_is_last_photo(bool value);
-  public:
-
   // @@protoc_insertion_point(class_scope:DistributionSystem.ImageResponse)
  private:
   class _Internal;
@@ -803,8 +756,6 @@ class ImageResponse final :
   struct Impl_ {
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr filename_;
     ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr data_;
-    bool is_last_chunk_of_photo_;
-    bool is_last_photo_;
     mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   };
   union { Impl_ _impl_; };
@@ -1995,97 +1946,27 @@ inline void ImageRequest::set_allocated_filename(std::string* filename) {
   // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.filename)
 }
 
-// string path_to_destination_node = 3;
-inline void ImageRequest::clear_path_to_destination_node() {
-  _impl_.path_to_destination_node_.ClearToEmpty();
+// bool last_packet = 3;
+inline void ImageRequest::clear_last_packet() {
+  _impl_.last_packet_ = false;
 }
-inline const std::string& ImageRequest::path_to_destination_node() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.path_to_destination_node)
-  return _internal_path_to_destination_node();
+inline bool ImageRequest::_internal_last_packet() const {
+  return _impl_.last_packet_;
 }
-template <typename ArgT0, typename... ArgT>
-inline PROTOBUF_ALWAYS_INLINE
-void ImageRequest::set_path_to_destination_node(ArgT0&& arg0, ArgT... args) {
- 
- _impl_.path_to_destination_node_.Set(static_cast<ArgT0 &&>(arg0), args..., GetArenaForAllocation());
-  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.path_to_destination_node)
+inline bool ImageRequest::last_packet() const {
+  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.last_packet)
+  return _internal_last_packet();
 }
-inline std::string* ImageRequest::mutable_path_to_destination_node() {
-  std::string* _s = _internal_mutable_path_to_destination_node();
-  // @@protoc_insertion_point(field_mutable:DistributionSystem.ImageRequest.path_to_destination_node)
-  return _s;
-}
-inline const std::string& ImageRequest::_internal_path_to_destination_node() const {
-  return _impl_.path_to_destination_node_.Get();
-}
-inline void ImageRequest::_internal_set_path_to_destination_node(const std::string& value) {
+inline void ImageRequest::_internal_set_last_packet(bool value) {
   
-  _impl_.path_to_destination_node_.Set(value, GetArenaForAllocation());
+  _impl_.last_packet_ = value;
 }
-inline std::string* ImageRequest::_internal_mutable_path_to_destination_node() {
-  
-  return _impl_.path_to_destination_node_.Mutable(GetArenaForAllocation());
-}
-inline std::string* ImageRequest::release_path_to_destination_node() {
-  // @@protoc_insertion_point(field_release:DistributionSystem.ImageRequest.path_to_destination_node)
-  return _impl_.path_to_destination_node_.Release();
-}
-inline void ImageRequest::set_allocated_path_to_destination_node(std::string* path_to_destination_node) {
-  if (path_to_destination_node != nullptr) {
-    
-  } else {
-    
-  }
-  _impl_.path_to_destination_node_.SetAllocated(path_to_destination_node, GetArenaForAllocation());
-#ifdef PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  if (_impl_.path_to_destination_node_.IsDefault()) {
-    _impl_.path_to_destination_node_.Set("", GetArenaForAllocation());
-  }
-#endif // PROTOBUF_FORCE_COPY_DEFAULT_STRING
-  // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageRequest.path_to_destination_node)
+inline void ImageRequest::set_last_packet(bool value) {
+  _internal_set_last_packet(value);
+  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.last_packet)
 }
 
-// bool is_last_chunk_of_photo = 4;
-inline void ImageRequest::clear_is_last_chunk_of_photo() {
-  _impl_.is_last_chunk_of_photo_ = false;
-}
-inline bool ImageRequest::_internal_is_last_chunk_of_photo() const {
-  return _impl_.is_last_chunk_of_photo_;
-}
-inline bool ImageRequest::is_last_chunk_of_photo() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.is_last_chunk_of_photo)
-  return _internal_is_last_chunk_of_photo();
-}
-inline void ImageRequest::_internal_set_is_last_chunk_of_photo(bool value) {
-  
-  _impl_.is_last_chunk_of_photo_ = value;
-}
-inline void ImageRequest::set_is_last_chunk_of_photo(bool value) {
-  _internal_set_is_last_chunk_of_photo(value);
-  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.is_last_chunk_of_photo)
-}
-
-// bool is_last_photo = 5;
-inline void ImageRequest::clear_is_last_photo() {
-  _impl_.is_last_photo_ = false;
-}
-inline bool ImageRequest::_internal_is_last_photo() const {
-  return _impl_.is_last_photo_;
-}
-inline bool ImageRequest::is_last_photo() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.ImageRequest.is_last_photo)
-  return _internal_is_last_photo();
-}
-inline void ImageRequest::_internal_set_is_last_photo(bool value) {
-  
-  _impl_.is_last_photo_ = value;
-}
-inline void ImageRequest::set_is_last_photo(bool value) {
-  _internal_set_is_last_photo(value);
-  // @@protoc_insertion_point(field_set:DistributionSystem.ImageRequest.is_last_photo)
-}
-
-// bytes data = 6;
+// bytes data = 4;
 inline void ImageRequest::clear_data() {
   _impl_.data_.ClearToEmpty();
 }
@@ -2189,47 +2070,7 @@ inline void ImageResponse::set_allocated_filename(std::string* filename) {
   // @@protoc_insertion_point(field_set_allocated:DistributionSystem.ImageResponse.filename)
 }
 
-// bool is_last_chunk_of_photo = 2;
-inline void ImageResponse::clear_is_last_chunk_of_photo() {
-  _impl_.is_last_chunk_of_photo_ = false;
-}
-inline bool ImageResponse::_internal_is_last_chunk_of_photo() const {
-  return _impl_.is_last_chunk_of_photo_;
-}
-inline bool ImageResponse::is_last_chunk_of_photo() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.is_last_chunk_of_photo)
-  return _internal_is_last_chunk_of_photo();
-}
-inline void ImageResponse::_internal_set_is_last_chunk_of_photo(bool value) {
-  
-  _impl_.is_last_chunk_of_photo_ = value;
-}
-inline void ImageResponse::set_is_last_chunk_of_photo(bool value) {
-  _internal_set_is_last_chunk_of_photo(value);
-  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.is_last_chunk_of_photo)
-}
-
-// bool is_last_photo = 3;
-inline void ImageResponse::clear_is_last_photo() {
-  _impl_.is_last_photo_ = false;
-}
-inline bool ImageResponse::_internal_is_last_photo() const {
-  return _impl_.is_last_photo_;
-}
-inline bool ImageResponse::is_last_photo() const {
-  // @@protoc_insertion_point(field_get:DistributionSystem.ImageResponse.is_last_photo)
-  return _internal_is_last_photo();
-}
-inline void ImageResponse::_internal_set_is_last_photo(bool value) {
-  
-  _impl_.is_last_photo_ = value;
-}
-inline void ImageResponse::set_is_last_photo(bool value) {
-  _internal_set_is_last_photo(value);
-  // @@protoc_insertion_point(field_set:DistributionSystem.ImageResponse.is_last_photo)
-}
-
-// bytes data = 4;
+// bytes data = 2;
 inline void ImageResponse::clear_data() {
   _impl_.data_.ClearToEmpty();
 }
