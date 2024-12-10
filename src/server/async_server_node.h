@@ -43,6 +43,7 @@ using DistributionSystem::TopologyResponse;
 #include "../client_on_server/async_client_node.h"
 #include "../data_collection/data_collection_server.h"
 #include "../data_collection/files_info.h"
+#include "../detection_task/face_detection.h"
 
 enum RPC_TYPE {
     PING,
@@ -160,7 +161,8 @@ private:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
             : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_), 
-              writing_mode_(false), new_responder_created_(false) {
+              writing_mode_(false), new_responder_created_(false), counter(0),
+              detection_task(server_dir + "/src/detection_task/haarcascade_frontalface_alt.xml") {
                 proceed(true, children, server_dir);
         }
         
@@ -178,15 +180,18 @@ private:
         bool writing_mode_;
         bool new_responder_created_;
 
-        bool last_packet;
+        bool last_packet_;
 
-        std::ofstream writing_stream;
+        std::ofstream writing_stream_;
         std::string prev_filename_;
+        std::vector<std::string> filenames_;
 
-        std::ifstream reading_stream;
-        std::string prev_filepath_;
-        int num_of_chunk;
-        int size;
+        int counter;
+        std::ifstream reading_stream_;
+        int num_of_chunk_;
+        int size_;
+
+        face_detection detection_task;
     };
 
     void handle_rpcs();

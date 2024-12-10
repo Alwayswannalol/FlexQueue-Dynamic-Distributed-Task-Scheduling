@@ -10,7 +10,10 @@ int main(int argc, char* argv[]) {
             client.handle_call();
         });
 
-        std::vector<std::string> filePaths = {"tmp/client/1.jpg"};
+        std::vector<std::string> filePaths = {"tmp/client/1.jpg",
+                                              "tmp/client/2.jpg",
+                                              "tmp/client/3.jpg"};
+        // std::vector<std::string> filePaths = {"tmp/client/3.jpg"};
 
         client.async_execute_detection_task(filePaths);
 

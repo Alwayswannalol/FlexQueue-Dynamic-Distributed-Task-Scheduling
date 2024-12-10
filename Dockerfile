@@ -13,6 +13,7 @@ RUN apt-get update && \
     curl \
     unzip \
     tzdata \
+    libopencv-dev\
     ca-certificates \
     && ln -fs /usr/share/zoneinfo/UTC /etc/localtime && \
     dpkg-reconfigure --frontend noninteractive tzdata && \

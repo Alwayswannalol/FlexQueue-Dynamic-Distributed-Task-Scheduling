@@ -193,82 +193,59 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             }
             else {
                 responder_.Read(&request_, (void*)this);
-                
-                if (std::filesystem::create_directories("tmp/" + request_.client_name() + "/results")) {
+
+                if (std::filesystem::create_directories(server_dir + "/tmp/" + request_.client_name())) {
                     std::cout << "Create folder for " << request_.client_name() << std::endl;
                 }
                 else {
                     std::cout << "Folder already exists" << std::endl;
                 }
 
-                std::string filename_ = request_.filename();
-                filename_.erase(std::remove(filename_.begin(), filename_.end(), '/'), filename_.end());
+                std::string filename_ = files_info::get_filename(request_.filename());
 
                 if (filename_ != prev_filename_) {
-                    if (!writing_stream.is_open()) {
-                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                    if (!writing_stream_.is_open()) {
+                        writing_stream_.open(server_dir + "/tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
                     }
                     else {
-                        writing_stream.close();
-                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                        writing_stream_.close();
+                        writing_stream_.open(server_dir + "/tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
                     }
                     prev_filename_ = filename_;
+                    filenames_.push_back(filename_);
                 }
 
-                writing_stream.write(request_.data().c_str(), request_.data().size());
+                writing_stream_.write(request_.data().c_str(), request_.data().size());
 
                 if (request_.last_packet() == true) {
-                    // TODO: сделать запуск обработки изображений
                     std::cout << "Выполнение задачи..." << std::endl;
+                    for (auto filename: filenames_) {
+                        detection_task.process_img(server_dir + "/tmp/" + request_.client_name() + "/" + filename);
+                    }
                     writing_mode_ = true;
                 }
             }
         }
         else { //writing mode
-            if (last_packet) {
+            if (last_packet_) {
                 status_ = FINISH_RPC;
                 responder_.Finish(Status(), (void*)this);
             }
             else {
-                // TODO: пока передаю обратно фиксированное одно изображение (чтобы проверить rpc)
-                if (!reading_stream.is_open()) {
-                    reading_stream.open("tmp/alwayswannalol/results/1_result.jpg");
-                    num_of_chunk = 1;
-                    size = files_info::get_size("tmp/alwayswannalol/results/1_result.jpg");
-                }
-
-                char data_for_client[CHUNK_SIZE];
-
-                if (num_of_chunk * CHUNK_SIZE <= size) {
-                    reading_stream.read(data_for_client, sizeof(data_for_client));
-
-                    response_.set_filename("1_result.jpg");
-                    response_.set_data(data_for_client, reading_stream.gcount());
-
-                    num_of_chunk++;
-                }
-                else {
-                    reading_stream.read(data_for_client, sizeof(data_for_client));
-
-                    response_.set_filename("1_result.jpg");
-                    response_.set_data(data_for_client, reading_stream.gcount());
-
-                    last_packet = true;
-
-                    reading_stream.close();
-                }
-
-                responder_.Write(response_, (void*)this);
+                last_packet_ = true;
+                
+                // TODO: сделать отправку изображений обратно и удаление папки
+                // responder_.Write(response_, (void*)this);
             }
         }
     }
     else {
-        if (reading_stream.is_open()) {
-            reading_stream.close();
+        if (reading_stream_.is_open()) {
+            reading_stream_.close();
         }
 
-        if (writing_stream.is_open()) {
-            writing_stream.close();
+        if (writing_stream_.is_open()) {
+            writing_stream_.close();
         }
 
         delete this;
@@ -291,8 +268,13 @@ void async_node_server::handle_rpcs() {
         std::cout << "Processing tag: " << tag << std::endl; 
         std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
 
-        std::thread([this, rpc_call, ok](){
+        if (rpc_call->rpc_type_ == RPC_TYPE::DETECTION_TASK_EXECUTION) {
             rpc_call->proceed(ok, children_, server_dir_);
-        }).detach();
+        }
+        else {
+            std::thread([this, rpc_call, ok](){
+                rpc_call->proceed(ok, children_, server_dir_);
+            }).detach();
+        }
     }
 }

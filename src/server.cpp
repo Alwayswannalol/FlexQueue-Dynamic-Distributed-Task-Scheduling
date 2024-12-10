@@ -1,7 +1,6 @@
 #include "server/async_server_node.h"
 
 int main(int argc, char* argv[]) {
-
     std::string server_address;
     std::string server_dir;
     std::vector<std::string> children;
@@ -23,5 +22,6 @@ int main(int argc, char* argv[]) {
 
     async_node_server server(server_address, server_dir, children);
     server.Run();
+    
     return 0;
 }

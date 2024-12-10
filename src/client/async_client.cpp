@@ -24,6 +24,7 @@ void async_client::detection_task_execution_call::proceed(bool ok) {
                     request_.set_client_name(client_name_);
                     request_.set_filename(filepath_);
                     request_.set_data(data_for_server, reading_stream.gcount());
+                    request_.set_last_packet(false);
 
                     num_of_chunk++;
                 }
@@ -33,6 +34,7 @@ void async_client::detection_task_execution_call::proceed(bool ok) {
                     request_.set_client_name(client_name_);
                     request_.set_filename(filepath_);
                     request_.set_data(data_for_server, reading_stream.gcount());
+                    request_.set_last_packet(false);
 
                     reading_stream.close();
 
