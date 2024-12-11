@@ -13,6 +13,7 @@
 #include <condition_variable>
 #include <filesystem>
 #include <fstream>
+#include <cstdio>
 
 #include <grpcpp/grpcpp.h>
 
@@ -161,7 +162,7 @@ private:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
             : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_), 
-              writing_mode_(false), new_responder_created_(false), counter(0),
+              writing_mode_(false), new_responder_created_(false), counter_(0),
               detection_task(server_dir + "/src/detection_task/haarcascade_frontalface_alt.xml") {
                 proceed(true, children, server_dir);
         }
@@ -186,7 +187,7 @@ private:
         std::string prev_filename_;
         std::vector<std::string> filenames_;
 
-        int counter;
+        int counter_;
         std::ifstream reading_stream_;
         int num_of_chunk_;
         int size_;

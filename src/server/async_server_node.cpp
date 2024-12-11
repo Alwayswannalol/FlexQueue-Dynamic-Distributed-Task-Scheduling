@@ -186,6 +186,8 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             new_responder_created_ = true;
         }
 
+        std::string filename_;
+
         if (!writing_mode_) {
             if(!ok) { // Клиент вызвал WritesDone - значит больше сообщений от него не будет
                 writing_mode_ = true;
@@ -201,7 +203,7 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
                     std::cout << "Folder already exists" << std::endl;
                 }
 
-                std::string filename_ = files_info::get_filename(request_.filename());
+                filename_ = files_info::get_filename(request_.filename());
 
                 if (filename_ != prev_filename_) {
                     if (!writing_stream_.is_open()) {
@@ -228,14 +230,56 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
         }
         else { //writing mode
             if (last_packet_) {
+                for (auto filename: filenames_) {
+                    std::string filepath = server_dir + "/tmp/" + request_.client_name() + "/" + filename;
+                    std::remove(filepath.c_str());
+                    filepath = server_dir + "/tmp/" + request_.client_name() + "/output_" + filename;
+                    std::remove(filepath.c_str());
+                }
                 status_ = FINISH_RPC;
                 responder_.Finish(Status(), (void*)this);
             }
             else {
-                last_packet_ = true;
-                
-                // TODO: сделать отправку изображений обратно и удаление папки
-                // responder_.Write(response_, (void*)this);
+                if (counter_ < filenames_.size()) {
+                    char data_for_client[CHUNK_SIZE];
+                    filename_ = "/output_" + filenames_[counter_];
+                    if (filename_ != prev_filename_) {
+                        std::string filepath = server_dir + "/tmp/" + request_.client_name() + filename_;
+                        size_ = files_info::get_size(filepath);
+                        num_of_chunk_ = 1;
+                        if (!reading_stream_.is_open()) {
+                            reading_stream_.open(filepath);
+                        }
+                        else {
+                            reading_stream_.close();
+                            reading_stream_.open(filepath);
+                        }
+                        prev_filename_ = filename_;
+                    }
+
+                    if (num_of_chunk_ * CHUNK_SIZE <= size_) {
+                        reading_stream_.read(data_for_client, sizeof(data_for_client));
+
+                        response_.set_filename(filename_);
+                        response_.set_data(data_for_client, reading_stream_.gcount());
+
+                        num_of_chunk_++;
+                    }
+                    else {
+                        reading_stream_.read(data_for_client, sizeof(data_for_client));
+
+                        response_.set_filename(filename_);
+                        response_.set_data(data_for_client, reading_stream_.gcount());
+
+                        reading_stream_.close();
+
+                        counter_++;
+                        if (counter_ == filenames_.size()) {
+                            last_packet_ = true;
+                        }
+                    }
+                }
+                responder_.Write(response_, (void*)this);
             }
         }
     }
