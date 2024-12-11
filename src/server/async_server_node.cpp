@@ -175,6 +175,56 @@ void async_node_server::get_topology_rpc::proceed(bool ok, std::vector<std::stri
     }
 }
 
+void async_node_server::distribute_detection_task_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
+        service_->RequestDistributeDetectionTask(&ctx_, &request_, &responder_, cq_, cq_, this);
+    }
+    else if (status_ == PROCESS_RPC) {
+        new distribute_detection_task_rpc(service_, cq_, RPC_TYPE::DISTRIBUTE_DETECTION_TASK, children, server_dir);
+
+        std::string full_string_server_addresses = "";
+        std::string full_string_collected_data_for_distribution = "";
+
+        // Сколько запросов надо сделать
+        std::atomic<int> requests_count;
+        requests_count.store(children.size());
+
+        std::mutex mtx;
+        std::condition_variable cv;
+
+        // Создаем клиентов для опроса дочерних узлов
+        std::vector<std::shared_ptr<async_node_client>> child_clients;
+        for (const std::string& child : children) {
+            child_clients.push_back(std::make_shared<async_node_client>(
+                grpc::CreateChannel(child, grpc::InsecureChannelCredentials()), child));
+        }
+
+        for (auto& child_client: child_clients) {
+            std::thread([this, child_client, &requests_count, &cv, &full_string_server_addresses, &full_string_collected_data_for_distribution]() {
+                child_client->handle_call(requests_count, cv, full_string_server_addresses, full_string_collected_data_for_distribution); // Запуск метода обработки ответов
+            }).detach();
+            child_client->async_collect_data_for_distribution();
+        }
+
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
+
+        std::cout << full_string_server_addresses << std::endl;
+        std::cout << full_string_collected_data_for_distribution << std::endl;
+
+        // TODO: вызов алгоритма скедулинга
+
+        response_.set_path("0.0.0.0:50051");
+
+        status_ = FINISH_RPC;
+        responder_.Finish(response_, grpc::Status::OK, this);
+    }
+    else {
+        delete this;
+    }
+}
+
 void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
     if (status_ == CREATE_RPC) {
         status_ = PROCESS_RPC;
@@ -240,6 +290,7 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
                 responder_.Finish(Status(), (void*)this);
             }
             else {
+                last_packet_ = false;
                 if (counter_ < filenames_.size()) {
                     char data_for_client[CHUNK_SIZE];
                     filename_ = "/output_" + filenames_[counter_];
@@ -298,8 +349,12 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
 
 void async_node_server::handle_rpcs() {
     new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children_, server_dir_);
+
     new ping_rpc(&fault_tolerance_service_, cq_.get(), RPC_TYPE::PING, children_, server_dir_);
+
+    new distribute_detection_task_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::DISTRIBUTE_DETECTION_TASK, children_, server_dir_);
     new detection_task_execution_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::DETECTION_TASK_EXECUTION, children_, server_dir_);
+
     new get_topology_rpc(&scalability_service_, cq_.get(), RPC_TYPE::GET_TOPOLOGY, children_, server_dir_);
 
     void* tag;

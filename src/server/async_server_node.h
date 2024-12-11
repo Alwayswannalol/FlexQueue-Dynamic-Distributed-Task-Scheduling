@@ -34,6 +34,9 @@ using DistributionSystem::CollectDataRequest;
 using DistributionSystem::CollectedData;
 
 using DistributionSystem::TaskExecutionService;
+using DistributionSystem::TaskInfoRequest;
+using DistributionSystem::PathResponse;
+
 using DistributionSystem::ImageRequest;
 using DistributionSystem::ImageResponse;
 
@@ -49,6 +52,7 @@ using DistributionSystem::TopologyResponse;
 enum RPC_TYPE {
     PING,
     COLLECT_DATA_FOR_DISTRIBUTION,
+    DISTRIBUTE_DETECTION_TASK,
     DETECTION_TASK_EXECUTION,
     GET_TOPOLOGY,
     UNKNOWN
@@ -156,15 +160,35 @@ private:
             ServerAsyncResponseWriter<TopologyResponse> responder_;
     };
 
+    class distribute_detection_task_rpc: public base_rpc {
+    public:
+        distribute_detection_task_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
+        std::vector<std::string> children, std::string server_dir)
+            : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_) {
+            proceed(true, children, server_dir);
+        }
+
+        void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
+
+    private:
+        TaskExecutionService::AsyncService* service_;
+        ServerCompletionQueue* cq_;
+        ServerContext ctx_;
+
+        TaskInfoRequest request_;
+        PathResponse response_;
+        ServerAsyncResponseWriter<PathResponse> responder_;
+    };
+
     // Класс для обработки DetectionTaskExecution RPC
     class detection_task_execution_rpc: public base_rpc {
     public:
         detection_task_execution_rpc(TaskExecutionService::AsyncService* service, ServerCompletionQueue* cq, RPC_TYPE rpc_type, 
         std::vector<std::string> children, std::string server_dir)
             : base_rpc(rpc_type, CREATE_RPC), service_(service), cq_(cq), responder_(&ctx_), 
-              writing_mode_(false), new_responder_created_(false), counter_(0),
+              writing_mode_(false), new_responder_created_(false), counter_(0), last_packet_(false),
               detection_task(server_dir + "/src/detection_task/haarcascade_frontalface_alt.xml") {
-                proceed(true, children, server_dir);
+            proceed(true, children, server_dir);
         }
         
         void proceed(bool ok, std::vector<std::string> children, std::string server_dir) override;
