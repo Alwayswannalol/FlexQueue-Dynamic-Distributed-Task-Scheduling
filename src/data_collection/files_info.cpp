@@ -8,3 +8,13 @@ int files_info::get_size(std::string filepath) {
     file.close();
     return size;
 }
+
+std::string files_info::get_filename(std::string filepath) {
+    std::filesystem::path file_path(filepath);
+    return file_path.filename().string();
+}
+
+std::string files_info::get_path(std::string filepath) {
+    std::filesystem::path file_path(filepath);
+    return file_path.parent_path().string();
+}

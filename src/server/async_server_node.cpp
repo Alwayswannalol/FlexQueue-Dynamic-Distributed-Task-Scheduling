@@ -175,6 +175,56 @@ void async_node_server::get_topology_rpc::proceed(bool ok, std::vector<std::stri
     }
 }
 
+void async_node_server::distribute_detection_task_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
+    if (status_ == CREATE_RPC) {
+        status_ = PROCESS_RPC;
+        service_->RequestDistributeDetectionTask(&ctx_, &request_, &responder_, cq_, cq_, this);
+    }
+    else if (status_ == PROCESS_RPC) {
+        new distribute_detection_task_rpc(service_, cq_, RPC_TYPE::DISTRIBUTE_DETECTION_TASK, children, server_dir);
+
+        std::string full_string_server_addresses = "";
+        std::string full_string_collected_data_for_distribution = "";
+
+        // Сколько запросов надо сделать
+        std::atomic<int> requests_count;
+        requests_count.store(children.size());
+
+        std::mutex mtx;
+        std::condition_variable cv;
+
+        // Создаем клиентов для опроса дочерних узлов
+        std::vector<std::shared_ptr<async_node_client>> child_clients;
+        for (const std::string& child : children) {
+            child_clients.push_back(std::make_shared<async_node_client>(
+                grpc::CreateChannel(child, grpc::InsecureChannelCredentials()), child));
+        }
+
+        for (auto& child_client: child_clients) {
+            std::thread([this, child_client, &requests_count, &cv, &full_string_server_addresses, &full_string_collected_data_for_distribution]() {
+                child_client->handle_call(requests_count, cv, full_string_server_addresses, full_string_collected_data_for_distribution); // Запуск метода обработки ответов
+            }).detach();
+            child_client->async_collect_data_for_distribution();
+        }
+
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&requests_count]() { return requests_count.load() == 0; });
+
+        std::cout << full_string_server_addresses << std::endl;
+        std::cout << full_string_collected_data_for_distribution << std::endl;
+
+        // TODO: вызов алгоритма скедулинга
+
+        response_.set_path("0.0.0.0:50051");
+
+        status_ = FINISH_RPC;
+        responder_.Finish(response_, grpc::Status::OK, this);
+    }
+    else {
+        delete this;
+    }
+}
+
 void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vector<std::string> children, std::string server_dir) {
     if (status_ == CREATE_RPC) {
         status_ = PROCESS_RPC;
@@ -186,6 +236,8 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             new_responder_created_ = true;
         }
 
+        std::string filename_;
+
         if (!writing_mode_) {
             if(!ok) { // Клиент вызвал WritesDone - значит больше сообщений от него не будет
                 writing_mode_ = true;
@@ -193,82 +245,102 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             }
             else {
                 responder_.Read(&request_, (void*)this);
-                
-                if (std::filesystem::create_directories("tmp/" + request_.client_name() + "/results")) {
+
+                if (std::filesystem::create_directories(server_dir + "/tmp/" + request_.client_name())) {
                     std::cout << "Create folder for " << request_.client_name() << std::endl;
                 }
                 else {
                     std::cout << "Folder already exists" << std::endl;
                 }
 
-                std::string filename_ = request_.filename();
-                filename_.erase(std::remove(filename_.begin(), filename_.end(), '/'), filename_.end());
+                filename_ = files_info::get_filename(request_.filename());
 
                 if (filename_ != prev_filename_) {
-                    if (!writing_stream.is_open()) {
-                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                    if (!writing_stream_.is_open()) {
+                        writing_stream_.open(server_dir + "/tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
                     }
                     else {
-                        writing_stream.close();
-                        writing_stream.open("tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
+                        writing_stream_.close();
+                        writing_stream_.open(server_dir + "/tmp/" + request_.client_name() + "/" + filename_, std::ios::app);
                     }
                     prev_filename_ = filename_;
+                    filenames_.push_back(filename_);
                 }
 
-                writing_stream.write(request_.data().c_str(), request_.data().size());
+                writing_stream_.write(request_.data().c_str(), request_.data().size());
 
                 if (request_.last_packet() == true) {
-                    // TODO: сделать запуск обработки изображений
                     std::cout << "Выполнение задачи..." << std::endl;
+                    for (auto filename: filenames_) {
+                        detection_task.process_img(server_dir + "/tmp/" + request_.client_name() + "/" + filename);
+                    }
                     writing_mode_ = true;
                 }
             }
         }
         else { //writing mode
-            if (last_packet) {
+            if (last_packet_) {
+                for (auto filename: filenames_) {
+                    std::string filepath = server_dir + "/tmp/" + request_.client_name() + "/" + filename;
+                    std::remove(filepath.c_str());
+                    filepath = server_dir + "/tmp/" + request_.client_name() + "/output_" + filename;
+                    std::remove(filepath.c_str());
+                }
                 status_ = FINISH_RPC;
                 responder_.Finish(Status(), (void*)this);
             }
             else {
-                // TODO: пока передаю обратно фиксированное одно изображение (чтобы проверить rpc)
-                if (!reading_stream.is_open()) {
-                    reading_stream.open("tmp/alwayswannalol/results/1_result.jpg");
-                    num_of_chunk = 1;
-                    size = files_info::get_size("tmp/alwayswannalol/results/1_result.jpg");
+                last_packet_ = false;
+                if (counter_ < filenames_.size()) {
+                    char data_for_client[CHUNK_SIZE];
+                    filename_ = "/output_" + filenames_[counter_];
+                    if (filename_ != prev_filename_) {
+                        std::string filepath = server_dir + "/tmp/" + request_.client_name() + filename_;
+                        size_ = files_info::get_size(filepath);
+                        num_of_chunk_ = 1;
+                        if (!reading_stream_.is_open()) {
+                            reading_stream_.open(filepath);
+                        }
+                        else {
+                            reading_stream_.close();
+                            reading_stream_.open(filepath);
+                        }
+                        prev_filename_ = filename_;
+                    }
+
+                    if (num_of_chunk_ * CHUNK_SIZE <= size_) {
+                        reading_stream_.read(data_for_client, sizeof(data_for_client));
+
+                        response_.set_filename(filename_);
+                        response_.set_data(data_for_client, reading_stream_.gcount());
+
+                        num_of_chunk_++;
+                    }
+                    else {
+                        reading_stream_.read(data_for_client, sizeof(data_for_client));
+
+                        response_.set_filename(filename_);
+                        response_.set_data(data_for_client, reading_stream_.gcount());
+
+                        reading_stream_.close();
+
+                        counter_++;
+                        if (counter_ == filenames_.size()) {
+                            last_packet_ = true;
+                        }
+                    }
                 }
-
-                char data_for_client[CHUNK_SIZE];
-
-                if (num_of_chunk * CHUNK_SIZE <= size) {
-                    reading_stream.read(data_for_client, sizeof(data_for_client));
-
-                    response_.set_filename("1_result.jpg");
-                    response_.set_data(data_for_client, reading_stream.gcount());
-
-                    num_of_chunk++;
-                }
-                else {
-                    reading_stream.read(data_for_client, sizeof(data_for_client));
-
-                    response_.set_filename("1_result.jpg");
-                    response_.set_data(data_for_client, reading_stream.gcount());
-
-                    last_packet = true;
-
-                    reading_stream.close();
-                }
-
                 responder_.Write(response_, (void*)this);
             }
         }
     }
     else {
-        if (reading_stream.is_open()) {
-            reading_stream.close();
+        if (reading_stream_.is_open()) {
+            reading_stream_.close();
         }
 
-        if (writing_stream.is_open()) {
-            writing_stream.close();
+        if (writing_stream_.is_open()) {
+            writing_stream_.close();
         }
 
         delete this;
@@ -277,8 +349,12 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
 
 void async_node_server::handle_rpcs() {
     new collect_data_for_distribution_rpc(&distribution_tasks_service_, cq_.get(), RPC_TYPE::COLLECT_DATA_FOR_DISTRIBUTION, children_, server_dir_);
+
     new ping_rpc(&fault_tolerance_service_, cq_.get(), RPC_TYPE::PING, children_, server_dir_);
+
+    new distribute_detection_task_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::DISTRIBUTE_DETECTION_TASK, children_, server_dir_);
     new detection_task_execution_rpc(&task_execution_service_, cq_.get(), RPC_TYPE::DETECTION_TASK_EXECUTION, children_, server_dir_);
+
     new get_topology_rpc(&scalability_service_, cq_.get(), RPC_TYPE::GET_TOPOLOGY, children_, server_dir_);
 
     void* tag;
@@ -291,8 +367,13 @@ void async_node_server::handle_rpcs() {
         std::cout << "Processing tag: " << tag << std::endl; 
         std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
 
-        std::thread([this, rpc_call, ok](){
+        if (rpc_call->rpc_type_ == RPC_TYPE::DETECTION_TASK_EXECUTION) {
             rpc_call->proceed(ok, children_, server_dir_);
-        }).detach();
+        }
+        else {
+            std::thread([this, rpc_call, ok](){
+                rpc_call->proceed(ok, children_, server_dir_);
+            }).detach();
+        }
     }
 }
