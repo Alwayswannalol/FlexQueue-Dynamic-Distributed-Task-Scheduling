@@ -59,7 +59,10 @@ public:
     }
 
     explicit async_client(std::shared_ptr<Channel> channel, std::string client_name)
-        : task_execution_stub_(TaskExecutionService::NewStub(channel)), client_name_(client_name) {}
+        : task_execution_stub_(TaskExecutionService::NewStub(channel)), client_name_(client_name) {
+            result_dir_ = "tmp/" + client_name + "_result/";
+            std::filesystem::create_directories(result_dir_);
+        }
 
     void async_distribute_detection_task(task_info task);
 
@@ -85,8 +88,8 @@ private:
 
     class distribute_detection_task_call: public base_call {
     public:
-        distribute_detection_task_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, task_info task)
-            : base_call(call_type, CREATE_CALL) {
+        distribute_detection_task_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, task_info task, std::string client_name)
+            : base_call(call_type, CREATE_CALL), client_name_(client_name) {
                 task_request.set_task_data("num_photo: " + std::to_string(task.num_photo));
                 path_response_reader = stub_->AsyncDistributeDetectionTask(&context, task_request, &cq_);
                 path_response_reader->Finish(&path_response, &status, (void*)this);
@@ -101,14 +104,16 @@ private:
 
         TaskInfoRequest task_request;
         PathResponse path_response;
+        
+        std::string client_name_;
     };
 
     class detection_task_execution_call: public base_call {
     public:
         detection_task_execution_call(std::unique_ptr<TaskExecutionService::Stub>& stub_, CompletionQueue& cq_, CALL_TYPE call_type, 
-                                      std::vector<std::string> filePaths, std::string client_name)
+                                      std::vector<std::string> filePaths, std::string client_name, std::string result_dir)
             : base_call(call_type, CREATE_CALL), writing_mode_(true),
-              filePaths_(filePaths), counter_(0), client_name_(client_name) {
+              filePaths_(filePaths), counter_(0), client_name_(client_name), result_dir_(result_dir) {
             responder_ = stub_->AsyncExecuteDetectionTask(&context, &cq_, (void*)this);
             call_status_ = PROCESS_CALL;
         };
@@ -138,6 +143,7 @@ private:
         std::string prev_filename_;
 
         std::string client_name_;
+        std::string result_dir_;
     };
 
     std::unique_ptr<TaskExecutionService::Stub> task_execution_stub_;
@@ -146,6 +152,7 @@ private:
     std::mutex mtx_;
 
     std::string client_name_;
+    std::string result_dir_;
 };
 
 #endif

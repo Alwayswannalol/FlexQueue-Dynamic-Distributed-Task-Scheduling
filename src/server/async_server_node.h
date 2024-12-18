@@ -48,6 +48,7 @@ using DistributionSystem::TopologyResponse;
 #include "../data_collection/data_collection_server.h"
 #include "../data_collection/files_info.h"
 #include "../detection_task/face_detection.h"
+#include "../scheduling_algorithm/WLC.h"
 
 enum RPC_TYPE {
     PING,
@@ -217,6 +218,8 @@ private:
         int size_;
 
         face_detection detection_task;
+
+        std::mutex mtx_;
     };
 
     void handle_rpcs();

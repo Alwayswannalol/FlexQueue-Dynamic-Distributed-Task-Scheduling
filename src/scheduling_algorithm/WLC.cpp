@@ -30,7 +30,7 @@ std::string WLC(std::string DATA) {
 	std::istringstream file(DATA);
 	std::string line;
 
-	std::regex pattern_id(R"(^0\.0\.0\.0\:\d+$)");
+	std::regex pattern_id(R"(\d{1,3}(?:\.\d{1,3}){3}:\d+)");
 	//reading values from the input string
 	while (std::getline(file, line)) {
 		std::smatch match;
@@ -90,7 +90,7 @@ std::string WLC(std::string DATA) {
 		//priority = count_queue / weight;
 
 		//up - used part of the CPU; down - weight * value of the free Mem
-		priority = (1 - AVG_loadCPU[i]) / (weight * (RAM[i] / max_RAM)); //example: 0.1/(0.7 * 0.5) - free cpu=0.9, weight = 0.7, part of Memfree = 0.5
+		priority = (1 - AVG_loadCPU[i]) / (weight * (RAM[i] / max_RAM)); // example: 0.1/(0.7 * 0.5) - free cpu=0.9, weight = 0.7, part of Memfree = 0.5
  
 		if (priority < min_priority) { 
 			min_priority = priority;

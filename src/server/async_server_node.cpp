@@ -213,9 +213,7 @@ void async_node_server::distribute_detection_task_rpc::proceed(bool ok, std::vec
         std::cout << full_string_server_addresses << std::endl;
         std::cout << full_string_collected_data_for_distribution << std::endl;
 
-        // TODO: вызов алгоритма скедулинга
-
-        response_.set_path("0.0.0.0:50051");
+        response_.set_path(WLC(full_string_server_addresses + full_string_collected_data_for_distribution));
 
         status_ = FINISH_RPC;
         responder_.Finish(response_, grpc::Status::OK, this);
@@ -235,6 +233,8 @@ void async_node_server::detection_task_execution_rpc::proceed(bool ok, std::vect
             new detection_task_execution_rpc(service_, cq_, RPC_TYPE::DETECTION_TASK_EXECUTION, children, server_dir);
             new_responder_created_ = true;
         }
+
+        std::unique_lock<std::mutex> lock(mtx_);
 
         std::string filename_;
 
@@ -367,13 +367,17 @@ void async_node_server::handle_rpcs() {
         std::cout << "Processing tag: " << tag << std::endl; 
         std::cout << "Processing rpc_type: " << rpc_call->rpc_type_ << std::endl; 
 
-        if (rpc_call->rpc_type_ == RPC_TYPE::DETECTION_TASK_EXECUTION) {
+        // if (rpc_call->rpc_type_ == RPC_TYPE::DETECTION_TASK_EXECUTION) {
+        //     rpc_call->proceed(ok, children_, server_dir_);
+        // }
+        // else {
+        //     std::thread([this, rpc_call, ok](){
+        //         rpc_call->proceed(ok, children_, server_dir_);
+        //     }).detach();
+        // }
+        std::thread([this, rpc_call, ok](){
             rpc_call->proceed(ok, children_, server_dir_);
-        }
-        else {
-            std::thread([this, rpc_call, ok](){
-                rpc_call->proceed(ok, children_, server_dir_);
-            }).detach();
-        }
+        }).detach();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 }

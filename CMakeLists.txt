@@ -23,6 +23,7 @@ src/data_collection/data_collection_server.cpp
 src/data_collection/data_parsing_server.cpp
 src/data_collection/files_info.cpp
 src/detection_task/face_detection.cpp
+src/scheduling_algorithm/WLC.cpp
 proto/distributionSystem.grpc.pb.cc proto/distributionSystem.pb.cc)
 
 add_executable(client_on_server src/client_on_server.cpp src/client_on_server/async_client_node.cpp

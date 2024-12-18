@@ -3,7 +3,7 @@
 void async_client::distribute_detection_task_call::proceed(bool ok, std::string& response) {
     if (ok) {
         if (status.ok()) {
-            std::cout << "To node: " << path_response.path() << std::endl;
+            std::cout << client_name_ << ": To node: " << path_response.path() << std::endl;
             response = path_response.path();
         }
     }
@@ -72,16 +72,16 @@ void async_client::detection_task_execution_call::proceed(bool ok, std::string& 
 
             responder_->Read(&response_, (void*)this);
 
-            std::cout << "Getting img: " << response_.filename() << std::endl;
+            std::cout << client_name_ << ": Getting img: " << response_.filename() << std::endl;
 
             std::string filename_ = response_.filename();
             if (filename_ != prev_filename_) {
                 if (!writing_stream.is_open()) {
-                    writing_stream.open("tmp/results/" + filename_, std::ios::app);
+                    writing_stream.open(result_dir_ + filename_, std::ios::app);
                 }
                 else {
                     writing_stream.close();
-                    writing_stream.open("tmp/results/" + filename_, std::ios::app);
+                    writing_stream.open(result_dir_ + filename_, std::ios::app);
                 }
                 prev_filename_ = filename_;
             }
@@ -104,11 +104,11 @@ void async_client::detection_task_execution_call::proceed(bool ok, std::string& 
 }
 
 void async_client::async_distribute_detection_task(task_info task) {
-    auto* call = new distribute_detection_task_call(task_execution_stub_, cq_, CALL_TYPE::DISTRIBUTE_DETECTION_TASK_CALL, task);
+    auto* call = new distribute_detection_task_call(task_execution_stub_, cq_, CALL_TYPE::DISTRIBUTE_DETECTION_TASK_CALL, task, client_name_);
 }
 
 void async_client::async_execute_detection_task(std::vector<std::string> filePaths) {
-    auto* call = new detection_task_execution_call(task_execution_stub_, cq_, CALL_TYPE::DETECTION_TASK_EXECUTION_CALL, filePaths, client_name_);
+    auto* call = new detection_task_execution_call(task_execution_stub_, cq_, CALL_TYPE::DETECTION_TASK_EXECUTION_CALL, filePaths, client_name_, result_dir_);
 }
 
 void async_client::handle_call(std::atomic<int>& quant_replies, std::condition_variable& cv, std::string& response) {
